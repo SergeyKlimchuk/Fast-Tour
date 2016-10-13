@@ -32,26 +32,6 @@ type
     Info: TsBitBtn;
     Print: TsBitBtn;
     Nick_Name: TsPanel;
-    sPanel1: TsPanel;
-    sImage1: TsImage;
-    sLabel1: TsLabel;
-    sBevel1: TsBevel;
-    sLabel2: TsLabel;
-    sBevel2: TsBevel;
-    sLabel3: TsLabel;
-    sLabel4: TsLabel;
-    sPanel2: TsPanel;
-    sImage2: TsImage;
-    sLabel5: TsLabel;
-    sBevel3: TsBevel;
-    sLabel6: TsLabel;
-    sBevel4: TsBevel;
-    sLabel7: TsLabel;
-    sLabel8: TsLabel;
-    sButton1: TsButton;
-    sButton3: TsButton;
-    Label1: TLabel;
-    sLabel9: TsLabel;
     Choose_Panel: TsGradientPanel;
     Label2: TLabel;
     sButton4: TsButton;
@@ -59,11 +39,6 @@ type
     sLabel11: TsLabel;
     sComboBox1: TsComboBox;
     Label3: TLabel;
-    sGradientPanel1: TsGradientPanel;
-    Delete_FB: TsButton;
-    Lbl_currency: TLabel;
-    Lbl_Price: TsLabel;
-    sButton2: TsButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure ExitClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
@@ -95,10 +70,10 @@ var
   IDLine:String;
 
   // Процедурный блок
-  Procedure RefreshPrice; // Процедура обновления цены (Активируется при смене валюты)
-  Procedure Lines_Add;   // Создание линии
-  Procedure Record_Delete(Index:Integer);
-  Procedure Lines_Delete;
+  Procedure REFRESH_PRICE; // Процедура обновления цены (Активируется при смене валюты)
+  Procedure ADD_LINES;   // Создание линии
+  Procedure LINE_DELETE(Index:Integer);
+  Procedure DELETE_LINES;
   Function Get_difference(A1, B1 :String; A2, B2:String):String;
 
 
@@ -132,29 +107,41 @@ if Minutes > 0 then
 Result:= Output;
 End;
 
-Procedure Record_Delete(Index:Integer);
+Procedure LINE_DELETE(Index:Integer);
 var
   I: Integer;
 Begin
 // Перемещение на начало
 DataModule2.Basket_Query.First;
 // Перемещение к объкту
-if (Index > 0) then
-  for I:= 1 to (Index) do
-    DataModule2.Basket_Query.Next;
+DataModule2.Basket_Query.MoveBy(Index);
 // Удаление объекта
 DataModule2.Basket_Query.Delete;
 End;
 
 
 // Полная очистка от объектов
-Procedure Lines_Delete;
+Procedure DELETE_LINES;
 var
 I :Integer;
 Begin
 // Очистка массива
 for I:= 0 to Length(Lines) - 1 do
-  Lines[I].Panel_Main.Free;
+  Begin
+  FreeAndNil(Lines[I].Label_Type);
+  FreeAndNil(Lines[I].Label_Time);
+  FreeAndNil(Lines[I].Label_Way_Name);
+  FreeAndNil(Lines[I].Label_Time_Country);
+  FreeAndNil(Lines[I].Label_Price);
+  FreeAndNil(Lines[I].Label_Currency);
+  FreeAndNil(Lines[I].Picture);
+  FreeAndNil(Lines[I].Picture_Bevel);
+  FreeAndNil(Lines[I].Main_Bevel);
+  FreeAndNil(Lines[I].Button_Delete);
+  FreeAndNil(Lines[I].Button_Info);
+  FreeAndNil(Lines[I].Additional_Panel);
+  FreeAndNil(Lines[I].Panel_Main);
+  End;
 // Обнуление длины
 SetLength(Lines,0);
 End;
@@ -165,11 +152,11 @@ Var
   I:Integer;
 Begin
 // Удаление записи
-Record_Delete((Sender as TsBitbtn).Tag);
+LINE_DELETE((Sender as TsBitbtn).Tag);
 // Перезапись объектов
-Lines_Add;
+ADD_LINES;
 // Пересчитываем цену
-RefreshPrice;
+REFRESH_PRICE;
 // Текстовое подтверждение
 ShowMessage('Объект был удален из корзины!');
 End;
@@ -209,7 +196,7 @@ end;
 
 procedure TForm9.FormShow(Sender: TObject);
 begin
-Lines_Add;
+ADD_LINES;
 Form9.sComboBox1.ItemIndex:= 0;
 sComboBox1Change(Sender);
 end;
@@ -227,10 +214,10 @@ end;
 
 procedure TForm9.sComboBox1Change(Sender: TObject);
 begin
-RefreshPrice;
+REFRESH_PRICE;
 end;
 
-Procedure RefreshPrice; // Процедура обновления цены (Активируется при смене валюты)
+Procedure REFRESH_PRICE; // Процедура обновления цены (Активируется при смене валюты)
 Var
   I, Price:Integer;
   Price2:String;
@@ -267,13 +254,13 @@ Form9.sLabel11.Left:= Form9.sLabel10.Left -6 - Form9.sLabel11.Width;
 End;
 
 // Создание линий
-Procedure Lines_Add;
+Procedure ADD_LINES;
 Var
   B_Type:String;
   I     :Integer;
 Begin
 // насильная очистка корзины
-Lines_Delete;
+DELETE_LINES;
 // Формирование длины массива
 SetLength(Lines,DataModule2.Basket_Query.RecordCount);
 // Переход к самому началу

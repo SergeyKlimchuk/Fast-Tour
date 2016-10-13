@@ -93,6 +93,7 @@ type
     procedure sBitBtn2Click(Sender: TObject);
     procedure sEdit3KeyPress(Sender: TObject; var Key: Char);
     procedure sEdit4KeyPress(Sender: TObject; var Key: Char);
+    procedure FormHide(Sender: TObject);
   private
     { Private declarations }
   public
@@ -131,7 +132,13 @@ if (Length(List) > 0) then
   I:= 0; // Подготавливаем переменную для работы в цикле
   while (I < Length(List)) do
     Begin
-    List[I].Panel_Main.Free;
+    FreeAndNil(List[I].Label_Type);
+    FreeAndNil(List[I].Label_Date);
+    FreeAndNil(List[I].Label_Way_Name);
+    FreeAndNil(List[I].Label_Time_Country);
+    FreeAndNil(List[I].First_Bevel);
+    FreeAndNil(List[I].Panel_Price);
+    FreeAndNil(List[I].Panel_Main);
     // Переходим к следующей записи
     DataModule2.Basket_Query.Next;
     // Постинкриментируем переменную
@@ -264,10 +271,14 @@ begin
 Application.Terminate;
 end;
 
-procedure TForm10.FormShow(Sender: TObject);
+procedure TForm10.FormHide(Sender: TObject);
 begin
 // Удаляем все объекты
 DESTROY_ALL;
+end;
+
+procedure TForm10.FormShow(Sender: TObject);
+begin
 // Создаем все объекты
 BUILD_ALL;
 // Красим панели в красный цвет (Т.к. еще не заполнены)

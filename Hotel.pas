@@ -149,13 +149,13 @@ var
 
   Page_Current:Integer;
 
-  Procedure Add_objects;
-  Procedure Get_INFO(Line:Integer);
-  Function  Get_Price(Start,Finish:TDateTime):Integer;
+  Procedure ADD_OBJECTS;
+  Procedure GET_INFO(Line:Integer);
+  Function  GET_PRICE(Start,Finish:TDateTime):Integer;
 
-  Procedure Build_Line(I:Integer);
-  Procedure Build_Page(StartPage:Integer);
-  Procedure Check_Basket;
+  Procedure BUILD_PAGE(Index:Integer);
+  Procedure BUILD_LINE(Index:Integer);
+  Procedure CHECK_BASKET;
 
 implementation
 
@@ -715,55 +715,55 @@ Form7.BackGround_Image.Stretch:=True;
 End;
 
 
-Procedure Build_Line(I:Integer);
+Procedure Build_Line(Index:Integer);
 Var
   D :Integer;
   S :String;
 Begin
-Panel_mas[I].Visible:=True;
-Label_name[I].Caption:=DataModule2.Hotel_Query.FieldByName('H_Name').AsString;
-Label_country[I].Caption:=DataModule2.Hotel_Query.FieldByName('H_Country').AsString+',';
-Label_city[I].Left:=Label_country[I].Left+Label_country[I].Width+6;
-Label_city[I].Caption:=DataModule2.Hotel_Query.FieldByName('H_City').AsString;
+Panel_mas[Index].Visible:=True;
+Label_name[Index].Caption:=DataModule2.Hotel_Query.FieldByName('H_Name').AsString;
+Label_country[Index].Caption:=DataModule2.Hotel_Query.FieldByName('H_Country').AsString+',';
+Label_city[Index].Left:=Label_country[Index].Left+Label_country[Index].Width+6;
+Label_city[Index].Caption:=DataModule2.Hotel_Query.FieldByName('H_City').AsString;
 //...
 S:=DataModule2.Hotel_Query.FieldByName('H_Comment').AsString;
 if Length(S)>183 then
   Begin
-  Label_comment[I].ShowHint:=True;
-  Label_comment[I].Hint:=S;
+  Label_comment[Index].ShowHint:=True;
+  Label_comment[Index].Hint:=S;
   S:=Copy(S,1,180)+'...';
-  End else Label_comment[I].ShowHint:=False;
-Label_comment[I].Caption:=S;
-Label_comment[I].Width:=390;
+  End else Label_comment[Index].ShowHint:=False;
+Label_comment[Index].Caption:=S;
+Label_comment[Index].Width:=390;
 //... Недофича (Нужен запрос онлайн времени!)
 if DataModule2.Hotel_Query.FieldByName('H_FixPrice').AsString='Да' then
-  Label_price[I].Caption:=DataModule2.Hotel_Query.FieldByName('H_Price').AsString
+  Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('H_Price').AsString
     else
-      Label_price[I].Caption:=DataModule2.Hotel_Query.FieldByName('H_Price_'+Copy(DateToStr(Now),4,2)).AsString;
+      Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('H_Price_'+Copy(DateToStr(Now),4,2)).AsString;
 //...
-GPanel_star[I].Left:=Label_name[I].Left+Label_name[I].Width+6;
-GPanel_star[I].Caption:=DataModule2.Hotel_Query.FieldByName('H_Stars').AsString;
+GPanel_star[Index].Left:=Label_name[Index].Left+Label_name[Index].Width+6;
+GPanel_star[Index].Caption:=DataModule2.Hotel_Query.FieldByName('H_Stars').AsString;
 //...
-Image_photo[I].Picture.Assign(DataModule2.Hotel_Query.FieldByName('H_Photo'));
+Image_photo[Index].Picture.Assign(DataModule2.Hotel_Query.FieldByName('H_Photo'));
 //...
 S:=DataModule2.Hotel_Query.FieldByName('H_Tags').AsString;
-Label_tag1[I].Visible:=False;
-Label_tag2[I].Visible:=False;
-Label_tag3[I].Visible:=False;
-Label_tag4[I].Visible:=False;
+Label_tag1[Index].Visible:=False;
+Label_tag2[Index].Visible:=False;
+Label_tag3[Index].Visible:=False;
+Label_tag4[Index].Visible:=False;
 D:=1;
 While (S<>'') do
   Begin
   if pos(';',S)>0 then
     begin
       case D of
-      1:Begin Label_tag1[I].Caption:=Copy(S,0,Pos(';',S)-1)+','; Label_tag1[I].Visible:=True; end;
+      1:Begin Label_tag1[Index].Caption:=Copy(S,0,Pos(';',S)-1)+','; Label_tag1[Index].Visible:=True; end;
 
-      2:Begin Label_tag2[I].Caption:=Copy(S,0,Pos(';',S)-1)+','; Label_tag2[I].Visible:=True; end;
+      2:Begin Label_tag2[Index].Caption:=Copy(S,0,Pos(';',S)-1)+','; Label_tag2[Index].Visible:=True; end;
 
-      3:Begin Label_tag3[I].Caption:=Copy(S,0,Pos(';',S)-1)+','; Label_tag3[I].Visible:=True; end;
+      3:Begin Label_tag3[Index].Caption:=Copy(S,0,Pos(';',S)-1)+','; Label_tag3[Index].Visible:=True; end;
 
-      4:Begin Label_tag4[I].Caption:=Copy(S,0,Pos(';',S)-1)+','; Label_tag4[I].Visible:=True; end;
+      4:Begin Label_tag4[Index].Caption:=Copy(S,0,Pos(';',S)-1)+','; Label_tag4[Index].Visible:=True; end;
       end;
     Delete(S,1,Pos(';',S));
     end;
@@ -772,20 +772,20 @@ While (S<>'') do
     begin
     S:='';
       Case D of
-      2:Label_tag1[I].Caption:=Copy(Label_tag1[I].Caption,0,Length(Label_tag1[I].Caption)-1);
-      3:Label_tag2[I].Caption:=Copy(Label_tag2[I].Caption,0,Length(Label_tag2[I].Caption)-1);
-      4:Label_tag3[I].Caption:=Copy(Label_tag3[I].Caption,0,Length(Label_tag3[I].Caption)-1);
-      5:Label_tag4[I].Caption:=Copy(Label_tag4[I].Caption,0,Length(Label_tag4[I].Caption)-1);
+      2:Label_tag1[Index].Caption:=Copy(Label_tag1[Index].Caption,0,Length(Label_tag1[Index].Caption)-1);
+      3:Label_tag2[Index].Caption:=Copy(Label_tag2[Index].Caption,0,Length(Label_tag2[Index].Caption)-1);
+      4:Label_tag3[Index].Caption:=Copy(Label_tag3[Index].Caption,0,Length(Label_tag3[Index].Caption)-1);
+      5:Label_tag4[Index].Caption:=Copy(Label_tag4[Index].Caption,0,Length(Label_tag4[Index].Caption)-1);
       End;
     end;
   End;
-Label_tag2[I].Left:=Label_tag1[I].Left+Label_tag1[I].Width+3;
-Label_tag3[I].Left:=Label_tag2[I].Left+Label_tag2[I].Width+3;
-Label_tag4[I].Left:=Label_tag3[I].Left+Label_tag3[I].Width+3;
+Label_tag2[Index].Left:=Label_tag1[Index].Left+Label_tag1[Index].Width+3;
+Label_tag3[Index].Left:=Label_tag2[Index].Left+Label_tag2[Index].Width+3;
+Label_tag4[Index].Left:=Label_tag3[Index].Left+Label_tag3[Index].Width+3;
 //...
 End;
 
-Procedure Build_Page(StartPage:Integer);
+Procedure Build_Page(Index:Integer);
 var
   I, D: Integer;
 Begin
@@ -794,8 +794,8 @@ for I:=1 to Line_Count do
   Panel_Mas[I].Visible:=False;
 
 // Перемещение по страницам
-if StartPage > 1 then
-  for I:=2 to StartPage do
+if Index > 1 then
+  for I:=2 to Index do
     for D:=1 to Line_Count do DataModule2.Hotel_Query.Next;
 // Вывод текущей страницы
 I:=1;
@@ -814,8 +814,8 @@ for I:=0 to Button_Count-1 do
     Form7.Button_panel.Canvas.Draw(CButtons[I].Left,CButtons[I].Top, CButtons[I].Paint);
     end;
 
-CButtons[StartPage-1].State:=cbLocked;
-Form7.Button_panel.Canvas.Draw(CButtons[StartPage-1].Left,CButtons[StartPage-1].Top, CButtons[StartPage-1].Paint);
+CButtons[Index - 1].State:=cbLocked;
+Form7.Button_panel.Canvas.Draw(CButtons[Index - 1].Left,CButtons[Index - 1].Top, CButtons[Index - 1].Paint);
 End;
 
 end.

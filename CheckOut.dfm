@@ -12,6 +12,7 @@ object Form10: TForm10
   Font.Style = []
   OldCreateOrder = False
   OnClose = FormClose
+  OnHide = FormHide
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13

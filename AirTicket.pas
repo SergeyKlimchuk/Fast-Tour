@@ -166,10 +166,10 @@ var
 //.............................................//
 
 //.........Блок процедур...............................//
-  procedure Build_page(Index:integer);                 //
-  Procedure Build_Line(Index:integer; OnNext:Boolean); //
-  Procedure Check_Basket;                              //
-  Procedure RefreshPrice;                              //
+  procedure BUILD_PAGE(Index:Integer);                 //
+  Procedure BUILD_LINE(Index:Integer; OnNext:Boolean); //
+  Procedure CHECK_BASKET;                              //
+  Procedure REFRESH_PRICE;                             //
 //.....................................................//
 
 implementation
@@ -229,51 +229,48 @@ if (DataModule2.Basket_Query.RecordCount > 0) then
       Form6.Label_Basket_Count.Caption:= 'Нет товаров!';
 End;
 
-procedure Build_page(Index:integer); // Построение страницы
+procedure BUILD_PAGE(Index:integer); // Построение страницы
 Var
   I, D, Residue :integer;
 Begin
 // Скрываем поле
 if Form6.Castom_Way.Visible = True then
-  Form6.Castom_Way.Visible:= False;
-// Переходим на первую запись
-DataModule2.Air_Query.First;
+   Form6.Castom_Way.Visible:= False;
 // Делаем проверку на присутствие записей на странице
 if (DataModule2.Air_Query.RecordCount > 0) then
-Begin
-// Убираем надпись об отсутствии записей
-Form6.Label_Not_Found.visible:= False;
-// Переход на первую запись нашей страницы
-if (Index > 1) then
-  for I:= 2 to index do
-    for D:= 1 to Panel_count do
-      DataModule2.Air_Query.Next;
-// Узнаем остаточное кол-во записей
-Residue:= DataModule2.Air_Query.RecordCount - ((Index - 1) * Panel_count);
-// Отключаем все не задействующиеся формы
-if (Residue < Panel_count) then
-  for I:= 1 to Panel_count do
-    if (I <= Residue) then
-      Home_Panel[I].Visible:= True
-        else
-          Home_Panel[I].Visible:= False
-            else
-              for I:= 1 to Panel_count do
-                Home_Panel[I].Visible:= True;
-// Создание страницы
-if (Residue >= Panel_count)  then
-  for I:= 1 to Panel_Count do
-    Build_Line(I, True)
-      else
-        for I:= 1 to Residue do
-          Build_Line(I, True);
-End
-  else  // В случае если послали пустую страницу на отрисовку
-    begin
+  Begin
+  // Убираем надпись об отсутствии записей
+  Form6.Label_Not_Found.Visible:= False;
+  // Переход на первую запись нашей страницы
+  DataModule2.Air_Query.First;
+  if (Index > 1) then
+    DataModule2.Air_Query.MoveBy((Index - 1) * Panel_count);
+  // Узнаем остаточное кол-во записей
+  Residue:= DataModule2.Air_Query.RecordCount - ((Index - 1) * Panel_count);
+  // Отключаем все не задействующиеся формы
+  if (Residue < Panel_count) then
     for I:= 1 to Panel_count do
-      Home_Panel[I].Visible:= False;
-    Form6.Label_Not_Found.visible:= True;  
-    end;
+      if (I <= Residue) then
+        Home_Panel[I].Visible:= True
+          else
+            Home_Panel[I].Visible:= False
+              else
+                for I:= 1 to Panel_count do
+                  Home_Panel[I].Visible:= True;
+  // Создание страницы
+  if (Residue >= Panel_count)  then
+    for I:= 1 to Panel_Count do
+      Build_Line(I, True)
+        else
+          for I:= 1 to Residue do
+            Build_Line(I, True);
+  End
+else  // В случае если послали пустую страницу на отрисовку
+  begin
+  for I:= 1 to Panel_count do
+    Home_Panel[I].Visible:= False;
+  Form6.Label_Not_Found.visible:= True;
+  end;
 // Изменение кнопок
 CButtons[Page_Current - 1].State:= cbStay;
 Form6.Button_panel.Canvas.Draw(CButtons[Page_Current - 1].Left, CButtons[Page_Current - 1].Top, CButtons[Page_Current - 1].Paint);
@@ -281,7 +278,7 @@ CButtons[Index - 1].State:= cbLocked;
 Form6.Button_panel.Canvas.Draw(CButtons[Index - 1].Left, CButtons[Index - 1].Top, CButtons[Index - 1].Paint);
 Page_Current:= Index;
 // Обновление цены
-RefreshPrice;
+REFRESH_PRICE;
 End;
 
 Function _Date:String;
@@ -806,7 +803,7 @@ begin
 Panel_FullInfo.Visible:= False;
 end;
 
-Procedure RefreshPrice; // Процедура обновления цены (Активируется при смене валюты)
+Procedure REFRESH_PRICE; // Процедура обновления цены (Активируется при смене валюты)
 Var
   I, Price:Integer;
   Price2  :String;
@@ -847,7 +844,7 @@ End;
 
 procedure TForm6.sComboBox1Change(Sender: TObject);
 begin
-RefreshPrice;
+REFRESH_PRICE;
 end;
 
 procedure TForm6.sLabel1Click(Sender: TObject);
