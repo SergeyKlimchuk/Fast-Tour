@@ -24580,20 +24580,20 @@ object Form6: TForm6
     SkinData.SkinSection = 'CHECKBOX'
   end
   object Main_Panel: TsGradientPanel
-    Left = 0
+    Left = 240
     Top = 0
-    Width = 1080
+    Width = 800
     Height = 720
     TabOrder = 3
     PaintData.Color1.Color = 16764315
     object Main_Bevel: TsBevel
       Left = 0
       Top = 0
-      Width = 1080
+      Width = 800
       Height = 720
     end
     object Label_Not_Found: TLabel
-      Left = 321
+      Left = 181
       Top = 341
       Width = 438
       Height = 38

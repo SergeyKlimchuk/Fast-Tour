@@ -178,22 +178,16 @@ implementation
 
 uses Modul, Main, Basket;
 
-Procedure TForm6.Get_Info(Sender: TObject);
+Procedure TForm6.GET_INFO(Sender: TObject);
 Var
   I, D:integer;
   S, P:String;
 //  FYearBoldManager: TYearBoldManager;
 Begin
-// Осуществляем переход к нужной нам записи
+// Переход к началу
 DataModule2.Air_Query.First;
-if Page_Current > 1 then
-  for I:=2 to Page_Current do
-    for D:=1 to Panel_Count do
-      DataModule2.Air_Query.Next;
-
-if (Sender as TsBitBtn).Tag  > 1 then
-  for I:=2 to (Sender as TsBitBtn).Tag  do
-    DataModule2.Air_Query.Next;
+// Переход к нужной записи
+DataModule2.Air_Query.MoveBy(((Page_Current - 1) * Panel_Count) + ((Sender as TsBitBtn).Tag - 1));
 // Заполняем поля
 Label_Air_Company.Caption:= DataModule2.Air_Query.FieldByName('Air_company').AsString;
 Label_Air_Company.Left:= sBevel15.Left + ((sBevel15.Width div 2) - (Label_Air_Company.Width div 2));
@@ -529,7 +523,7 @@ For I:=1 to Panel_Count do
     Home_Panel[I].Parent:= Main_Panel;
     Home_Panel[I].Width:= 800;
     Home_Panel[I].Height:= 100;
-    Home_Panel[I].Left:= 140;
+    Home_Panel[I].Left:= 0;
     case I of
     1:Home_Panel[I].Top:= 100;
     2:Home_Panel[I].Top:= 210;
@@ -605,7 +599,7 @@ For I:=1 to Panel_Count do
     Picture_AirCompany[I].Width:= 400;
     Picture_AirCompany[I].Height:= 100;
     Picture_AirCompany[I].SendToBack;
-    // Лейбел ":"
+    // Лейбел ""
     Panel_Explorer[I]:=TsGradientPanel.create(Owner);
     Panel_Explorer[I].Parent:= Home_Panel[I];
     Panel_Explorer[I].Left:= 600;
@@ -615,13 +609,13 @@ For I:=1 to Panel_Count do
     Panel_Explorer[I].PaintData.Color1.Color:= $00EBEBEB;
     Panel_Explorer[I].PaintData.Color2.UseSkinColor:= False;
     Panel_Explorer[I].PaintData.Color2.Color:= $00EBEBEB;
-    // Лейбел "Аэропорт 1:"
+    // Лейбел ""
     Label_Price[I]:=TsLabel.create(Owner);
     Label_Price[I].Parent:= Panel_Explorer[I];
     Label_Price[I].Left:= 55;
     Label_Price[I].Top:= 24;
     Label_Price[I].Font.Size:= 16;
-    // Лейбел "Аэропорт 2:"
+    // Лейбел ""
     Label_Currency[I]:=TsLabel.create(Owner);
     Label_Currency[I].Parent:= Panel_Explorer[I];
     Label_Currency[I].Left:= 123;
@@ -635,7 +629,7 @@ For I:=1 to Panel_Count do
     Label_Message[I].Top:= 44;
     Label_Message[I].Caption:='Цена за всех пассажиров';
     Label_Message[I].Font.Size:= 9;
-    // Лейбел "Свободно мест в Первом классе"
+    // Лейбел ""
     Button_Choose[I]:=TsBitBtn.create(Owner);
     Button_Choose[I].Parent:= Panel_Explorer[I];
     Button_Choose[I].Left:= 50;
@@ -646,7 +640,7 @@ For I:=1 to Panel_Count do
     Button_Choose[I].Caption:= 'Выбрать';
     Button_Choose[I].Tag:= I;
     Button_Choose[I].OnClick:= Get_Info;
-    // Кнопка с капчей "Выбрать"
+    // Кнопка с капчей ""
     Explorer_Bevel[I]:=TsBevel.Create(Owner);
     Explorer_Bevel[I].Parent:= Panel_Explorer[I];
     Explorer_Bevel[I].Left:= 0;
@@ -859,14 +853,14 @@ begin
 MSG:='SELECT * FROM Air_Ticket ';
 FRST:=True;
 if (sCheckBox2.Checked=True) AND (sComboBox3.ItemIndex<>0) then
-case FRST of
-True:Begin MSG:=MSG+' WHERE (City_D="'+sComboBox3.Text+'")'; FRST:=False; end;
-False:MSG:=MSG+' AND (City_D="'+sComboBox3.Text+'")';
-end;
+  case FRST of
+  True:Begin MSG:=MSG+' WHERE (City_D="'+sComboBox3.Text+'")'; FRST:=False; end;
+  False:MSG:=MSG+' AND (City_D="'+sComboBox3.Text+'")';
+  end;
 if (sCheckBox1.Checked=True) AND (sComboBox2.ItemIndex<>0) then
-case FRST of
-True:Begin MSG:=MSG+' WHERE (City_A="'+sComboBox2.Text+'")'; FRST:=False; end;
-False:MSG:=MSG+' AND (City_A="'+sComboBox2.Text+'")';
+  case FRST of
+  True:Begin MSG:=MSG+' WHERE (City_A="'+sComboBox2.Text+'")'; FRST:=False; end;
+  False:MSG:=MSG+' AND (City_A="'+sComboBox2.Text+'")';
 end;
 //..............................................................................
   case Form6.sComboBox1.ItemIndex of
@@ -912,12 +906,12 @@ if (sCheckBox6.Checked=True) and (sCheckBox7.Checked=True) then
 //..............................................................................
 if (sCheckBox4.Checked = True) then
   Begin
-  Prm1:=StringReplace(sDateEdit1.text,'.','-',[rfReplaceAll, rfIgnoreCase]);
-  Prm2:=StringReplace(sDateEdit2.text,'.','-',[rfReplaceAll, rfIgnoreCase]);
-  case FRST of
-  True:Begin MSG:=MSG+' WHERE (Date_D BETWEEN #'+Prm1+'# AND #'+Prm2+'#)'; FRST:=False; end;
-  False:MSG:=MSG+' AND (Date_D BETWEEN #'+Prm1+'# AND #'+Prm2+'#)';
-  end;
+  Prm1:=StringReplace(sDateEdit1.text, '.', '-', [rfReplaceAll, rfIgnoreCase]);
+  Prm2:=StringReplace(sDateEdit2.text, '.', '-', [rfReplaceAll, rfIgnoreCase]);
+    case FRST of
+    True:Begin MSG:=MSG+' WHERE (Date_D BETWEEN #'+Prm1+'# AND #'+Prm2+'#)'; FRST:=False; end;
+    False:MSG:=MSG+' AND (Date_D BETWEEN #'+Prm1+'# AND #'+Prm2+'#)';
+    end;
   End;
 //..............................................................................
 if (sCheckBox5.Checked = True) then
@@ -1046,15 +1040,8 @@ Procedure TForm6.sLabel28Click(Sender: TObject);
 Var
   I, D:Integer;
 begin
-   DataModule2.Air_Query.First;
-    if Page_Current > 1 then
-      for I:= 2 to Page_Current do
-        for D:= 1 to Panel_Count do
-          DataModule2.Air_Query.Next;
-
-if (Sender as TsLabel).Tag  > 1 then
-  for I:= 2 to (Sender as TsLabel).Tag  do
-    DataModule2.Air_Query.Next;
+DataModule2.Air_Query.First;
+DataModule2.Air_Query.MoveBy(((Page_Current - 1) * Panel_Count) + ((Sender as TsLabel).Tag - 1));
 
 if (DataModule2.Air_Query.FieldByName('Regular').AsString = '+') then
   if (Edit_Date.Tag = 1) then
