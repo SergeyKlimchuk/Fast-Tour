@@ -1,6 +1,7 @@
 object Form10: TForm10
   Left = 0
   Top = 0
+  BorderStyle = bsSingle
   Caption = #1054#1092#1086#1088#1084#1083#1077#1085#1080#1077' '#1087#1086#1082#1091#1087#1082#1080
   ClientHeight = 350
   ClientWidth = 900
@@ -252,6 +253,7 @@ object Form10: TForm10
       ItemIndex = -1
       TabOrder = 4
       Text = 'KZT - '#1058#1077#1085#1075#1077
+      OnChange = sComboBox1Change
       Items.Strings = (
         'KZT - '#1058#1077#1085#1075#1077
         'USD - '#1044#1086#1083#1083#1072#1088' '#1057#1064#1040
@@ -3070,7 +3072,7 @@ object Form10: TForm10
       ShowFocus = False
     end
     object sGradientPanel5: TsGradientPanel
-      Left = 200
+      Left = 329
       Top = 1
       Width = 50
       Height = 48
@@ -3087,7 +3089,7 @@ object Form10: TForm10
       PaintData.Color2.UseSkinColor = False
     end
     object sGradientPanel6: TsGradientPanel
-      Left = 252
+      Left = 381
       Top = 1
       Width = 50
       Height = 48
@@ -3102,7 +3104,7 @@ object Form10: TForm10
       PaintData.Color2.UseSkinColor = False
     end
     object sGradientPanel7: TsGradientPanel
-      Left = 304
+      Left = 433
       Top = 1
       Width = 50
       Height = 48
@@ -3117,7 +3119,7 @@ object Form10: TForm10
       PaintData.Color2.UseSkinColor = False
     end
     object sGradientPanel8: TsGradientPanel
-      Left = 356
+      Left = 485
       Top = 1
       Width = 69
       Height = 48

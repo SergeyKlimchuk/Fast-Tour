@@ -78,7 +78,7 @@ type
     sLabel18: TsLabel;
     Label_FFlight: TsLabel;
     Label_FAirCompany: TsLabel;
-    LAbel_FClass: TsLabel;
+    Label_FClass: TsLabel;
     Label_FPlane: TsLabel;
     Label_FFrom: TsLabel;
     Label_FTo: TsLabel;
@@ -374,7 +374,11 @@ if (DataModule2.Air_Query.FieldByName('Regular').AsString = '+') then
       DataModule2.Basket_Query.FieldByName('Date_Start').AsString:= DataModule2.Air_Query.FieldByName('Date_D').AsString;
       DataModule2.Basket_Query.FieldByName('Date_Finish').AsString:= DataModule2.Air_Query.FieldByName('Date_A').AsString;
       End;
-DataModule2.Basket_Query.FieldByName('Price').AsString:= '1000';
+case sRadioGroup1.ItemIndex of
+0:DataModule2.Basket_Query.FieldByName('Price').AsString:= DataModule2.Air_Query.FieldByName('Price_FC').AsString;
+1:DataModule2.Basket_Query.FieldByName('Price').AsString:= DataModule2.Air_Query.FieldByName('Price_BC').AsString;
+2:DataModule2.Basket_Query.FieldByName('Price').AsString:= DataModule2.Air_Query.FieldByName('Price_EC').AsString;
+end;
 DataModule2.Basket_Query.Post;
 // Проверка корзины
 Check_Basket;
@@ -1046,6 +1050,12 @@ Var
 begin
 DataModule2.Air_Query.First;
 DataModule2.Air_Query.MoveBy(((Page_Current - 1) * Panel_Count) + ((Sender as TsLabel).Tag - 1));
+
+case sRadioGroup1.ItemIndex of
+0:Label_FClass.Caption:= 'Первый класс';
+1:Label_FClass.Caption:= 'Бизнес класс';
+2:Label_FClass.Caption:= 'Эконом класс';
+end;
 
 if (DataModule2.Air_Query.FieldByName('Regular').AsString = '+') then
   if (Edit_Date.Tag = 1) then

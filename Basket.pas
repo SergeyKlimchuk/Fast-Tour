@@ -47,6 +47,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure sComboBox1Change(Sender: TObject);
     procedure sButton4Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { НЕ ГОДНОТА declarations }
   public
@@ -180,6 +181,13 @@ end;
 procedure TForm9.FormCreate(Sender: TObject);
 begin
 Main_Box.Color:= RGB(204,204,204);
+end;
+
+procedure TForm9.FormDestroy(Sender: TObject);
+begin
+DataModule2.Basket_Query.First;
+while DataModule2.Basket_Query.RecordCount > 0 do
+  DataModule2.Basket_Query.Delete;
 end;
 
 // Динамическое изменение положений объектов на форме

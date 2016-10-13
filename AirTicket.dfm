@@ -26434,7 +26434,7 @@ object Form6: TForm6
         ItemIndex = 2
         Items.Strings = (
           #1055#1077#1088#1074#1099#1081' '#1082#1083#1072#1089#1089
-          #1041#1080#1079#1085#1077#1089'-'#1082#1083#1072#1089#1089
+          #1041#1080#1079#1085#1077#1089' '#1082#1083#1072#1089#1089
           #1069#1082#1086#1085#1086#1084' '#1082#1083#1072#1089#1089)
       end
     end
@@ -26708,6 +26708,12 @@ object Form6: TForm6
     Visible = False
     PaintData.Color1.Color = clYellow
     PaintData.CustomGradient = '16777215;16316664;97;0;0;16316664;16316664;0;0;0'
+    object sBevel11: TsBevel
+      Left = 0
+      Top = 0
+      Width = 1000
+      Height = 97
+    end
     object sBevel15: TsBevel
       Left = 16
       Top = 49
@@ -26794,6 +26800,7 @@ object Form6: TForm6
       Top = 16
       Width = 61
       Height = 19
+      Cursor = crHandPoint
       Caption = #1047#1072#1082#1088#1099#1090#1100
       ParentFont = False
       OnClick = Button_ExitClick
@@ -26820,13 +26827,6 @@ object Form6: TForm6
       Top = 48
       Width = 110
       Height = 2
-    end
-    object sBevel11: TsBevel
-      Left = 0
-      Top = 0
-      Width = 1000
-      Height = 97
-      Cursor = crHandPoint
     end
     object Button_Exit: TsBitBtn
       Left = 965
@@ -26993,7 +26993,7 @@ object Form6: TForm6
   end
   object Panel_FullInfo: TsPanel
     Left = 290
-    Top = 284
+    Top = 132
     Width = 700
     Height = 152
     TabOrder = 4
@@ -27138,7 +27138,7 @@ object Form6: TForm6
       Font.Style = []
       UseSkinColor = False
     end
-    object LAbel_FClass: TsLabel
+    object Label_FClass: TsLabel
       Left = 236
       Top = 68
       Width = 37

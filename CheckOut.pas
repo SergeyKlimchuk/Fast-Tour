@@ -94,11 +94,22 @@ type
     procedure sEdit3KeyPress(Sender: TObject; var Key: Char);
     procedure sEdit4KeyPress(Sender: TObject; var Key: Char);
     procedure FormHide(Sender: TObject);
+    procedure sComboBox1Change(Sender: TObject);
   private
     { Private declarations }
   public
     Currency:String;
   end;
+
+const
+  KZT= 333;
+  USD= 1;
+  EUR= 0.89;
+  RUB= 62;
+  AUD= 1.32;
+  GBP= 0.79;
+  DKK= 6.65;
+  AED= 3.67;
 
 var
   Form10: TForm10;
@@ -405,6 +416,37 @@ procedure TForm10.sBitBtn6Click(Sender: TObject);
 begin
 Form10.Hide;
 Form4.Show;
+end;
+
+procedure TForm10.sComboBox1Change(Sender: TObject);
+Var
+  I: Integer;
+  S: String;
+begin
+DataModule2.Basket_Query.First;
+I:= 0;
+while (DataModule2.Basket_Query.Eof = false) do
+  Begin
+  case sComboBox1.ItemIndex of
+  0:List[I].Panel_Price.Caption:= IntToStr(DataModule2.Basket_Query.FieldByName('Price').AsInteger * KZT);
+  1:List[I].Panel_Price.Caption:= IntToStr(DataModule2.Basket_Query.FieldByName('Price').AsInteger);
+  2:List[I].Panel_Price.Caption:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * EUR));
+  3:List[I].Panel_Price.Caption:= IntToStr(DataModule2.Basket_Query.FieldByName('Price').AsInteger * RUB);
+  4:List[I].Panel_Price.Caption:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * AUD));
+  5:List[I].Panel_Price.Caption:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * GBP));
+  6:List[I].Panel_Price.Caption:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * DKK));
+  7:List[I].Panel_Price.Caption:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * AED));
+  end;
+  if Length(List[I].Panel_Price.Caption) > 3 then
+    List[I].Panel_Price.Caption:=
+    Copy(List[I].Panel_Price.Caption, 1, Length(List[I].Panel_Price.Caption) - 3)
+    + ' '
+    + Copy(List[I].Panel_Price.Caption, Length(List[I].Panel_Price.Caption) - 2, 3)
+    + ' ' + Copy(sComboBox1.Items[sComboBox1.ItemIndex], 1, 3);
+  List[I].Panel_Price.Refresh;
+  I:= I + 1;
+  DataModule2.Basket_Query.Next;
+  End;
 end;
 
 procedure TForm10.sEdit3KeyPress(Sender: TObject; var Key: Char);
