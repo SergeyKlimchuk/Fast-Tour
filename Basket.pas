@@ -71,12 +71,10 @@ var
 
   // Процедурный блок
   Procedure REFRESH_PRICE; // Процедура обновления цены (Активируется при смене валюты)
-  Procedure ADD_LINES;   // Создание линии
+  Procedure ADD_LINES;     // Создание линии
   Procedure LINE_DELETE(Index:Integer);
   Procedure DELETE_LINES;
   Function Get_difference(A1, B1 :String; A2, B2:String):String;
-
-
 
 implementation
 
@@ -134,16 +132,10 @@ for I:= 0 to Length(Lines) - 1 do
   FreeAndNil(Lines[I].Label_Time_Country);
   FreeAndNil(Lines[I].Label_Price);
   FreeAndNil(Lines[I].Label_Currency);
-  FreeAndNil(Lines[I].Picture);
-  FreeAndNil(Lines[I].Picture_Bevel);
-  FreeAndNil(Lines[I].Main_Bevel);
-  FreeAndNil(Lines[I].Button_Delete);
-  FreeAndNil(Lines[I].Button_Info);
-  FreeAndNil(Lines[I].Additional_Panel);
   FreeAndNil(Lines[I].Panel_Main);
   End;
 // Обнуление длины
-SetLength(Lines,0);
+SetLength(Lines, 0);
 End;
 
 // Динамическая процедура нажатия на динамическую кнопку
@@ -151,14 +143,20 @@ Procedure Tform9.TsClick(Sender:Tobject);
 Var
   I:Integer;
 Begin
-// Удаление записи
-LINE_DELETE((Sender as TsBitbtn).Tag);
-// Перезапись объектов
-ADD_LINES;
-// Пересчитываем цену
-REFRESH_PRICE;
-// Текстовое подтверждение
-ShowMessage('Объект был удален из корзины!');
+case MessageDlg('Вы точно хотите удалить товар из корзины?',mtConfirmation , [mbYes,mbCancel], 0) of
+  mrYes:
+    Begin
+    // Удаление записи
+    LINE_DELETE((Sender as TsBitbtn).Tag);
+    // Перезапись объектов
+    ADD_LINES;
+    // Пересчитываем цену
+    REFRESH_PRICE;
+    // Текстовое подтверждение
+    ShowMessage('Объект был удален из корзины!');
+    End;
+  mrCancel:Abort;
+end;
 End;
 
 // Кнопка перехода в главное меню
@@ -172,9 +170,9 @@ end;
 procedure TForm9.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 // Выборка пользователя о его намерении 1. Вернуться назад. 2. Выйти из программы
-case MessageDlg('Вы точно хотите выйти?',mtConfirmation , [mbYes,mbCancel], 0) of
-mrYes:Application.Terminate;  // Если да - то закрытие программы
-mrCancel:Abort;               // Если же нет то отмена процедуры
+case MessageDlg('Вы точно хотите выйти?', mtConfirmation, [mbYes,mbCancel], 0) of
+  mrYes:Application.Terminate;  // Если да - то закрытие программы
+  mrCancel:Abort;               // Если же нет то отмена процедуры
 end;
 end;
 
@@ -191,7 +189,7 @@ Main_Box.Left:= (ClientWidth div 2) - (Main_Box.Width div 2);
 Explorer_Panel.Left:= Main_Box.Left - 2;
 Choose_Panel.Left:= Explorer_Panel.Left;
 Main_Box.Height:= ClientHeight- 110;
-Choose_Panel.Top:=Main_Box.Height + 56;
+Choose_Panel.Top:= Main_Box.Height + 56;
 end;
 
 procedure TForm9.FormShow(Sender: TObject);
@@ -246,8 +244,13 @@ for I:=0 to Length(Lines) - 1 do
   Lines[I].Label_Price.Left:= (Lines[I].Additional_Panel.Width div 2) - ((Lines[I].Label_Currency.Width + Lines[I].Label_Price.Width + 6) div 2);
   Lines[I].Label_Currency.Left:= Lines[I].Label_Price.Left + Lines[I].Label_Price.Width + 6;
   DataModule2.Basket_Query.Next;
-  End;  
-Form9.sLabel10.Caption:= IntToStr(EndPrice);  
+  End;
+
+Price2:= IntToStr(EndPrice);
+ if Price2.Length > 3 then
+  Insert(' ', Price2, Price2.Length - 2);
+Form9.sLabel10.Caption:= Price2;
+
 Form9.Label2.Caption:= Copy(Form9.sComboBox1.Text, 1, 3); 
 Form9.sLabel10.Left:= Form9.Label2.Left -6 - Form9.sLabel10.Width;
 Form9.sLabel11.Left:= Form9.sLabel10.Left -6 - Form9.sLabel11.Width; 

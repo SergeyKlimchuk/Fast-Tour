@@ -24579,432 +24579,6 @@ object Form6: TForm6
     Stretch = True
     SkinData.SkinSection = 'CHECKBOX'
   end
-  object Main_Panel: TsGradientPanel
-    Left = 240
-    Top = 0
-    Width = 800
-    Height = 720
-    TabOrder = 3
-    PaintData.Color1.Color = 16764315
-    object Main_Bevel: TsBevel
-      Left = 0
-      Top = 0
-      Width = 800
-      Height = 720
-    end
-    object Label_Not_Found: TLabel
-      Left = 181
-      Top = 341
-      Width = 438
-      Height = 38
-      Alignment = taCenter
-      Caption = 
-        #1048#1079#1074#1080#1085#1080#1090#1077', '#1085#1086' '#1087#1086' '#1074#1072#1096#1077#1084#1091' '#1079#1072#1087#1088#1086#1089#1091' '#1085#1077' '#1073#1099#1083#1086' '#1085#1072#1081#1076#1077#1085#1086' '#1079#1072#1087#1080#1089#1077#1081'!'#13#10#1055#1086#1087#1088#1086#1073#1091 +
-        #1081#1090#1077' '#1080#1079#1084#1077#1085#1080#1090#1100' '#1082#1088#1080#1090#1077#1088#1080#1080' '#1087#1086#1080#1089#1082#1072'!'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -16
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-    end
-  end
-  object sPanel2: TsPanel
-    Left = 0
-    Top = 590
-    Width = 1280
-    Height = 130
-    Align = alBottom
-    TabOrder = 0
-    object Search_Panel: TsPanel
-      Left = 8
-      Top = 0
-      Width = 960
-      Height = 130
-      TabOrder = 0
-      object sBevel1: TsBevel
-        Left = 340
-        Top = 0
-        Width = 270
-        Height = 60
-      end
-      object sBevel2: TsBevel
-        Left = 0
-        Top = 0
-        Width = 180
-        Height = 110
-      end
-      object sBevel3: TsBevel
-        Left = 620
-        Top = 0
-        Width = 180
-        Height = 60
-      end
-      object sBevel4: TsBevel
-        Left = 190
-        Top = 0
-        Width = 140
-        Height = 110
-      end
-      object sBevel5: TsBevel
-        Left = 810
-        Top = 0
-        Width = 150
-        Height = 116
-      end
-      object sLabel1: TsLabel
-        AlignWithMargins = True
-        Left = 4
-        Top = 107
-        Width = 952
-        Height = 19
-        Align = alBottom
-        Alignment = taCenter
-        Caption = #1055#1086#1080#1089#1082'!'
-        Color = clBtnFace
-        ParentColor = False
-        ParentFont = False
-        OnClick = sLabel1Click
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -16
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ExplicitWidth = 55
-      end
-      object sLabel2: TsLabel
-        Left = 350
-        Top = 35
-        Width = 11
-        Height = 13
-        Caption = #1057':'
-      end
-      object sLabel3: TsLabel
-        Left = 480
-        Top = 35
-        Width = 17
-        Height = 13
-        Caption = #1055#1086':'
-      end
-      object sLabel4: TsLabel
-        Left = 200
-        Top = 35
-        Width = 11
-        Height = 13
-        Caption = #1057':'
-      end
-      object sLabel5: TsLabel
-        Left = 192
-        Top = 86
-        Width = 18
-        Height = 13
-        Caption = #1044#1086':'
-      end
-      object sLabel6: TsLabel
-        Left = 271
-        Top = 39
-        Width = 46
-        Height = 13
-        Caption = #8376' ('#1058#1077#1085#1075#1077')'
-      end
-      object sLabel7: TsLabel
-        Left = 271
-        Top = 90
-        Width = 46
-        Height = 13
-        Caption = #8376' ('#1058#1077#1085#1075#1077')'
-      end
-      object sBevel14: TsBevel
-        Left = 190
-        Top = 69
-        Width = 140
-        Height = 4
-      end
-      object sBevel7: TsBevel
-        Left = 340
-        Top = 66
-        Width = 270
-        Height = 35
-      end
-      object sLabel27: TsLabel
-        Left = 358
-        Top = 75
-        Width = 49
-        Height = 16
-        Caption = #1042#1072#1083#1102#1090#1072':'
-        ParentFont = False
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -13
-        Font.Name = 'Tahoma'
-        Font.Style = []
-      end
-      object sCheckBox1: TsCheckBox
-        Left = 10
-        Top = 61
-        Width = 125
-        Height = 20
-        Caption = #1055#1086' '#1075#1086#1088#1086#1076#1091' '#1087#1088#1080#1073#1099#1090#1080#1103
-        Ctl3D = True
-        ParentCtl3D = False
-        ParentShowHint = False
-        ShowHint = False
-        TabOrder = 0
-        ImgChecked = 0
-        ImgUnchecked = 0
-        ShowFocus = False
-      end
-      object sCheckBox2: TsCheckBox
-        Left = 10
-        Top = 10
-        Width = 113
-        Height = 20
-        Caption = #1055#1086' '#1075#1086#1088#1086#1076#1091' '#1074#1099#1083#1077#1090#1072
-        Ctl3D = True
-        ParentCtl3D = False
-        ParentShowHint = False
-        ShowHint = False
-        TabOrder = 1
-        ImgChecked = 0
-        ImgUnchecked = 0
-        ShowFocus = False
-      end
-      object sCheckBox4: TsCheckBox
-        Left = 420
-        Top = 8
-        Width = 108
-        Height = 20
-        Caption = #1055#1086' '#1076#1072#1090#1077' '#1086#1090#1073#1099#1090#1080#1103
-        Ctl3D = True
-        ParentCtl3D = False
-        ParentShowHint = False
-        ShowHint = False
-        TabOrder = 2
-        ImgChecked = 0
-        ImgUnchecked = 0
-        ShowFocus = False
-      end
-      object sCheckBox5: TsCheckBox
-        Left = 630
-        Top = 10
-        Width = 108
-        Height = 20
-        Caption = #1055#1086' '#1072#1074#1080#1072#1082#1086#1084#1087#1072#1085#1080#1080
-        Ctl3D = True
-        ParentCtl3D = False
-        ParentShowHint = False
-        ShowHint = False
-        TabOrder = 3
-        ImgChecked = 0
-        ImgUnchecked = 0
-        ShowFocus = False
-      end
-      object sCheckBox6: TsCheckBox
-        Left = 200
-        Top = 10
-        Width = 60
-        Height = 20
-        Caption = #1055#1086' '#1094#1077#1085#1077
-        Ctl3D = True
-        ParentCtl3D = False
-        ParentShowHint = False
-        ShowHint = False
-        TabOrder = 4
-        ImgChecked = 0
-        ImgUnchecked = 0
-        ShowFocus = False
-      end
-      object sCheckBox7: TsCheckBox
-        Left = 820
-        Top = 10
-        Width = 114
-        Height = 20
-        Caption = #1055#1086' '#1091#1088#1086#1074#1085#1102' '#1087#1086#1083#1077#1090#1072
-        Ctl3D = True
-        ParentCtl3D = False
-        ParentShowHint = False
-        ShowHint = False
-        TabOrder = 5
-        ImgChecked = 0
-        ImgUnchecked = 0
-        ShowFocus = False
-      end
-      object sCheckListBox1: TsCheckListBox
-        Left = 820
-        Top = 36
-        Width = 130
-        Height = 70
-        Style = lbOwnerDrawFixed
-        BorderStyle = bsSingle
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        Items.Strings = (
-          #1055#1077#1088#1074#1099#1081' '#1082#1083#1072#1089#1089
-          #1041#1080#1079#1085#1077#1089'-'#1082#1083#1072#1089#1089
-          #1069#1082#1086#1085#1086#1084' '#1082#1083#1072#1089#1089)
-        ParentFont = False
-        TabOrder = 6
-        SkinData.SkinSection = 'EDIT'
-      end
-      object sComboBox2: TsComboBox
-        Left = 0
-        Top = 86
-        Width = 180
-        Height = 21
-        Alignment = taLeftJustify
-        VerticalAlignment = taAlignTop
-        Style = csDropDownList
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ItemIndex = 0
-        ParentFont = False
-        TabOrder = 7
-        Text = #1042#1089#1077' '#1075#1086#1088#1086#1076#1072
-        Items.Strings = (
-          #1042#1089#1077' '#1075#1086#1088#1086#1076#1072)
-      end
-      object sComboBox3: TsComboBox
-        Left = 0
-        Top = 35
-        Width = 180
-        Height = 21
-        Alignment = taLeftJustify
-        VerticalAlignment = taAlignTop
-        Style = csDropDownList
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ItemIndex = 0
-        ParentFont = False
-        TabOrder = 8
-        Text = #1042#1089#1077' '#1075#1086#1088#1086#1076#1072
-        Items.Strings = (
-          #1042#1089#1077' '#1075#1086#1088#1086#1076#1072)
-      end
-      object sComboBox4: TsComboBox
-        Left = 620
-        Top = 36
-        Width = 180
-        Height = 21
-        Alignment = taLeftJustify
-        VerticalAlignment = taAlignTop
-        Style = csDropDownList
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ItemIndex = 0
-        ParentFont = False
-        TabOrder = 9
-        Text = #1042#1089#1077' '#1072#1074#1080#1072#1082#1086#1084#1087#1072#1085#1080#1080
-        Items.Strings = (
-          #1042#1089#1077' '#1072#1074#1080#1072#1082#1086#1084#1087#1072#1085#1080#1080)
-      end
-      object sDateEdit1: TsDateEdit
-        Left = 365
-        Top = 34
-        Width = 100
-        Height = 21
-        AutoSize = False
-        EditMask = '!99/99/9999;1; '
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        MaxLength = 10
-        ParentFont = False
-        TabOrder = 10
-        Text = '  .  .    '
-        GlyphMode.Blend = 0
-        GlyphMode.Grayed = False
-      end
-      object sDateEdit2: TsDateEdit
-        Left = 500
-        Top = 34
-        Width = 100
-        Height = 21
-        AutoSize = False
-        EditMask = '!99/99/9999;1; '
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        MaxLength = 10
-        ParentFont = False
-        TabOrder = 11
-        Text = '  .  .    '
-        GlyphMode.Blend = 0
-        GlyphMode.Grayed = False
-      end
-      object sEdit1: TsEdit
-        Left = 216
-        Top = 35
-        Width = 49
-        Height = 21
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 12
-        Text = '200000'
-      end
-      object sEdit2: TsEdit
-        Left = 216
-        Top = 86
-        Width = 49
-        Height = 21
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 13
-        Text = '200000'
-      end
-      object sComboBox1: TsComboBox
-        Left = 413
-        Top = 73
-        Width = 180
-        Height = 21
-        Alignment = taLeftJustify
-        VerticalAlignment = taAlignTop
-        Style = csDropDownList
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ItemIndex = 0
-        ParentFont = False
-        TabOrder = 14
-        Text = 'KZT - '#1058#1077#1085#1075#1077
-        OnChange = sComboBox1Change
-        Items.Strings = (
-          'KZT - '#1058#1077#1085#1075#1077
-          'USD - '#1044#1086#1083#1083#1072#1088' '#1057#1064#1040
-          'EUR - '#1045#1074#1088#1086
-          'RUB - '#1056#1086#1089#1089#1080#1081#1089#1082#1080#1081' '#1088#1091#1073#1083#1100
-          'AUD - '#1040#1074#1089#1090#1088#1072#1083#1080#1081#1089#1082#1080#1081' '#1076#1086#1083#1083#1072#1088
-          'GBP - '#1040#1085#1075#1083#1080#1081#1089#1082#1080#1081' '#1092#1091#1085#1090' '#1089#1090#1077#1088#1083#1080#1085#1075#1086#1074
-          'DKK - '#1044#1072#1090#1089#1082#1072#1103' '#1082#1088#1086#1085#1072
-          'AED  '#1044#1080#1088#1093#1072#1084' '#1054#1040#1069)
-      end
-    end
-  end
   object sPanel1: TsPanel
     Left = 390
     Top = -3
@@ -25016,6 +24590,7 @@ object Form6: TForm6
       Top = 0
       Width = 50
       Height = 49
+      Cursor = crHandPoint
       Picture.Data = {
         0B54504E47477261706869634E1D0000424D4E1D000000000000360000002800
         000032000000310000000100180000000000181D000000000000000000000000
@@ -25252,6 +24827,7 @@ object Form6: TForm6
         FFFEFEFFFEFEFEFEFEFFFEFEFFFEFEFFFFFEFFFEFEFEFFFEFFFFFEFFFEFEFFFE
         FEFFFEFEFFFEFEFFFFFEFEFEFEFEFEFEFFFDFEFFFEFEFFFEFEFFFEFEFFFEFEFF
         FEFEFFFEFEFEFFFFFFFEFEFFFDFFFFFEFEFFFEFEFEFEFEFFFFFEFFFE0000}
+      OnClick = Label_Basket_ExplorerClick
       SkinData.SkinSection = 'CHECKBOX'
     end
     object Label_Basket_Explorer: TsLabel
@@ -26469,6 +26045,400 @@ object Form6: TForm6
       ShowFocus = False
     end
   end
+  object Main_ScrollBox: TsScrollBox
+    Left = 240
+    Top = 53
+    Width = 821
+    Height = 667
+    TabOrder = 5
+    object Label_Not_Found: TLabel
+      Left = 189
+      Top = 339
+      Width = 438
+      Height = 38
+      Alignment = taCenter
+      Caption = 
+        #1048#1079#1074#1080#1085#1080#1090#1077', '#1085#1086' '#1087#1086' '#1074#1072#1096#1077#1084#1091' '#1079#1072#1087#1088#1086#1089#1091' '#1085#1077' '#1073#1099#1083#1086' '#1085#1072#1081#1076#1077#1085#1086' '#1079#1072#1087#1080#1089#1077#1081'!'#13#10#1055#1086#1087#1088#1086#1073#1091 +
+        #1081#1090#1077' '#1080#1079#1084#1077#1085#1080#1090#1100' '#1082#1088#1080#1090#1077#1088#1080#1080' '#1087#1086#1080#1089#1082#1072'!'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+  end
+  object sPanel2: TsPanel
+    Left = 0
+    Top = 590
+    Width = 1280
+    Height = 130
+    Align = alBottom
+    TabOrder = 0
+    object Search_Panel: TsPanel
+      Left = 8
+      Top = 0
+      Width = 960
+      Height = 130
+      TabOrder = 0
+      object sBevel1: TsBevel
+        Left = 340
+        Top = 0
+        Width = 270
+        Height = 60
+      end
+      object sBevel2: TsBevel
+        Left = 0
+        Top = 0
+        Width = 180
+        Height = 110
+      end
+      object sBevel3: TsBevel
+        Left = 620
+        Top = 0
+        Width = 180
+        Height = 60
+      end
+      object sBevel4: TsBevel
+        Left = 190
+        Top = 0
+        Width = 140
+        Height = 110
+      end
+      object sLabel1: TsLabel
+        AlignWithMargins = True
+        Left = 4
+        Top = 107
+        Width = 952
+        Height = 19
+        Align = alBottom
+        Alignment = taCenter
+        Caption = #1055#1086#1080#1089#1082'!'
+        Color = clBtnFace
+        ParentColor = False
+        ParentFont = False
+        OnClick = sLabel1Click
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ExplicitWidth = 55
+      end
+      object sLabel2: TsLabel
+        Left = 350
+        Top = 35
+        Width = 11
+        Height = 13
+        Caption = #1057':'
+      end
+      object sLabel3: TsLabel
+        Left = 480
+        Top = 35
+        Width = 17
+        Height = 13
+        Caption = #1055#1086':'
+      end
+      object sLabel4: TsLabel
+        Left = 200
+        Top = 35
+        Width = 11
+        Height = 13
+        Caption = #1057':'
+      end
+      object sLabel5: TsLabel
+        Left = 192
+        Top = 86
+        Width = 18
+        Height = 13
+        Caption = #1044#1086':'
+      end
+      object sLabel6: TsLabel
+        Left = 271
+        Top = 39
+        Width = 46
+        Height = 13
+        Caption = #8376' ('#1058#1077#1085#1075#1077')'
+      end
+      object sLabel7: TsLabel
+        Left = 271
+        Top = 90
+        Width = 46
+        Height = 13
+        Caption = #8376' ('#1058#1077#1085#1075#1077')'
+      end
+      object sBevel14: TsBevel
+        Left = 190
+        Top = 69
+        Width = 140
+        Height = 4
+      end
+      object sBevel7: TsBevel
+        Left = 340
+        Top = 66
+        Width = 270
+        Height = 35
+      end
+      object sLabel27: TsLabel
+        Left = 358
+        Top = 75
+        Width = 49
+        Height = 16
+        Caption = #1042#1072#1083#1102#1090#1072':'
+        ParentFont = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = []
+      end
+      object sCheckBox1: TsCheckBox
+        Left = 10
+        Top = 61
+        Width = 125
+        Height = 20
+        Caption = #1055#1086' '#1075#1086#1088#1086#1076#1091' '#1087#1088#1080#1073#1099#1090#1080#1103
+        Ctl3D = True
+        ParentCtl3D = False
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 0
+        ImgChecked = 0
+        ImgUnchecked = 0
+        ShowFocus = False
+      end
+      object sCheckBox2: TsCheckBox
+        Left = 10
+        Top = 10
+        Width = 113
+        Height = 20
+        Caption = #1055#1086' '#1075#1086#1088#1086#1076#1091' '#1074#1099#1083#1077#1090#1072
+        Ctl3D = True
+        ParentCtl3D = False
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 1
+        ImgChecked = 0
+        ImgUnchecked = 0
+        ShowFocus = False
+      end
+      object sCheckBox4: TsCheckBox
+        Left = 420
+        Top = 8
+        Width = 108
+        Height = 20
+        Caption = #1055#1086' '#1076#1072#1090#1077' '#1086#1090#1073#1099#1090#1080#1103
+        Ctl3D = True
+        ParentCtl3D = False
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 2
+        ImgChecked = 0
+        ImgUnchecked = 0
+        ShowFocus = False
+      end
+      object sCheckBox5: TsCheckBox
+        Left = 630
+        Top = 10
+        Width = 108
+        Height = 20
+        Caption = #1055#1086' '#1072#1074#1080#1072#1082#1086#1084#1087#1072#1085#1080#1080
+        Ctl3D = True
+        ParentCtl3D = False
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 3
+        ImgChecked = 0
+        ImgUnchecked = 0
+        ShowFocus = False
+      end
+      object sCheckBox6: TsCheckBox
+        Left = 200
+        Top = 10
+        Width = 60
+        Height = 20
+        Caption = #1055#1086' '#1094#1077#1085#1077
+        Ctl3D = True
+        ParentCtl3D = False
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 4
+        ImgChecked = 0
+        ImgUnchecked = 0
+        ShowFocus = False
+      end
+      object sComboBox2: TsComboBox
+        Left = 0
+        Top = 86
+        Width = 180
+        Height = 21
+        Alignment = taLeftJustify
+        VerticalAlignment = taAlignTop
+        Style = csDropDownList
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ItemIndex = 0
+        ParentFont = False
+        TabOrder = 5
+        Text = #1042#1089#1077' '#1075#1086#1088#1086#1076#1072
+        Items.Strings = (
+          #1042#1089#1077' '#1075#1086#1088#1086#1076#1072)
+      end
+      object sComboBox3: TsComboBox
+        Left = 0
+        Top = 35
+        Width = 180
+        Height = 21
+        Alignment = taLeftJustify
+        VerticalAlignment = taAlignTop
+        Style = csDropDownList
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ItemIndex = 0
+        ParentFont = False
+        TabOrder = 6
+        Text = #1042#1089#1077' '#1075#1086#1088#1086#1076#1072
+        Items.Strings = (
+          #1042#1089#1077' '#1075#1086#1088#1086#1076#1072)
+      end
+      object sComboBox4: TsComboBox
+        Left = 620
+        Top = 36
+        Width = 180
+        Height = 21
+        Alignment = taLeftJustify
+        VerticalAlignment = taAlignTop
+        Style = csDropDownList
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ItemIndex = 0
+        ParentFont = False
+        TabOrder = 7
+        Text = #1042#1089#1077' '#1072#1074#1080#1072#1082#1086#1084#1087#1072#1085#1080#1080
+        Items.Strings = (
+          #1042#1089#1077' '#1072#1074#1080#1072#1082#1086#1084#1087#1072#1085#1080#1080)
+      end
+      object sDateEdit1: TsDateEdit
+        Left = 365
+        Top = 34
+        Width = 100
+        Height = 21
+        AutoSize = False
+        EditMask = '!99/99/9999;1; '
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 10
+        ParentFont = False
+        TabOrder = 8
+        Text = '  .  .    '
+        GlyphMode.Blend = 0
+        GlyphMode.Grayed = False
+      end
+      object sDateEdit2: TsDateEdit
+        Left = 500
+        Top = 34
+        Width = 100
+        Height = 21
+        AutoSize = False
+        EditMask = '!99/99/9999;1; '
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 10
+        ParentFont = False
+        TabOrder = 9
+        Text = '  .  .    '
+        GlyphMode.Blend = 0
+        GlyphMode.Grayed = False
+      end
+      object sEdit1: TsEdit
+        Left = 216
+        Top = 35
+        Width = 49
+        Height = 21
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 10
+        Text = '0'
+      end
+      object sEdit2: TsEdit
+        Left = 216
+        Top = 86
+        Width = 49
+        Height = 21
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 11
+        Text = '200000'
+      end
+      object sComboBox1: TsComboBox
+        Left = 413
+        Top = 73
+        Width = 180
+        Height = 21
+        Alignment = taLeftJustify
+        VerticalAlignment = taAlignTop
+        Style = csDropDownList
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ItemIndex = 0
+        ParentFont = False
+        TabOrder = 12
+        Text = 'KZT - '#1058#1077#1085#1075#1077
+        OnChange = sComboBox1Change
+        Items.Strings = (
+          'KZT - '#1058#1077#1085#1075#1077
+          'USD - '#1044#1086#1083#1083#1072#1088' '#1057#1064#1040
+          'EUR - '#1045#1074#1088#1086
+          'RUB - '#1056#1086#1089#1089#1080#1081#1089#1082#1080#1081' '#1088#1091#1073#1083#1100
+          'AUD - '#1040#1074#1089#1090#1088#1072#1083#1080#1081#1089#1082#1080#1081' '#1076#1086#1083#1083#1072#1088
+          'GBP - '#1040#1085#1075#1083#1080#1081#1089#1082#1080#1081' '#1092#1091#1085#1090' '#1089#1090#1077#1088#1083#1080#1085#1075#1086#1074
+          'DKK - '#1044#1072#1090#1089#1082#1072#1103' '#1082#1088#1086#1085#1072
+          'AED  '#1044#1080#1088#1093#1072#1084' '#1054#1040#1069)
+      end
+      object sRadioGroup1: TsRadioGroup
+        Left = 821
+        Top = 6
+        Width = 130
+        Height = 77
+        Color = clWhite
+        ParentBackground = False
+        ParentColor = False
+        TabOrder = 13
+        SkinData.CustomColor = True
+        ItemIndex = 2
+        Items.Strings = (
+          #1055#1077#1088#1074#1099#1081' '#1082#1083#1072#1089#1089
+          #1041#1080#1079#1085#1077#1089'-'#1082#1083#1072#1089#1089
+          #1069#1082#1086#1085#1086#1084' '#1082#1083#1072#1089#1089)
+      end
+    end
+  end
   object Explorer_Panel: TsPanel
     Left = 155
     Top = 540
@@ -26734,7 +26704,7 @@ object Form6: TForm6
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 4
+    TabOrder = 3
     Visible = False
     PaintData.Color1.Color = clYellow
     PaintData.CustomGradient = '16777215;16316664;97;0;0;16316664;16316664;0;0;0'
@@ -26850,6 +26820,13 @@ object Form6: TForm6
       Top = 48
       Width = 110
       Height = 2
+    end
+    object sBevel11: TsBevel
+      Left = 0
+      Top = 0
+      Width = 1000
+      Height = 97
+      Cursor = crHandPoint
     end
     object Button_Exit: TsBitBtn
       Left = 965
@@ -27015,17 +26992,18 @@ object Form6: TForm6
     end
   end
   object Panel_FullInfo: TsPanel
-    Left = 140
-    Top = 105
+    Left = 290
+    Top = 284
     Width = 700
     Height = 152
-    TabOrder = 5
+    TabOrder = 4
     Visible = False
     object sLabel11: TsLabel
       Left = 598
       Top = 16
       Width = 61
       Height = 19
+      Cursor = crHandPoint
       Caption = #1047#1072#1082#1088#1099#1090#1100
       ParentFont = False
       OnClick = sBitBtn5Click

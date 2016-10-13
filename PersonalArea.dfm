@@ -46,10 +46,11 @@ object Form5: TForm5
       Width = 164
       Height = 164
       Picture.Data = {07544269746D617000000000}
+      Stretch = True
       SkinData.SkinSection = 'CHECKBOX'
     end
     object sButton1: TsButton
-      Left = 6
+      Left = 8
       Top = 178
       Width = 164
       Height = 25
@@ -206,13 +207,13 @@ object Form5: TForm5
       Left = 6
       Top = 162
       Width = 386
-      Height = 7
+      Height = 3
     end
     object sBevel3: TsBevel
       Left = 6
       Top = 52
       Width = 386
-      Height = 7
+      Height = 3
     end
     object sLabel7: TsLabel
       Left = 90
@@ -310,7 +311,7 @@ object Form5: TForm5
       Font.Style = []
     end
     object sLabel17: TsLabel
-      Left = 289
+      Left = 369
       Top = 348
       Width = 9
       Height = 19
@@ -323,8 +324,8 @@ object Form5: TForm5
       Font.Style = []
     end
     object sLabel18: TsLabel
-      Left = 287
-      Top = 383
+      Left = 367
+      Top = 377
       Width = 9
       Height = 19
       Caption = '*'
@@ -520,7 +521,7 @@ object Form5: TForm5
     object sComboBox3: TsComboBox
       Left = 120
       Top = 350
-      Width = 163
+      Width = 243
       Height = 21
       Alignment = taLeftJustify
       VerticalAlignment = taAlignTop
@@ -531,9 +532,10 @@ object Form5: TForm5
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemIndex = -1
+      ItemIndex = 2
       ParentFont = False
       TabOrder = 9
+      Text = #1053#1072#1079#1074#1072#1085#1080#1077' '#1091#1083#1080#1094#1099', '#1085#1072' '#1082#1086#1090#1086#1088#1086#1081' '#1074#1099' '#1074#1099#1088#1086#1089#1083#1080'?'
       OnChange = sComboBox3Change
       Items.Strings = (
         #1050#1072#1082' '#1079#1074#1072#1083#1080' '#1074#1072#1096#1077#1075#1086' '#1087#1077#1088#1074#1086#1075#1086' '#1087#1080#1090#1086#1084#1094#1072'?'
@@ -549,7 +551,7 @@ object Form5: TForm5
     object sEdit6: TsEdit
       Left = 118
       Top = 385
-      Width = 163
+      Width = 243
       Height = 21
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET

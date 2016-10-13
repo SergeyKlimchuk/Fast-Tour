@@ -431,7 +431,7 @@ Procedure CHK_Date;
 Begin
 if (Form7.sDateEdit1.Text <> '  .  .    ') and (Form7.sDateEdit2.Text <> '  .  .    ') then
 Begin
-if Form7.sDateEdit1.Date < Form7.sDateEdit2.Date then // Если дата заезда позже чем дата въезда то
+if (Form7.sDateEdit1.Date < Form7.sDateEdit2.Date) and (Form7.sDateEdit1.Date > Now) then // Если дата заезда позже чем дата въезда то
   Begin
   // Скрываем прудпредительный знак
   Form7.sPanel2.Visible:= False;

@@ -325,6 +325,13 @@ procedure TForm5.FormShow(Sender: TObject);
 begin
 if (DataModule2.Purchases_Query.RecordCount > 0) then
   Begin
+  With DataModule2.Purchases_Query do
+    Begin
+    Active:= False;
+    SQL.Clear;
+    SQL.Add('Select * From Purchases Where ID_Buyer=' + DataModule2.Reg_Query.FieldByName('ID').AsString);
+    Active:= True;
+    End;
   DELETE_LINES;
   ADD_LINES;
   End;
@@ -356,7 +363,6 @@ Var
 Begin
   if LowerCase(Copy(Form5.OpenDialog1.FileName,Length(Form5.OpenDialog1.FileName)-2,3))='jpg' then
   Begin
-  //Showmessage('Its JPG!');
   jpg:=TJPEGImage.Create;
   bmp:=TBitmap.Create;
   jpg.LoadFromFile(Form5.OpenDialog1.FileName);
@@ -370,7 +376,6 @@ Begin
 
   if LowerCase(Copy(Form5.OpenDialog1.FileName,Length(Form5.OpenDialog1.FileName)-2,3))='bmp' then
   Begin
-  //Showmessage('Its BMP!');
   pins:=Tpicture.Create;
   pins.LoadFromFile(Form5.OpenDialog1.FileName);
   DataModule2.Reg_Query.Edit;
@@ -389,21 +394,7 @@ Var
 begin
   if (Edit_PictureB = True) then
     Set_Image;
-//    Begin
-//    jpg := TJPEGImage.Create;
-//    bmp := TBitmap.Create;
-//    try
-//      jpg.LoadFromFile(OpenDialog1.FileName);
-//      bmp.Assign(jpg);
-//      DataModule2.Reg_Query.Edit;
-//      DataModule2.Reg_Query.FieldByName('U_Picture').Assign(bmp);
-//      DataModule2.Reg_Query.Post;
-//    finally
-//      jpg.Free;
-//      bmp.Free;
-//    end;
-//
-//    End;
+
 
   DataModule2.Reg_Query.Edit;
 

@@ -8,7 +8,8 @@ uses
   Vcl.StdCtrls, Vcl.ExtCtrls, sPanel, sSkinManager, sLabel,
   sBevel, sComboBox, sButton, Vcl.Mask, sMaskEdit, sToolEdit, sCheckBox, sEdit,
   Vcl.ActnPopup, sCheckListBox, Vcl.Buttons, sBitBtn, acPNG, acImage,
-  BTNlib, sRadioButton, DateUtils, Vcl.Imaging.jpeg, sCustomComboEdit, sListBox;
+  BTNlib, sRadioButton, DateUtils, Vcl.Imaging.jpeg, sCustomComboEdit, sListBox,
+  sScrollBox, sGroupBox;
 
 type
   TForm6 = class(TForm)
@@ -23,7 +24,6 @@ type
     sBevel2: TsBevel;
     sBevel3: TsBevel;
     sBevel4: TsBevel;
-    sBevel5: TsBevel;
     sLabel1: TsLabel;
     sLabel2: TsLabel;
     sLabel3: TsLabel;
@@ -37,8 +37,6 @@ type
     sCheckBox4: TsCheckBox;
     sCheckBox5: TsCheckBox;
     sCheckBox6: TsCheckBox;
-    sCheckBox7: TsCheckBox;
-    sCheckListBox1: TsCheckListBox;
     sComboBox2: TsComboBox;
     sComboBox3: TsComboBox;
     sComboBox4: TsComboBox;
@@ -46,7 +44,6 @@ type
     sDateEdit2: TsDateEdit;
     sEdit1: TsEdit;
     sEdit2: TsEdit;
-    Main_Panel: TsGradientPanel;
     sBitBtn2: TsBitBtn;
     sBitBtn3: TsBitBtn;
     sImage1: TsImage;
@@ -54,7 +51,6 @@ type
     Label_Basket_Count: TsLabel;
     sBitBtn1: TsBitBtn;
     sBitBtn4: TsBitBtn;
-    Main_Bevel: TsBevel;
     BackGround_Image: TsImage;
     Castom_Way: TsGradientPanel;
     sBevel15: TsBevel;
@@ -87,12 +83,15 @@ type
     Label_FFrom: TsLabel;
     Label_FTo: TsLabel;
     Image1: TImage;
-    Label_Not_Found: TLabel;
     sBevel6: TsBevel;
     sLabel12: TsLabel;
     sBevel8: TsBevel;
     sBevel9: TsBevel;
     sBevel10: TsBevel;
+    sBevel11: TsBevel;
+    Main_ScrollBox: TsScrollBox;
+    Label_Not_Found: TLabel;
+    sRadioGroup1: TsRadioGroup;
     procedure FormCreate(Sender: TObject);
     procedure sLabel1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -520,17 +519,17 @@ Img.LoadFromFile('Textures\Plane.png');
 For I:=1 to Panel_Count do
   Begin
     Home_Panel[I]:=TsGradientPanel.create(Owner);
-    Home_Panel[I].Parent:= Main_Panel;
+    Home_Panel[I].Parent:= Main_ScrollBox;
     Home_Panel[I].Width:= 800;
     Home_Panel[I].Height:= 100;
     Home_Panel[I].Left:= 0;
     case I of
-    1:Home_Panel[I].Top:= 100;
-    2:Home_Panel[I].Top:= 210;
-    3:Home_Panel[I].Top:= 320;
-    4:Home_Panel[I].Top:= 430;
-    5:Home_Panel[I].Top:= 540;
-    6:Home_Panel[I].Top:= 650;
+    1:Home_Panel[I].Top:= 10;
+    2:Home_Panel[I].Top:= 120;
+    3:Home_Panel[I].Top:= 230;
+    4:Home_Panel[I].Top:= 340;
+    5:Home_Panel[I].Top:= 450;
+    6:Home_Panel[I].Top:= 560;
     end;
     // Лейбел "Авиакомпания:"
     Label_AirCompany[I]:=TsLabel.create(Owner);
@@ -707,11 +706,11 @@ for I:= 0 to (Button_count - 1) do
   for I:=1 to DataModule2.Air_Query.RecordCount do
     Begin
     if LowerCase(sComboBox3.Items[I - 1] )= LowerCase(DataModule2.Air_Query.Fields.Fields[1].AsString) then
-      CHK1:= True; // Наден элемент = правда
+      CHK1:= True; // Найден элемент = правда
     if LowerCase(sComboBox2.Items[I - 1]) = LowerCase(DataModule2.Air_Query.Fields.Fields[5].AsString) then
-      CHK2:= True; // Наден элемент = правда
+      CHK2:= True; // Найден элемент = правда
     if LowerCase(sComboBox4.Items[I - 1]) = LowerCase(DataModule2.Air_Query.Fields.Fields[9].AsString) then
-      CHK3:= True; // Наден элемент = правда
+      CHK3:= True; // Найден элемент = правда
     end;
   if (CHK1 = False) then // Если мы не нашли похожий элемент в нашем комбобоксе то мы его добавляем
     sComboBox3.Items.Add(DataModule2.Air_Query.Fields.Fields[1].AsString);
@@ -744,13 +743,12 @@ begin
 Search_Panel.left:=(ClientWidth div 2) - (Search_Panel.Width div 2);
 Explorer_Panel.Left:= Search_Panel.left;
 Explorer_Panel.Top:= sPanel2.Top - Explorer_Panel.Height;
-Main_Panel.Left:= (ClientWidth div 2) - (Main_Panel.Width div 2);
-Main_Panel.Height:= ClientHeight;
+Main_ScrollBox.Left:= (ClientWidth div 2) - (Main_ScrollBox.Width div 2);
+Main_ScrollBox.Height:= Explorer_Panel.Top - Main_ScrollBox.Top;
 sPanel1.Left:= (ClientWidth div 2) - (sPanel1.Width div 2);
-Main_Bevel.Height:= Main_Panel.Height-1;
 BackGround_Image.Width:= ClientWidth;
 BackGround_Image.Height:= ClientHeight;
-Castom_Way.Left:= Main_Panel.Left + 40;
+Castom_Way.Left:= Main_ScrollBox.Left + 40;
 end;
 
 procedure TForm6.FormShow(Sender: TObject);
@@ -799,29 +797,31 @@ end;
 
 Procedure REFRESH_PRICE; // Процедура обновления цены (Активируется при смене валюты)
 Var
-  I, Price:Integer;
-  Price2  :String;
-  EndPrice:Integer;
+  I, Price: Integer;
+  Price2,tpe: String;
+  EndPrice: Integer;
 Begin
 DataModule2.Air_Query.First;
 // Переход на первую запись нашей страницы
-if (Page_Current > 1) then
-  for I:= 2 to Page_Current do
-    for EndPrice:= 1 to Panel_count do
-      DataModule2.Air_Query.Next;
+DataModule2.Air_Query.MoveBy(((Page_Current - 1) * Panel_Count));
 EndPrice:=0;
 for I:= 1 to Panel_Count do
   Begin
   Label_Currency[I].Caption:= Copy(Form6.sComboBox1.Text, 1, 3);
+  case Form6.sRadioGroup1.ItemIndex of
+  0:tpe:= 'FC';
+  1:tpe:= 'BC';
+  2:tpe:= 'EC';
+  end;
   case Form6.sComboBox1.ItemIndex of
-  0:Price:= DataModule2.Air_Query.FieldByName('Price_EC').AsInteger * KZT;
-  1:Price:= DataModule2.Air_Query.FieldByName('Price_EC').AsInteger;
-  2:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_EC').AsInteger * EUR);
-  3:Price:= DataModule2.Air_Query.FieldByName('Price_EC').AsInteger * RUB;
-  4:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_EC').AsInteger * AUD);
-  5:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_EC').AsInteger * GBP);
-  6:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_EC').AsInteger * DKK);
-  7:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_EC').AsInteger * AED);
+  0:Price:= DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * KZT;
+  1:Price:= DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger;
+  2:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * EUR);
+  3:Price:= DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * RUB;
+  4:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * AUD);
+  5:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * GBP);
+  6:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * DKK);
+  7:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * AED);
   end;
   EndPrice:= EndPrice + Price;
   Price2:= IntToStr(Price);
@@ -883,21 +883,21 @@ end;
   6:Prm2:= IntToStr(Trunc(StrToInt(sEdit2.Text) / DKK));
   7:Prm2:= IntToStr(Trunc(StrToInt(sEdit2.Text) / AED));
   end;
-if (sCheckBox6.Checked=True) and (sCheckBox7.Checked=True) then
+if (sCheckBox6.Checked=True) then
   Begin
-  if sCheckListBox1.Checked[0] then  //Первый
+  if sRadioGroup1.ItemIndex = 0 then  //Первый
     case FRST of
     True:Begin MSG:= MSG + ' WHERE (Price_FC BETWEEN ' + Prm1 + ' AND '+Prm2 + ')'; FRST:=False; end;
     False:MSG:= MSG + ' AND (Price_FC BETWEEN ' + Prm1 + ' AND ' + Prm2 + ')';
     end;
 
-  if sCheckListBox1.Checked[1] then  //Бизнес
+  if sRadioGroup1.ItemIndex = 1 then  //Бизнес
     case FRST of
     True:Begin MSG:= MSG + ' WHERE (Price_BC BETWEEN ' + Prm1 + ' AND '+Prm2 + ')'; FRST:=False; end;
     False:MSG:= MSG + ' AND (Price_BC BETWEEN ' + Prm1 + ' AND ' + Prm2 + ')';
     end;
 
-  if sCheckListBox1.Checked[2] then  //Эконом
+  if sRadioGroup1.ItemIndex = 2 then  //Эконом
     case FRST of
     True:Begin MSG:= MSG + ' WHERE (Price_EC BETWEEN ' + Prm1 + ' AND '+Prm2 + ')'; FRST:=False; end;
     False:MSG:= MSG + ' AND (Price_EC BETWEEN ' + Prm1 + ' AND ' + Prm2 + ')';
@@ -920,21 +920,22 @@ if (sCheckBox5.Checked = True) then
   False:MSG:=MSG+' AND (Air_company="'+sComboBox4.Text+'")';
   end;
 //..............................................................................
-if (sCheckBox7.Checked = True) AND (sCheckListBox1.Checked[0] = True) then
+if (sRadioGroup1.ItemIndex = 0) then
   case FRST of
   True:Begin MSG:=MSG+' WHERE (Free_places_FC > 0)'; FRST:=False; end;
   False:MSG:=MSG+' AND (Free_places_FC > 0)';
   end;
-if (sCheckBox7.Checked = True) AND (sCheckListBox1.Checked[1] = True) then
+if (sRadioGroup1.ItemIndex = 1) then
   case FRST of
   True:Begin MSG:=MSG+' WHERE (Free_places_BC > 0)'; FRST:=False; end;
   False:MSG:=MSG+' AND (Free_places_BC > 0)';
   end;
-if (sCheckBox7.Checked = True) AND (sCheckListBox1.Checked[2] = True) then
+if (sRadioGroup1.ItemIndex = 2) then
   case FRST of
   True:Begin MSG:=MSG+' WHERE (Free_places_EC > 0)'; FRST:=False; end;
   False:MSG:=MSG+' AND (Free_places_EC > 0)';
   end;
+//..............................................................................
 // Отправка запроса
 With DataModule2.Air_Query do
   Begin
@@ -954,8 +955,11 @@ Button_count:= Pages_Count;
 // Выставляем текущей страницей - страницу 1
 Build_page(1);
 // Проверяем будут ли кнопки активны
+//ShowMessage('Page_Current= ' + IntToStr(Page_Current) + ' <= ' + IntToStr(Pages_count));
 if (Page_Current + 1) <= Pages_count then
-  Next_Button.Enabled:= True;
+  Next_Button.Enabled:= True
+    else
+      Next_Button.Enabled:= False;
 Prior_button.Enabled:= False;
 // Перерисовка кнопочной панели
 // Отрисовываем задний фон
@@ -997,7 +1001,7 @@ for I:= 0 to Button_count - 1 do
   CButtons[I].Create;
   Button_panel.Canvas.Draw(CButtons[I].Left, CButtons[I].Top, CButtons[I].Paint);
   end;
-//   ShowMEssage('-->  ' + MSG + '  <--');
+
 end;
 
 

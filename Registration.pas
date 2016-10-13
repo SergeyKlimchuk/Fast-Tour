@@ -129,9 +129,9 @@ if (Length(sEdit1.Text)<6) or (Length(sEdit2.Text)<6) or (Length(sEdit3.Text)<6)
       DataModule2.Reg_Table.Fields.Fields[5].AsString := sEdit4.Text;
       DataModule2.Reg_Table.Fields.Fields[6].AsString := 'ѕользователь';
       DataModule2.Reg_Table.Post;
+      Showmessage('¬ы успешно зарегистрировались! ƒл€ полной регистрации и возможности востановлени€ аккаунта зайдите в личный кабинет и дополните информацию!');
       Form2.Hide;
       Form3.Show;
-      Showmessage('¬ы успешно зарегистрировались! ƒл€ полной регистрации и возможности востановлени€ аккаунта зайдите в личный кабинет и дополните информацию!');
     End else Showmessage('ѕользователь с таким логином или почтой уже зарегестрирован! ≈сли это ваш логин или почта то пройдите процедуру востановлени€!');
 
     End;
