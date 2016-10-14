@@ -82,8 +82,8 @@ type
     sLabel1: TsLabel;
     sDateEdit2: TsDateEdit;
     sBevel5: TsBevel;
-    sPanel2: TsPanel;
     sLabel2: TsLabel;
+    sButton2: TsButton;
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure sButton1Click(Sender: TObject);
@@ -106,11 +106,10 @@ type
     procedure Button_PanelMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure sDateEdit2Change(Sender: TObject);
-    procedure sDateEdit1Change(Sender: TObject);
     procedure Button_add_OBJECTClick(Sender: TObject);
     procedure sLabel26Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure sButton2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -417,6 +416,8 @@ Begin
 End;
 end;
 
+
+
 Procedure CHK_Date;
 Begin
 if (Pos(' ', Form7.sDateEdit1.Text) > 0) or (Pos(' ', Form7.sDateEdit2.Text) > 0) then
@@ -431,44 +432,26 @@ if (Form7.sDateEdit1.Date < Now) then
   Abort;
   End;
 
-
-
 if (Form7.sDateEdit2.Date > IncMonth((Form7.sDateEdit1.Date), 3)) then
   Begin
   ShowMessage('Нельзя бронировать отель более чем на 3 месяца!');
   Abort;
   End;
 
-
-
-
-  if (Form7.sDateEdit1.Text <> '  .  .    ') and (Form7.sDateEdit2.Text <> '  .  .    ') then
+if (Form7.sDateEdit2.Date < Form7.sDateEdit2.Date) then
   Begin
-  if (Form7.sDateEdit1.Date < Form7.sDateEdit2.Date) and (Form7.sDateEdit1.Date > Now) then // Если дата заезда позже чем дата въезда то
-    Begin
-    // Скрываем прудпредительный знак
-    Form7.sPanel2.Visible:= False;
-    Form7.Price_Panel.Caption:= '     Цена:  ' + IntToStr(Get_Price(Form7.sDateEdit1.Date, Form7.sDateEdit2.Date))+'$';
-    Form7.Price_Panel.Refresh;
-    // Показываем кнопку добавления
-    Form7.Button_add_OBJECT.Enabled:= True;
-    End
-  else
-    Begin
-    // Показываем прудпредительный знак
-    Form7.sPanel2.Visible:= True;
-    // Скрываем кнопку добавления
-    Form7.Button_add_OBJECT.Enabled:= False;
-    End;
+  ShowMessage('Дата окончания бронирования не должна быть меньше чем день начала бронирования!');
+  Abort;
   End;
+
+// Скрываем прудпредительный знак
+Form7.Price_Panel.Caption:= '     Цена:  ' + IntToStr(Get_Price(Form7.sDateEdit1.Date, Form7.sDateEdit2.Date))+'$';
+Form7.Price_Panel.Refresh;
+// Показываем кнопку добавления
+Form7.Button_add_OBJECT.Enabled:= True;
 End;
 
-procedure TForm7.sDateEdit1Change(Sender: TObject);
-begin
-CHK_Date;
-end;
-
-procedure TForm7.sDateEdit2Change(Sender: TObject);
+procedure TForm7.sButton2Click(Sender: TObject);
 begin
 CHK_Date;
 end;

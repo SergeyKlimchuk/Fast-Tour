@@ -679,7 +679,7 @@ object Form7: TForm7
         TabOrder = 3
         object sLabel1: TsLabel
           Left = 15
-          Top = 34
+          Top = 10
           Width = 47
           Height = 19
           Caption = #1047#1072#1077#1079#1076':'
@@ -691,14 +691,14 @@ object Form7: TForm7
           Font.Style = []
         end
         object sBevel5: TsBevel
-          Left = 10
-          Top = 60
+          Left = 7
+          Top = 44
           Width = 300
           Height = 3
         end
         object sLabel2: TsLabel
           Left = 181
-          Top = 34
+          Top = 10
           Width = 18
           Height = 19
           Caption = #1076#1086
@@ -711,7 +711,7 @@ object Form7: TForm7
         end
         object sDateEdit1: TsDateEdit
           Left = 68
-          Top = 32
+          Top = 7
           Width = 100
           Height = 21
           AutoSize = False
@@ -725,13 +725,12 @@ object Form7: TForm7
           ParentFont = False
           TabOrder = 0
           Text = '  .  .    '
-          OnChange = sDateEdit1Change
           GlyphMode.Blend = 0
           GlyphMode.Grayed = False
         end
         object sDateEdit2: TsDateEdit
           Left = 205
-          Top = 32
+          Top = 7
           Width = 100
           Height = 21
           AutoSize = False
@@ -745,24 +744,24 @@ object Form7: TForm7
           ParentFont = False
           TabOrder = 1
           Text = '  .  .    '
-          OnChange = sDateEdit2Change
           GlyphMode.Blend = 0
           GlyphMode.Grayed = False
         end
-      end
-      object sPanel2: TsPanel
-        Left = 26
-        Top = 193
-        Width = 300
-        Height = 25
-        Caption = #1047#1072#1087#1086#1083#1085#1080#1090#1077' '#1086#1073#1072' '#1087#1086#1083#1103' '#1089' '#1076#1072#1090#1072#1084#1080'!'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -16
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 4
+        object sButton2: TsButton
+          Left = 60
+          Top = 53
+          Width = 200
+          Height = 25
+          Caption = #1055#1088#1080#1085#1103#1090#1100'!'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -19
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+          OnClick = sButton2Click
+        end
       end
     end
     object Panel_Stars: TsGradientPanel
@@ -805,7 +804,7 @@ object Form7: TForm7
       Top = 22
       Width = 548
       Height = 346
-      ActivePage = TabSheet1
+      ActivePage = TabSheet3
       TabOrder = 1
       TabPosition = tpBottom
       object TabSheet1: TTabSheet
