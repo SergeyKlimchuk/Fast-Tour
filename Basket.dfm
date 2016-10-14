@@ -33,6 +33,7 @@ object Form9: TForm9
       Top = 0
       Width = 50
       Height = 50
+      Hint = #1042#1099#1081#1090#1080' '#1074' '#1075#1083#1072#1074#1085#1086#1077' '#1084#1077#1085#1102'!'
       Glyph.Data = {
         EE240000424DEE240000000000003600000028000000320000002F0000000100
         200000000000B824000000000000000000000000000000000000F7F7F700F7F7
@@ -330,14 +331,16 @@ object Form9: TForm9
         F700F7F7F700F7F7F700F7F7F700F7F7F700F7F7F700F7F7F700F7F7F700F7F7
         F700F7F7F700F7F7F700F7F7F700F7F7F700F7F7F700F7F7F700F7F7F700F7F7
         F700F7F7F700F7F7F700F7F7F700F7F7F700}
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
       TabStop = False
       OnClick = ExitClick
       ShowFocus = False
     end
     object Info: TsBitBtn
-      Left = 100
-      Top = 0
+      Left = 106
+      Top = -3
       Width = 50
       Height = 50
       Hint = #1057#1087#1088#1072#1074#1082#1072' '#1087#1086' '#1076#1072#1085#1085#1086#1084#1091' '#1084#1077#1085#1102'!'
@@ -620,15 +623,17 @@ object Form9: TForm9
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00}
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
       TabStop = False
       ShowFocus = False
     end
     object Nick_Name: TsPanel
-      Left = 280
-      Top = 11
-      Width = 217
-      Height = 25
+      Left = 680
+      Top = 0
+      Width = 200
+      Height = 50
       Caption = #1042#1099' '#1074#1086#1096#1083#1080' '#1082#1072#1082' - Sergey_Klim!'
       TabOrder = 2
     end
@@ -954,6 +959,8 @@ object Form9: TForm9
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000333333FF3333
         33FF333333EC00000000}
+      ParentShowHint = False
+      ShowHint = True
       Style = bsWin31
       TabOrder = 3
       TabStop = False
@@ -979,7 +986,7 @@ object Form9: TForm9
     PaintData.Color1.Color = 16764315
     PaintData.Color1.UseSkinColor = True
     object Label2: TLabel
-      Left = 704
+      Left = 658
       Top = 20
       Width = 22
       Height = 14
@@ -992,7 +999,7 @@ object Form9: TForm9
       ParentFont = False
     end
     object sLabel10: TsLabel
-      Left = 636
+      Left = 596
       Top = 12
       Width = 48
       Height = 25
@@ -1005,7 +1012,7 @@ object Form9: TForm9
       Font.Style = []
     end
     object sLabel11: TsLabel
-      Left = 571
+      Left = 531
       Top = 12
       Width = 59
       Height = 25
@@ -1031,11 +1038,11 @@ object Form9: TForm9
       ParentFont = False
     end
     object sButton4: TsButton
-      Left = 744
+      Left = 710
       Top = 8
-      Width = 129
+      Width = 163
       Height = 29
-      Caption = #1055#1088#1080#1086#1073#1088#1077#1089#1090#1080
+      Caption = #1055#1077#1088#1077#1081#1090#1080' '#1082' '#1086#1092#1086#1088#1084#1083#1077#1085#1080#1102'!'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11

@@ -167,6 +167,7 @@ With Datamodule2.Reg_Query do
 
   if Datamodule2.Reg_Query.RecordCount = 1 then
   Begin
+  sButton2.Enabled:= True;
   sEdit4.Text:='';
   sEdit3.Enabled:=False;
   sButton1.Enabled:=False;
@@ -180,9 +181,10 @@ end;
 
 procedure TForm3.sButton2Click(Sender: TObject);
 begin
-  sEdit3.Enabled:=True;
-  sButton1.Enabled:=True;
-  sPanel3.Height:=89;
+sButton2.Enabled:= False;
+sEdit3.Enabled:=True;
+sButton1.Enabled:=True;
+sPanel3.Height:=89;
 end;
 
 procedure TForm3.sButton3Click(Sender: TObject);
@@ -210,6 +212,7 @@ sEdit3.Text:='';
 sEdit3.Enabled:=True;
 spanel1.Visible:=False;
 sLabel4.Visible:=False;
+sButton2.Enabled:= False;
 end;
 
 procedure TForm3.sSpeedButton1Click(Sender: TObject);

@@ -188,6 +188,7 @@ Var
   S, P:String;
 //  FYearBoldManager: TYearBoldManager;
 Begin
+Edit_Date.Text:= '';
 // Переход к началу
 DataModule2.Air_Query.First;
 // Переход к нужной записи

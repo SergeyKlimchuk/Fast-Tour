@@ -2113,6 +2113,7 @@ object Form10: TForm10
       MaxLength = 4
       ParentFont = False
       TabOrder = 4
+      OnKeyPress = sEdit1KeyPress
       OnKeyUp = sEdit1KeyUp
     end
     object sEdit2: TsEdit
@@ -2128,6 +2129,7 @@ object Form10: TForm10
       MaxLength = 4
       ParentFont = False
       TabOrder = 5
+      OnKeyPress = sEdit2KeyPress
       OnKeyUp = sEdit2KeyUp
     end
     object sEdit5: TsEdit
@@ -2143,6 +2145,7 @@ object Form10: TForm10
       MaxLength = 4
       ParentFont = False
       TabOrder = 6
+      OnKeyPress = sEdit5KeyPress
       OnKeyUp = sEdit5KeyUp
     end
     object sEdit6: TsEdit
@@ -2158,6 +2161,7 @@ object Form10: TForm10
       MaxLength = 4
       ParentFont = False
       TabOrder = 7
+      OnKeyPress = sEdit6KeyPress
     end
     object sEdit7: TsEdit
       Left = 395

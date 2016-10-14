@@ -99,6 +99,10 @@ type
     procedure sEdit2KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure sEdit5KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure sEdit7KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure sEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure sEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure sEdit5KeyPress(Sender: TObject; var Key: Char);
+    procedure sEdit6KeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -333,6 +337,7 @@ if (Length(sEdit1.Text) < 4) or (Length(sEdit2.Text) < 4) or (Length(sEdit5.Text
   ShowMessage('Номер карты заполнен не до конца!');
   Abort;
   End;
+
 if (Length(sEdit7.Text) < 2) or (Length(sEdit8.Text) < 2) then
   Begin
   ShowMessage('Заполните дату по формату: mm / yy !');
@@ -384,7 +389,7 @@ sGradientPanel8.PaintData.Color1.Color:= $0000EAEA;
 sGradientPanel8.PaintData.Color2.Color:= $0000EAEA;
 Panel_Step3.Visible:= False;
 Panel_Step4.Visible:= True;
-
+Form9.sBitBtn1Click(Form9);
 end;
 
 procedure TForm10.sBitBtn3Click(Sender: TObject);
@@ -458,11 +463,29 @@ while (DataModule2.Basket_Query.Eof = false) do
 sLabel2.Caption:= IntToStr(EndPrice) + ' ' + Copy(sComboBox1.Text, 1, 3);
 end;
 
+procedure TForm10.sEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+If not (Key in ['0'..'9', #8]) then
+  Begin
+  Key:=#0;
+  Beep;
+  End;
+end;
+
 procedure TForm10.sEdit1KeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
 if Length(sEdit1.Text) = 4 then
   ActiveControl:= sEdit2;
+end;
+
+procedure TForm10.sEdit2KeyPress(Sender: TObject; var Key: Char);
+begin
+If not (Key in ['0'..'9', #8]) then
+  Begin
+  Key:=#0;
+  Beep;
+  End;
 end;
 
 procedure TForm10.sEdit2KeyUp(Sender: TObject; var Key: Word;
@@ -482,11 +505,29 @@ begin
 if Key in ['0'..'9'] then key :=#0;
 end;
 
+procedure TForm10.sEdit5KeyPress(Sender: TObject; var Key: Char);
+begin
+If not (Key in ['0'..'9', #8]) then
+  Begin
+  Key:=#0;
+  Beep;
+  End;
+end;
+
 procedure TForm10.sEdit5KeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
 if Length(sEdit5.Text) = 4 then
   ActiveControl:= sEdit6;
+end;
+
+procedure TForm10.sEdit6KeyPress(Sender: TObject; var Key: Char);
+begin
+If not (Key in ['0'..'9', #8]) then
+  Begin
+  Key:=#0;
+  Beep;
+  End;
 end;
 
 procedure TForm10.sEdit7KeyUp(Sender: TObject; var Key: Word;
