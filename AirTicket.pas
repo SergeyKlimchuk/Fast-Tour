@@ -216,6 +216,7 @@ if DataModule2.Air_Query.FieldByName('Regular').AsString = '+' then
 // Перекидываем тег
 sLabel28.Tag:= (Sender as TsBitBtn).Tag;
 // Показываем
+Castom_Way.Left:= (ClientWidth div 2) - (Castom_Way.Width div 2);
 Castom_Way.Visible:= True;
 End;
 
@@ -305,8 +306,8 @@ End;
 
 Function _Days:String;
 Var
-  sLine         :String;
-  sDate1, sDate2:TDateTime;
+  sLine: String;
+  sDate1, sDate2: TDateTime;
 Begin
 if (DataModule2.Air_Query.FieldByName('Regular').AsString = '+') then
   Begin
@@ -366,15 +367,15 @@ if (DataModule2.Air_Query.FieldByName('Regular').AsString = '+') then
   DataModule2.Basket_Query.FieldByName('Date_Start').AsString:= Edit_Date.Text;
   DataModule2.Basket_Query.FieldByName('Date_Finish').AsString:= Edit_Date.Text;
   End
-    else
-      Begin
-      DataModule2.Basket_Query.FieldByName('Date_Start').AsString:= DataModule2.Air_Query.FieldByName('Date_D').AsString;
-      DataModule2.Basket_Query.FieldByName('Date_Finish').AsString:= DataModule2.Air_Query.FieldByName('Date_A').AsString;
-      End;
+else
+  Begin
+  DataModule2.Basket_Query.FieldByName('Date_Start').AsString:= DataModule2.Air_Query.FieldByName('Date_D').AsString;
+  DataModule2.Basket_Query.FieldByName('Date_Finish').AsString:= DataModule2.Air_Query.FieldByName('Date_A').AsString;
+  End;
 case sRadioGroup1.ItemIndex of
-0:DataModule2.Basket_Query.FieldByName('Price').AsString:= DataModule2.Air_Query.FieldByName('Price_FC').AsString;
-1:DataModule2.Basket_Query.FieldByName('Price').AsString:= DataModule2.Air_Query.FieldByName('Price_BC').AsString;
-2:DataModule2.Basket_Query.FieldByName('Price').AsString:= DataModule2.Air_Query.FieldByName('Price_EC').AsString;
+  0:DataModule2.Basket_Query.FieldByName('Price').AsString:= DataModule2.Air_Query.FieldByName('Price_FC').AsString;
+  1:DataModule2.Basket_Query.FieldByName('Price').AsString:= DataModule2.Air_Query.FieldByName('Price_BC').AsString;
+  2:DataModule2.Basket_Query.FieldByName('Price').AsString:= DataModule2.Air_Query.FieldByName('Price_EC').AsString;
 end;
 DataModule2.Basket_Query.Post;
 // Проверка корзины
@@ -773,7 +774,6 @@ Main_ScrollBox.Height:= Explorer_Panel.Top - Main_ScrollBox.Top;
 sPanel1.Left:= (ClientWidth div 2) - (sPanel1.Width div 2);
 BackGround_Image.Width:= ClientWidth;
 BackGround_Image.Height:= ClientHeight;
-Castom_Way.Left:= Main_ScrollBox.Left + 40;
 end;
 
 procedure TForm6.FormShow(Sender: TObject);
@@ -872,23 +872,22 @@ begin
 REFRESH_PRICE;
 end;
 
+
+// Блок защиты
 procedure TForm6.sDateEdit1Exit(Sender: TObject);
 begin
 if sDateEdit1.Text = '  .  .    ' then
   sDateEdit1.Date:= Now;
 end;
-
 procedure TForm6.sDateEdit2Exit(Sender: TObject);
 begin
 if sDateEdit2.Text = '  .  .    ' then
   sDateEdit2.Date:= Now;
 end;
-
 procedure TForm6.sEdit1Exit(Sender: TObject);
 begin
 if (sEdit1.Text = '') then sEdit1.Text:= '0';
 end;
-
 procedure TForm6.sEdit1KeyPress(Sender: TObject; var Key: Char);
 begin
 If not (Key in ['0'..'9', #8]) then
@@ -897,12 +896,10 @@ If not (Key in ['0'..'9', #8]) then
   Beep;
   End;
 end;
-
 procedure TForm6.sEdit2Exit(Sender: TObject);
 begin
 if (sEdit2.Text = '') then sEdit2.Text:= '0';
 end;
-
 procedure TForm6.sEdit2KeyPress(Sender: TObject; var Key: Char);
 begin
 If not (Key in ['0'..'9', #8]) then
@@ -911,6 +908,8 @@ If not (Key in ['0'..'9', #8]) then
   Beep;
   End;
 end;
+// Конец блока защиты
+
 
 procedure TForm6.sLabel1Click(Sender: TObject);
 Var
@@ -1075,7 +1074,6 @@ for I:= 0 to Button_count - 1 do
 
 end;
 
-
 Function Date_Info(I:String):String;
 const
   // Месяци года
@@ -1110,18 +1108,16 @@ if (I = 'From') then
 Result:= sLine;
 End;
 
-
 Procedure TForm6.sLabel28Click(Sender: TObject);
 Var
   I, D:Integer;
 begin
 DataModule2.Air_Query.First;
 DataModule2.Air_Query.MoveBy(((Page_Current - 1) * Panel_Count) + ((Sender as TsLabel).Tag - 1));
-
 case sRadioGroup1.ItemIndex of
-0:Label_FClass.Caption:= 'Первый класс';
-1:Label_FClass.Caption:= 'Бизнес класс';
-2:Label_FClass.Caption:= 'Эконом класс';
+  0:Label_FClass.Caption:= 'Первый класс';
+  1:Label_FClass.Caption:= 'Бизнес класс';
+  2:Label_FClass.Caption:= 'Эконом класс';
 end;
 
 if (DataModule2.Air_Query.FieldByName('Regular').AsString = '+') then
@@ -1139,18 +1135,18 @@ if (DataModule2.Air_Query.FieldByName('Regular').AsString = '+') then
     End
   else
     ShowMessage('Введите правильно дату!')
-      else
-        Begin
-        // Показ формы
-        Label_FWay.Caption:= DataModule2.Air_Query.FieldByName('City_D').AsString + ' -> ' + DataModule2.Air_Query.FieldByName('City_A').AsString;
-        Label_FAirCompany.Caption:= DataModule2.Air_Query.FieldByName('Air_company').AsString;
-        Label_FFrom.Caption:= Date_Info('From');
-        Label_FTo.Caption:= Date_Info('To');
-        // Смещение формы (Центр)
-        Panel_FullInfo.Left:= (ClientWidth div 2) - (Panel_FullInfo.Width div 2);
-        Panel_FullInfo.Top:= (ClientHeight div 2) - (Panel_FullInfo.Height div 2);
-        Panel_FullInfo.Visible:= True;
-        End;
+else
+  Begin
+    // Показ формы
+    Label_FWay.Caption:= DataModule2.Air_Query.FieldByName('City_D').AsString + ' -> ' + DataModule2.Air_Query.FieldByName('City_A').AsString;
+    Label_FAirCompany.Caption:= DataModule2.Air_Query.FieldByName('Air_company').AsString;
+    Label_FFrom.Caption:= Date_Info('From');
+    Label_FTo.Caption:= Date_Info('To');
+    // Смещение формы (Центр)
+    Panel_FullInfo.Left:= (ClientWidth div 2) - (Panel_FullInfo.Width div 2);
+    Panel_FullInfo.Top:= (ClientHeight div 2) - (Panel_FullInfo.Height div 2);
+    Panel_FullInfo.Visible:= True;
+    End;
 end;
 
 end.
