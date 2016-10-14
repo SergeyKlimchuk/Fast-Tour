@@ -95,6 +95,10 @@ type
     procedure sEdit4KeyPress(Sender: TObject; var Key: Char);
     procedure FormHide(Sender: TObject);
     procedure sComboBox1Change(Sender: TObject);
+    procedure sEdit1KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure sEdit2KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure sEdit5KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure sEdit7KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -279,7 +283,11 @@ end;
 
 procedure TForm10.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-Application.Terminate;
+// Выборка пользователя о его намерении 1. Вернуться назад. 2. Выйти из программы
+case MessageDlg('Вы точно хотите выйти?', mtConfirmation, [mbYes,mbCancel], 0) of
+  mrYes:Application.Terminate;  // Если да - то закрытие программы
+  mrCancel:Abort;               // Если же нет то отмена процедуры
+end;
 end;
 
 procedure TForm10.FormHide(Sender: TObject);
@@ -299,6 +307,8 @@ Panel_Step1.Visible:= True;
 Panel_Step2.Visible:= False;
 Panel_Step3.Visible:= False;
 Panel_Step4.Visible:= False;
+sComboBox1.ItemIndex:= Form9.sComboBox1.ItemIndex;
+sComboBox1.OnChange(Sender);
 end;
 
 
@@ -420,33 +430,46 @@ end;
 
 procedure TForm10.sComboBox1Change(Sender: TObject);
 Var
-  I: Integer;
+  I, EndPrice: Integer;
   S: String;
 begin
 DataModule2.Basket_Query.First;
 I:= 0;
+EndPrice:= 0;
 while (DataModule2.Basket_Query.Eof = false) do
   Begin
   case sComboBox1.ItemIndex of
-  0:List[I].Panel_Price.Caption:= IntToStr(DataModule2.Basket_Query.FieldByName('Price').AsInteger * KZT);
-  1:List[I].Panel_Price.Caption:= IntToStr(DataModule2.Basket_Query.FieldByName('Price').AsInteger);
-  2:List[I].Panel_Price.Caption:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * EUR));
-  3:List[I].Panel_Price.Caption:= IntToStr(DataModule2.Basket_Query.FieldByName('Price').AsInteger * RUB);
-  4:List[I].Panel_Price.Caption:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * AUD));
-  5:List[I].Panel_Price.Caption:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * GBP));
-  6:List[I].Panel_Price.Caption:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * DKK));
-  7:List[I].Panel_Price.Caption:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * AED));
+    0:S:= IntToStr(DataModule2.Basket_Query.FieldByName('Price').AsInteger * KZT);
+    1:S:= IntToStr(DataModule2.Basket_Query.FieldByName('Price').AsInteger);
+    2:S:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * EUR));
+    3:S:= IntToStr(DataModule2.Basket_Query.FieldByName('Price').AsInteger * RUB);
+    4:S:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * AUD));
+    5:S:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * GBP));
+    6:S:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * DKK));
+    7:S:= IntToStr(Trunc(DataModule2.Basket_Query.FieldByName('Price').AsInteger * AED));
   end;
-  if Length(List[I].Panel_Price.Caption) > 3 then
-    List[I].Panel_Price.Caption:=
-    Copy(List[I].Panel_Price.Caption, 1, Length(List[I].Panel_Price.Caption) - 3)
-    + ' '
-    + Copy(List[I].Panel_Price.Caption, Length(List[I].Panel_Price.Caption) - 2, 3)
-    + ' ' + Copy(sComboBox1.Items[sComboBox1.ItemIndex], 1, 3);
-  List[I].Panel_Price.Refresh;
-  I:= I + 1;
-  DataModule2.Basket_Query.Next;
+  EndPrice:= EndPrice + StrToInt(S);
+  if (S.Length > 3) then
+    Insert(' ', S, S.Length - 2);
+  S:= S + ' ' + Copy(sComboBox1.Text, 1, 3);
+  List[I].Panel_Price.Caption:=S; List[I].Panel_Price.Refresh;
+  I:= I + 1; DataModule2.Basket_Query.Next;
   End;
+sLabel2.Caption:= IntToStr(EndPrice) + ' ' + Copy(sComboBox1.Text, 1, 3);
+end;
+
+procedure TForm10.sEdit1KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if Length(sEdit1.Text) = 4 then
+  ActiveControl:= sEdit2;
+end;
+
+procedure TForm10.sEdit2KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if Length(sEdit2.Text) = 4 then
+  ActiveControl:= sEdit5;
 end;
 
 procedure TForm10.sEdit3KeyPress(Sender: TObject; var Key: Char);
@@ -457,6 +480,20 @@ end;
 procedure TForm10.sEdit4KeyPress(Sender: TObject; var Key: Char);
 begin
 if Key in ['0'..'9'] then key :=#0;
+end;
+
+procedure TForm10.sEdit5KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if Length(sEdit5.Text) = 4 then
+  ActiveControl:= sEdit6;
+end;
+
+procedure TForm10.sEdit7KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if Length(sEdit7.Text) = 2 then
+  ActiveControl:= sEdit8;
 end;
 
 Function GET_WAY_NAME(O_Type:Integer):String;

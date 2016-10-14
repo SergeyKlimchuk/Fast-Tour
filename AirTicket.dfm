@@ -25460,6 +25460,7 @@ object Form6: TForm6
       ShowHint = True
       TabOrder = 1
       TabStop = False
+      OnClick = sBitBtn3Click
       ShowFocus = False
     end
     object sBitBtn1: TsBitBtn
@@ -26343,6 +26344,7 @@ object Form6: TForm6
         ParentFont = False
         TabOrder = 8
         Text = '  .  .    '
+        OnExit = sDateEdit1Exit
         GlyphMode.Blend = 0
         GlyphMode.Grayed = False
       end
@@ -26362,6 +26364,7 @@ object Form6: TForm6
         ParentFont = False
         TabOrder = 9
         Text = '  .  .    '
+        OnExit = sDateEdit2Exit
         GlyphMode.Blend = 0
         GlyphMode.Grayed = False
       end
@@ -26378,6 +26381,8 @@ object Form6: TForm6
         ParentFont = False
         TabOrder = 10
         Text = '0'
+        OnExit = sEdit1Exit
+        OnKeyPress = sEdit1KeyPress
       end
       object sEdit2: TsEdit
         Left = 216
@@ -26392,6 +26397,8 @@ object Form6: TForm6
         ParentFont = False
         TabOrder = 11
         Text = '200000'
+        OnExit = sEdit2Exit
+        OnKeyPress = sEdit2KeyPress
       end
       object sComboBox1: TsComboBox
         Left = 413
@@ -26748,34 +26755,6 @@ object Form6: TForm6
       Font.Name = 'Tahoma'
       Font.Style = [fsUnderline]
     end
-    object sLabel8: TsLabel
-      Left = 446
-      Top = 40
-      Width = 130
-      Height = 13
-      Caption = #1053#1077#1087#1088#1072#1074#1080#1083#1100#1085#1072#1103' '#1076#1072#1090#1072'! *'
-      ParentFont = False
-      Visible = False
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clBlack
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-    end
-    object sLabel9: TsLabel
-      Left = 594
-      Top = 64
-      Width = 10
-      Height = 18
-      Caption = '*'
-      ParentFont = False
-      Visible = False
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clBlack
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-    end
     object sLabel10: TsLabel
       Left = 337
       Top = 11
@@ -26965,7 +26944,7 @@ object Form6: TForm6
     object Edit_Date: TsDateEdit
       Left = 438
       Top = 59
-      Width = 150
+      Width = 148
       Height = 22
       AutoSize = False
       EditMask = '!99/99/9999;1; '
@@ -26978,7 +26957,7 @@ object Form6: TForm6
       ParentFont = False
       TabOrder = 3
       Text = '  .  .    '
-      OnChange = Edit_DateChange
+      OnKeyPress = Edit_DateKeyPress
       BoundLabel.Active = True
       BoundLabel.Caption = #1044#1072#1090#1072' '#1074#1099#1083#1077#1090#1072':'
       BoundLabel.Font.Charset = DEFAULT_CHARSET
@@ -26988,6 +26967,7 @@ object Form6: TForm6
       BoundLabel.Font.Style = [fsBold]
       GlyphMode.Blend = 0
       GlyphMode.Grayed = False
+      OnCloseUp = Edit_DateCloseUp
       Weekends = []
     end
   end

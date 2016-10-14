@@ -36,6 +36,7 @@ type
     { Private declarations }
   public
     procedure Send_Email(Address:String);
+    Procedure REFRESH_BASKET;
   end;
 
 var
@@ -46,7 +47,21 @@ implementation
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
+uses AirTicket, Hotel;
+
 {$R *.dfm}
+
+Procedure TDataModule2.REFRESH_BASKET;
+Var
+  S: String;
+Begin
+if (DataModule2.Basket_Query.RecordCount > 0) then
+  S:= 'В вашей корзине: ' + IntToStr(DataModule2.Basket_Query.RecordCount) + ' товаров!'
+  else
+    S:= 'Нет товаров!';
+Form6.Label_Basket_Count.Caption:= S;
+Form7.Label_Basket_Count.Caption:= S;
+End;
 
 procedure TDataModule2.DataModuleCreate(Sender: TObject);
 const

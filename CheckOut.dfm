@@ -250,7 +250,8 @@ object Form10: TForm10
       Height = 21
       Alignment = taLeftJustify
       VerticalAlignment = taAlignTop
-      ItemIndex = -1
+      Style = csDropDownList
+      ItemIndex = 0
       TabOrder = 4
       Text = 'KZT - '#1058#1077#1085#1075#1077
       OnChange = sComboBox1Change
@@ -799,6 +800,8 @@ object Form10: TForm10
         ' '#1101#1090#1080#1084' '#1048#1048#1053#39#1086#1084'!'
       Caption = '*'
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -815,6 +818,8 @@ object Form10: TForm10
         ' '#1101#1090#1080#1084' '#1048#1048#1053#39#1086#1084'!'
       Caption = '*'
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -2108,6 +2113,7 @@ object Form10: TForm10
       MaxLength = 4
       ParentFont = False
       TabOrder = 4
+      OnKeyUp = sEdit1KeyUp
     end
     object sEdit2: TsEdit
       Left = 396
@@ -2122,6 +2128,7 @@ object Form10: TForm10
       MaxLength = 4
       ParentFont = False
       TabOrder = 5
+      OnKeyUp = sEdit2KeyUp
     end
     object sEdit5: TsEdit
       Left = 448
@@ -2136,6 +2143,7 @@ object Form10: TForm10
       MaxLength = 4
       ParentFont = False
       TabOrder = 6
+      OnKeyUp = sEdit5KeyUp
     end
     object sEdit6: TsEdit
       Left = 496
@@ -2165,6 +2173,7 @@ object Form10: TForm10
       MaxLength = 2
       ParentFont = False
       TabOrder = 8
+      OnKeyUp = sEdit7KeyUp
     end
     object sEdit8: TsEdit
       Left = 453

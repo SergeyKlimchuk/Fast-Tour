@@ -30,7 +30,6 @@ type
     Main_Box: TsScrollBox;
     Exit: TsBitBtn;
     Info: TsBitBtn;
-    Print: TsBitBtn;
     Nick_Name: TsPanel;
     Choose_Panel: TsGradientPanel;
     Label2: TLabel;
@@ -39,6 +38,7 @@ type
     sLabel11: TsLabel;
     sComboBox1: TsComboBox;
     Label3: TLabel;
+    sBitBtn1: TsBitBtn;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure ExitClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
@@ -48,6 +48,7 @@ type
     procedure sComboBox1Change(Sender: TObject);
     procedure sButton4Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure sBitBtn1Click(Sender: TObject);
   private
     { Õ≈ √ŒƒÕŒ“¿ declarations }
   public
@@ -205,6 +206,15 @@ begin
 ADD_LINES;
 Form9.sComboBox1.ItemIndex:= 0;
 sComboBox1Change(Sender);
+end;
+
+procedure TForm9.sBitBtn1Click(Sender: TObject);
+begin
+DELETE_LINES;
+//
+DataModule2.Basket_Query.First;
+while DataModule2.Basket_Query.Eof = False do
+  DataModule2.Basket_Query.Delete;  
 end;
 
 procedure TForm9.sButton4Click(Sender: TObject);

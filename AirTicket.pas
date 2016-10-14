@@ -63,8 +63,6 @@ type
     sBevel7: TsBevel;
     sComboBox1: TsComboBox;
     sLabel27: TsLabel;
-    sLabel8: TsLabel;
-    sLabel9: TsLabel;
     sLabel10: TsLabel;
     Panel_FullInfo: TsPanel;
     sBitBtn5: TsBitBtn;
@@ -113,9 +111,17 @@ type
     procedure FormShow(Sender: TObject);
     procedure sComboBox1Change(Sender: TObject);
     Procedure Get_Info(Sender: TObject);
-    procedure Edit_DateChange(Sender: TObject);
     procedure sLabel28Click(Sender: TObject);
     procedure sBitBtn5Click(Sender: TObject);
+    procedure sEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure sEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure sEdit1Exit(Sender: TObject);
+    procedure sEdit2Exit(Sender: TObject);
+    procedure sDateEdit1Exit(Sender: TObject);
+    procedure sDateEdit2Exit(Sender: TObject);
+    procedure sBitBtn3Click(Sender: TObject);
+    procedure Edit_DateKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_DateCloseUp(Sender: TObject);
   private
     { Private declarations }
   public
@@ -167,7 +173,6 @@ var
 //.........Блок процедур...............................//
   procedure BUILD_PAGE(Index:Integer);                 //
   Procedure BUILD_LINE(Index:Integer; OnNext:Boolean); //
-  Procedure CHECK_BASKET;                              //
   Procedure REFRESH_PRICE;                             //
 //.....................................................//
 
@@ -212,14 +217,6 @@ if DataModule2.Air_Query.FieldByName('Regular').AsString = '+' then
 sLabel28.Tag:= (Sender as TsBitBtn).Tag;
 // Показываем
 Castom_Way.Visible:= True;
-End;
-
-Procedure Check_Basket;
-Begin
-if (DataModule2.Basket_Query.RecordCount > 0) then
-  Form6.Label_Basket_Count.Caption:= 'В вашей корзине: ' + IntToStr(DataModule2.Basket_Query.RecordCount) + ' товаров!'
-    else
-      Form6.Label_Basket_Count.Caption:= 'Нет товаров!';
 End;
 
 procedure BUILD_PAGE(Index:integer); // Построение страницы
@@ -381,7 +378,7 @@ case sRadioGroup1.ItemIndex of
 end;
 DataModule2.Basket_Query.Post;
 // Проверка корзины
-Check_Basket;
+DataModule2.REFRESH_BASKET;
 // Закрытие нашей формы
 Castom_Way.Visible:= False;
 // Вывод сообщение об успешном добавлении
@@ -462,15 +459,32 @@ for I:=0 to Button_Count-1 do
       End;
 end;
 
-procedure TForm6.Edit_DateChange(Sender: TObject);
+Procedure CHECK_DATE;
 Var
   Tr:Boolean;
   S:String;
 begin
+if Pos(' ', Form6.Edit_Date.Text) > 0 then
+  Begin
+  ShowMessage('Был найден пропущенный символ, проверьте дату!');
+  Abort;
+  End;
+
+if (Form6.Edit_Date.Date > IncYear(Now)) then
+  Begin
+  ShowMessage('Нельзя забронировать авиабилет за год!');
+  Abort;
+  End;
+
+if (Form6.Edit_Date.Date < Now) then
+  Begin
+  ShowMessage('Дата которую вы выбрали нельзя использовать, т.к. нельзя забронировать билет за прошлые дни!');
+  Abort;
+  End;
 // Проверка на вхождение
 Tr:= False;
 S:= DataModule2.Air_Query.FieldByName('Days').AsString;
-case DayOfWeek(Edit_Date.Date) of
+case DayOfWeek(Form6.Edit_Date.Date) of
 2:if Pos('ПН;', S) <> 0 then Tr:= True;
 3:if Pos('ВТ;', S) <> 0 then Tr:= True;
 4:if Pos('СР;', S) <> 0 then Tr:= True;
@@ -481,18 +495,25 @@ case DayOfWeek(Edit_Date.Date) of
 end;
 if (Tr = True) then
   Begin
-  sLabel8.Visible:= False;
-  sLabel9.Visible:= False;
-  Button_add_OBJECT.Enabled:= True;
-  Edit_Date.Tag:= 1;
+  Form6.Button_add_OBJECT.Enabled:= True;
+  Form6.Edit_Date.Tag:= 1;
   End
   else
   Begin
-  sLabel8.Visible:= True;
-  sLabel9.Visible:= True;
-  Button_add_OBJECT.Enabled:= False;
-  Edit_Date.Tag:= 0;
+  Form6.Button_add_OBJECT.Enabled:= False;
+  Form6.Edit_Date.Tag:= 0;
   End;
+End;
+
+procedure TForm6.Edit_DateCloseUp(Sender: TObject);
+begin
+CHECK_DATE;
+end;
+
+procedure TForm6.Edit_DateKeyPress(Sender: TObject; var Key: Char);
+begin
+if key = #13 then
+  CHECK_DATE;
 end;
 
 procedure TForm6.FormActivate(Sender: TObject);
@@ -757,7 +778,7 @@ end;
 
 procedure TForm6.FormShow(Sender: TObject);
 begin
-Check_Basket;
+DataModule2.REFRESH_BASKET;
 end;
 
 procedure TForm6.Label_Basket_ExplorerClick(Sender: TObject);
@@ -791,7 +812,12 @@ end;
 procedure TForm6.sBitBtn2Click(Sender: TObject);
 begin
 Form6.Hide;
-Form4.show;
+Form4.Show;
+end;
+
+procedure TForm6.sBitBtn3Click(Sender: TObject);
+begin
+ShowMessage('Настроек нет, но вы там держитесь!');
 end;
 
 procedure TForm6.sBitBtn5Click(Sender: TObject);
@@ -802,30 +828,31 @@ end;
 Procedure REFRESH_PRICE; // Процедура обновления цены (Активируется при смене валюты)
 Var
   I, Price: Integer;
-  Price2,tpe: String;
+  Price2,tpe, currency: String;
   EndPrice: Integer;
 Begin
 DataModule2.Air_Query.First;
 // Переход на первую запись нашей страницы
 DataModule2.Air_Query.MoveBy(((Page_Current - 1) * Panel_Count));
-EndPrice:=0;
+EndPrice:= 0;
+currency:= Copy(Form6.sComboBox1.Text, 1, 3);
+  case Form6.sRadioGroup1.ItemIndex of
+    0:tpe:= 'FC';
+    1:tpe:= 'BC';
+    2:tpe:= 'EC';
+  end;
 for I:= 1 to Panel_Count do
   Begin
-  Label_Currency[I].Caption:= Copy(Form6.sComboBox1.Text, 1, 3);
-  case Form6.sRadioGroup1.ItemIndex of
-  0:tpe:= 'FC';
-  1:tpe:= 'BC';
-  2:tpe:= 'EC';
-  end;
+  Label_Currency[I].Caption:= currency;
   case Form6.sComboBox1.ItemIndex of
-  0:Price:= DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * KZT;
-  1:Price:= DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger;
-  2:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * EUR);
-  3:Price:= DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * RUB;
-  4:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * AUD);
-  5:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * GBP);
-  6:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * DKK);
-  7:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * AED);
+    0:Price:= DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * KZT;
+    1:Price:= DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger;
+    2:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * EUR);
+    3:Price:= DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * RUB;
+    4:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * AUD);
+    5:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * GBP);
+    6:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * DKK);
+    7:Price:= Trunc(DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * AED);
   end;
   EndPrice:= EndPrice + Price;
   Price2:= IntToStr(Price);
@@ -843,6 +870,46 @@ End;
 procedure TForm6.sComboBox1Change(Sender: TObject);
 begin
 REFRESH_PRICE;
+end;
+
+procedure TForm6.sDateEdit1Exit(Sender: TObject);
+begin
+if sDateEdit1.Text = '  .  .    ' then
+  sDateEdit1.Date:= Now;
+end;
+
+procedure TForm6.sDateEdit2Exit(Sender: TObject);
+begin
+if sDateEdit2.Text = '  .  .    ' then
+  sDateEdit2.Date:= Now;
+end;
+
+procedure TForm6.sEdit1Exit(Sender: TObject);
+begin
+if (sEdit1.Text = '') then sEdit1.Text:= '0';
+end;
+
+procedure TForm6.sEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+If not (Key in ['0'..'9', #8]) then
+  Begin
+  Key:=#0;
+  Beep;
+  End;
+end;
+
+procedure TForm6.sEdit2Exit(Sender: TObject);
+begin
+if (sEdit2.Text = '') then sEdit2.Text:= '0';
+end;
+
+procedure TForm6.sEdit2KeyPress(Sender: TObject; var Key: Char);
+begin
+If not (Key in ['0'..'9', #8]) then
+  Begin
+  Key:=#0;
+  Beep;
+  End;
 end;
 
 procedure TForm6.sLabel1Click(Sender: TObject);

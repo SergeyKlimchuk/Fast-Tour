@@ -755,7 +755,7 @@ object Form7: TForm7
         Top = 193
         Width = 300
         Height = 25
-        Caption = #1055#1088#1086#1074#1077#1088#1100#1090#1077' '#1082#1086#1088#1088#1077#1082#1090#1085#1086#1089#1090#1100' '#1076#1072#1090#1099' !'
+        Caption = #1047#1072#1087#1086#1083#1085#1080#1090#1077' '#1086#1073#1072' '#1087#1086#1083#1103' '#1089' '#1076#1072#1090#1072#1084#1080'!'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -16
@@ -763,7 +763,6 @@ object Form7: TForm7
         Font.Style = []
         ParentFont = False
         TabOrder = 4
-        Visible = False
       end
     end
     object Panel_Stars: TsGradientPanel

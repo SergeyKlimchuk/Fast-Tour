@@ -155,21 +155,12 @@ var
 
   Procedure BUILD_PAGE(Index:Integer);
   Procedure BUILD_LINE(Index:Integer);
-  Procedure CHECK_BASKET;
 
 implementation
 
 {$R *.dfm}
 
 uses Modul, Main, Basket;
-
-Procedure Check_Basket;
-Begin
-if DataModule2.Basket_Query.RecordCount > 0 then
-  Form7.Label_Basket_Count.Caption:= 'В вашей корзине: ' + IntToStr(DataModule2.Basket_Query.RecordCount) + ' товаров!'
-    else
-      Form7.Label_Basket_Count.Caption:= 'Нет товаров!';
-End;
 
 Function Get_Price(Start,Finish:TDateTime):Integer;
 var
@@ -193,7 +184,6 @@ End;
 
 procedure TForm7.Button_add_OBJECTClick(Sender: TObject);
 begin
-Check_Basket;
 DataModule2.Basket_Query.Active:= False;
 DataModule2.Basket_Query.SQL.Clear;
 DataModule2.Basket_Query.SQL.Add('Select * From Basket');
@@ -206,7 +196,7 @@ DataModule2.Basket_Query.FieldByName('Date_Finish').AsString:= sDateEdit2.Text;
 DataModule2.Basket_Query.FieldByName('Price').AsString:= IntToStr(Get_Price(sDateEdit1.Date, sDateEdit2.Date));
 DataModule2.Basket_Query.Post;
 Info_Panel.Visible:= False;
-Check_Basket;
+DataModule2.REFRESH_BASKET;
 ShowMessage('Отель был успешно добавлен в корзину!');
 end;
 
@@ -301,7 +291,7 @@ var
 begin
 Application.HintHidePause:= 50000;
 Add_objects;
-Check_Basket;
+DataModule2.REFRESH_BASKET;
 // Для создания проекта
 Image_Comment.Picture.LoadFromFile( 'Textures\Comment.png' );
 Image_Tag.Picture.LoadFromFile( 'Textures\Tag.png' );
@@ -380,7 +370,7 @@ end;
 
 procedure TForm7.FormShow(Sender: TObject);
 begin
-Check_Basket;
+DataModule2.REFRESH_BASKET;
 end;
 
 procedure TForm7.sBitBtn1Click(Sender: TObject);
@@ -429,25 +419,48 @@ end;
 
 Procedure CHK_Date;
 Begin
-if (Form7.sDateEdit1.Text <> '  .  .    ') and (Form7.sDateEdit2.Text <> '  .  .    ') then
-Begin
-if (Form7.sDateEdit1.Date < Form7.sDateEdit2.Date) and (Form7.sDateEdit1.Date > Now) then // Если дата заезда позже чем дата въезда то
+if (Pos(' ', Form7.sDateEdit1.Text) > 0) or (Pos(' ', Form7.sDateEdit2.Text) > 0) then
   Begin
-  // Скрываем прудпредительный знак
-  Form7.sPanel2.Visible:= False;
-  Form7.Price_Panel.Caption:= '     Цена:  ' + IntToStr(Get_Price(Form7.sDateEdit1.Date, Form7.sDateEdit2.Date))+'$';
-  Form7.Price_Panel.Refresh;
-  // Показываем кнопку добавления
-  Form7.Button_add_OBJECT.Enabled:= True;
-  End
-else
-  Begin
-  // Показываем прудпредительный знак
-  Form7.sPanel2.Visible:= True;
-  // Скрываем кнопку добавления
-  Form7.Button_add_OBJECT.Enabled:= False;
+  ShowMessage('Был найден пропущенный символ, проверьте дату!');
+  Abort;
   End;
-End;
+
+if (Form7.sDateEdit1.Date < Now) then
+  Begin
+  ShowMessage('Дата которую вы выбрали нельзя использовать, т.к. нельзя забронировать билет за прошлые дни!');
+  Abort;
+  End;
+
+
+
+if (Form7.sDateEdit2.Date > IncMonth((Form7.sDateEdit1.Date), 3)) then
+  Begin
+  ShowMessage('Нельзя бронировать отель более чем на 3 месяца!');
+  Abort;
+  End;
+
+
+
+
+  if (Form7.sDateEdit1.Text <> '  .  .    ') and (Form7.sDateEdit2.Text <> '  .  .    ') then
+  Begin
+  if (Form7.sDateEdit1.Date < Form7.sDateEdit2.Date) and (Form7.sDateEdit1.Date > Now) then // Если дата заезда позже чем дата въезда то
+    Begin
+    // Скрываем прудпредительный знак
+    Form7.sPanel2.Visible:= False;
+    Form7.Price_Panel.Caption:= '     Цена:  ' + IntToStr(Get_Price(Form7.sDateEdit1.Date, Form7.sDateEdit2.Date))+'$';
+    Form7.Price_Panel.Refresh;
+    // Показываем кнопку добавления
+    Form7.Button_add_OBJECT.Enabled:= True;
+    End
+  else
+    Begin
+    // Показываем прудпредительный знак
+    Form7.sPanel2.Visible:= True;
+    // Скрываем кнопку добавления
+    Form7.Button_add_OBJECT.Enabled:= False;
+    End;
+  End;
 End;
 
 procedure TForm7.sDateEdit1Change(Sender: TObject);
