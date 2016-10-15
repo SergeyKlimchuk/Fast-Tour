@@ -6,33 +6,37 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
   Vcl.ExtCtrls, Vcl.Buttons, sSpeedButton, sPanel, Vcl.StdCtrls, sLabel,
-  Vcl.Imaging.jpeg;
+  Vcl.Imaging.jpeg, sBitBtn;
 
 type
   TForm4 = class(TForm)
-    sPanel3: TsPanel;
-    Image1: TImage;
-    sPanel4: TsPanel;
     sPanel2: TsPanel;
-    sLabel1: TsLabel;
-    sLabel3: TsLabel;
-    sPanel1: TsPanel;
-    sSpeedButton1: TsSpeedButton;
-    sSpeedButton2: TsSpeedButton;
-    sSpeedButton3: TsSpeedButton;
-    sSpeedButton5: TsSpeedButton;
-    sSpeedButton6: TsSpeedButton;
-    Timer1: TTimer;
-    sLabel2: TsLabel;
-    sSpeedButton4: TsSpeedButton;
+    sLabelFX1: TsLabelFX;
+    sLabelFX2: TsLabelFX;
+    sPanel3: TsPanel;
+    Label_Info: TsLabelFX;
+    Button_Air: TsBitBtn;
+    Button_Hotel: TsBitBtn;
+    Button_Tour: TsBitBtn;
+    sBitBtn1: TsBitBtn;
+    sBitBtn2: TsBitBtn;
     procedure FormCreate(Sender: TObject);
-    procedure sSpeedButton1Click(Sender: TObject);
     procedure sSpeedButton5Click(Sender: TObject);
-    procedure sSpeedButton2Click(Sender: TObject);
-    procedure sSpeedButton3Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure Timer1Timer(Sender: TObject);
-    procedure sSpeedButton4Click(Sender: TObject);
+    procedure sBitBtn1MouseEnter(Sender: TObject);
+    procedure Button_AirMouseEnter(Sender: TObject);
+    procedure Button_HotelMouseEnter(Sender: TObject);
+    procedure Button_TourMouseEnter(Sender: TObject);
+    procedure sBitBtn2MouseEnter(Sender: TObject);
+    procedure sBitBtn1MouseLeave(Sender: TObject);
+    procedure Button_AirMouseLeave(Sender: TObject);
+    procedure Button_HotelMouseLeave(Sender: TObject);
+    procedure Button_TourMouseLeave(Sender: TObject);
+    procedure sBitBtn2MouseLeave(Sender: TObject);
+    procedure sBitBtn1Click(Sender: TObject);
+    procedure Button_AirClick(Sender: TObject);
+    procedure Button_HotelClick(Sender: TObject);
+    procedure sBitBtn2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -44,11 +48,64 @@ var
 
   BackGround:Tbitmap;
 
+  Procedure SHOW_LABEL;
+
 implementation
 
 {$R *.dfm}
 
 Uses Modul, PersonalArea,  AirTicket, Hotel, WorldTime, Basket;
+
+Procedure SHOW_LABEL;
+Begin
+Form4.Label_Info.Left:= (Form4.sPanel3.Width div 2) - (Form4.Label_Info.Width div 2);
+Form4.Label_Info.Visible:= True;
+End;
+
+procedure TForm4.Button_AirClick(Sender: TObject);
+begin
+Form4.Hide;
+Form6.Show;
+end;
+
+procedure TForm4.Button_AirMouseEnter(Sender: TObject);
+begin
+Form4.Label_Info.Caption:= 'Заказать авиабилет';
+SHOW_LABEL;
+end;
+
+procedure TForm4.Button_AirMouseLeave(Sender: TObject);
+begin
+Form4.Label_Info.Visible:= False;
+end;
+
+procedure TForm4.Button_HotelClick(Sender: TObject);
+begin
+Form4.Hide;
+Form7.Show;
+end;
+
+procedure TForm4.Button_HotelMouseEnter(Sender: TObject);
+begin
+Form4.Label_Info.Caption:= 'Заказать отель';
+SHOW_LABEL;
+end;
+
+procedure TForm4.Button_HotelMouseLeave(Sender: TObject);
+begin
+Form4.Label_Info.Visible:= False;
+end;
+
+procedure TForm4.Button_TourMouseEnter(Sender: TObject);
+begin
+Form4.Label_Info.Caption:= 'Заказать тур';
+SHOW_LABEL;
+end;
+
+procedure TForm4.Button_TourMouseLeave(Sender: TObject);
+begin
+Form4.Label_Info.Visible:= False;
+end;
 
 procedure TForm4.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
@@ -63,29 +120,39 @@ begin
 BackGround:= Tbitmap.Create;
 end;
 
-procedure TForm4.sSpeedButton1Click(Sender: TObject);
+procedure TForm4.sBitBtn1Click(Sender: TObject);
 begin
 Form4.Hide;
 Form5.Show;
 end;
 
-procedure TForm4.sSpeedButton2Click(Sender: TObject);
+procedure TForm4.sBitBtn1MouseEnter(Sender: TObject);
 begin
-Form4.Hide;
-Form6.Show;
+Form4.Label_Info.Caption:= 'Личный кабинет';
+SHOW_LABEL;
 end;
 
-procedure TForm4.sSpeedButton3Click(Sender: TObject);
+procedure TForm4.sBitBtn1MouseLeave(Sender: TObject);
 begin
-Form4.Hide;
-Form7.Show;
+Form4.Label_Info.Visible:= False;
 end;
 
-procedure TForm4.sSpeedButton4Click(Sender: TObject);
+procedure TForm4.sBitBtn2Click(Sender: TObject);
 begin
 Form4.Hide;
 Form9.Position:= PoDeskTopCenter;
 Form9.Show;
+end;
+
+procedure TForm4.sBitBtn2MouseEnter(Sender: TObject);
+begin
+Form4.Label_Info.Caption:= 'Ваша корзина';
+SHOW_LABEL;
+end;
+
+procedure TForm4.sBitBtn2MouseLeave(Sender: TObject);
+begin
+Form4.Label_Info.Visible:= False;
 end;
 
 procedure TForm4.sSpeedButton5Click(Sender: TObject);
@@ -93,14 +160,6 @@ begin
 Form4.Hide;
 Form8.StartTime;
 Form8.Show;
-end;
-
-procedure TForm4.Timer1Timer(Sender: TObject);
-begin
-if (slabel2.Left+sLabel2.Width > 0) then
-  (slabel2.Left:=slabel2.Left - 1)
-    else
-      slabel2.Left:= ClientWidth;
 end;
 
 end.
