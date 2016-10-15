@@ -6372,10 +6372,10 @@ object Form4: TForm4
     Height = 73
     TabOrder = 0
     object sLabelFX1: TsLabelFX
-      Left = 241
-      Top = 14
-      Width = 143
-      Height = 45
+      Left = 240
+      Top = 13
+      Width = 145
+      Height = 47
       SkinSection = 'MENUBTN'
       Caption = 'Fast-Tour'
       ParentFont = False
@@ -6385,15 +6385,14 @@ object Form4: TForm4
       Font.Name = 'Tahoma'
       Font.Style = []
       Angle = 0
-      Shadow.Color = clLime
-      Shadow.OffsetKeeper.LeftTop = -2
-      Shadow.OffsetKeeper.RightBottom = 4
+      Shadow.OffsetKeeper.LeftTop = -3
+      Shadow.OffsetKeeper.RightBottom = 5
     end
     object sLabelFX2: TsLabelFX
-      Left = 390
-      Top = 33
-      Width = 39
-      Height = 22
+      Left = 389
+      Top = 32
+      Width = 41
+      Height = 24
       SkinSection = 'MENUBTN'
       Caption = 'V18.3'
       ParentFont = False
@@ -6403,9 +6402,8 @@ object Form4: TForm4
       Font.Name = 'Tahoma'
       Font.Style = []
       Angle = 0
-      Shadow.Color = clLime
-      Shadow.OffsetKeeper.LeftTop = -2
-      Shadow.OffsetKeeper.RightBottom = 4
+      Shadow.OffsetKeeper.LeftTop = -3
+      Shadow.OffsetKeeper.RightBottom = 5
     end
   end
 end

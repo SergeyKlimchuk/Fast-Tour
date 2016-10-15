@@ -87,6 +87,7 @@ if (Length(sEdit1.Text)<6) or (Length(sEdit2.Text)<6) or (Length(sEdit3.Text)<6)
   if (Length(sEdit2.Text)<6) then strend:=strend+' Пароль,';                                            //
   if (Length(sEdit3.Text)<6) then strend:=strend+' Пароль(2),';                                         //
   if (Length(sEdit4.Text)<6) then strend:=strend+' Почтовый ящик,';                                     //
+  if strend[strend.Length] = ',' then strend[strend.Length]:= #0;                                       //
   ShowMessage(strend);                                                                                  //
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   End else

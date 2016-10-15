@@ -82,6 +82,8 @@ type
     sEdit7: TsEdit;
     sEdit8: TsEdit;
     sLabel20: TsLabel;
+    sLabel21: TsLabel;
+    sLabel22: TsLabel;
     procedure ExitClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);

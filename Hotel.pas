@@ -27,12 +27,8 @@ type
     Lbl_tag3: TsLabel;
     Lbl_tag4: TsLabel;
     lbl_HotelInfo: TsLabel;
-    BackGround_Image: TsImage;
     Image_Comment: TsImage;
     Image_tag: TsImage;
-    DBGrid1: TDBGrid;
-    sButton1: TsButton;
-    BackGround_Image_Shadow: TsImage;
     Back_Gradient: TsGradientPanel;
     Control_Panel: TsPanel;
     sBitBtn1: TsBitBtn;
@@ -84,9 +80,10 @@ type
     sBevel5: TsBevel;
     sLabel2: TsLabel;
     sButton2: TsButton;
+    BackGround_Image_Shadow: TsImage;
+    BackGround_Image: TsImage;
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
-    procedure sButton1Click(Sender: TObject);
     Procedure Show_info1(Sender: TObject);
     Procedure Show_info2(Sender: TObject);
     Procedure Show_info3(Sender: TObject);
@@ -378,45 +375,6 @@ Form7.Hide;
 // Код для показа меню
 Form4.show;
 end;
-
-procedure TForm7.sButton1Click(Sender: TObject);
-var
-  pins:TPicture;
-  jpg: TJPEGImage;
-  bmp: TBitmap;
-begin
-if DataModule2.sOpenDialog1.Execute then
-Begin
-
-  if LowerCase(Copy(DataModule2.sOpenDialog1.FileName,Length(DataModule2.sOpenDialog1.FileName)-2,3))='jpg' then
-  Begin
-  Showmessage('Its JPG!');
-  jpg:=TJPEGImage.Create;
-  bmp:=TBitmap.Create;
-  jpg.LoadFromFile(DataModule2.sOpenDialog1.FileName);
-  bmp.Assign(jpg);
-  DataModule2.Hotel_Query.Edit;
-  DataModule2.Hotel_Query.FieldByName('H_Photo').Assign(bmp);
-  DataModule2.Hotel_Query.Post;
-  jpg.Free;
-  bmp.Free;
-  End;
-
-  if LowerCase(Copy(DataModule2.sOpenDialog1.FileName,Length(DataModule2.sOpenDialog1.FileName)-2,3))='bmp' then
-  Begin
-  Showmessage('Its BMP!');
-  pins:=Tpicture.Create;
-  pins.LoadFromFile(DataModule2.sOpenDialog1.FileName);
-  DataModule2.Hotel_Query.Edit;
-  DataModule2.Hotel_Query.FieldByName('H_Photo').Assign(pins);
-  DataModule2.Hotel_Query.Post;
-  pins.Free;
-  End;
-
-End;
-end;
-
-
 
 Procedure CHK_Date;
 Begin

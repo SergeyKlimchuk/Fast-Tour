@@ -53,7 +53,7 @@ object Form7: TForm7
     Font.Style = [fsBold]
     ParentFont = False
     ShowCaption = False
-    TabOrder = 3
+    TabOrder = 1
     PaintData.Color2.UseSkinColor = False
     PaintData.CustomGradient = '15658734;15658734;97;0;0;15658734;15658734;0;0;0'
     object Lbl_Records_count: TsLabel
@@ -560,7 +560,7 @@ object Form7: TForm7
         Top = 369
         Width = 150
         Height = 25
-        Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1074' '#1082#1086#1088#1079#1080#1085#1072
+        Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1074' '#1082#1086#1088#1079#1080#1085#1091
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWhite
@@ -3827,36 +3827,13 @@ object Form7: TForm7
       end
     end
   end
-  object DBGrid1: TDBGrid
-    Left = 0
-    Top = 1
-    Width = 121
-    Height = 136
-    TabOrder = 1
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -11
-    TitleFont.Name = 'Tahoma'
-    TitleFont.Style = []
-    Visible = False
-  end
-  object sButton1: TsButton
-    Left = 0
-    Top = 111
-    Width = 121
-    Height = 25
-    Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1080#1079#1086#1073#1088#1072#1078#1077#1085#1080#1077
-    TabOrder = 2
-    Visible = False
-    OnClick = sButton1Click
-  end
   object Control_Panel: TsPanel
     Left = 390
     Top = -3
     Width = 500
     Height = 50
     ShowCaption = False
-    TabOrder = 4
+    TabOrder = 2
     object sImage1: TsImage
       Left = 250
       Top = -1
