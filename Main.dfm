@@ -3832,6 +3832,7 @@ object Form4: TForm4
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000}
       TabOrder = 2
+      OnClick = Button_TourClick
       OnMouseEnter = Button_TourMouseEnter
       OnMouseLeave = Button_TourMouseLeave
       ShowCaption = False

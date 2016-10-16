@@ -31,6 +31,7 @@ type
     Basket_Query: TADOQuery;
     Buffer: TADOQuery;
     Purchases_Query: TADOQuery;
+    Tour_Query: TADOQuery;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
@@ -84,6 +85,7 @@ begin
     Reg_Table.Active:= True;
     Hotel_Query.Active:= True;
     Basket_Query.Active:= True;
+    Tour_Query.Active:= True;
   except
     ShowMessage('Connection Error !');
     exit;

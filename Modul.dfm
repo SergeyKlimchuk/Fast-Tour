@@ -153,7 +153,7 @@ object DataModule2: TDataModule2
     SQL.Strings = (
       'Select * from Basket')
     Left = 48
-    Top = 312
+    Top = 296
   end
   object Buffer: TADOQuery
     Connection = Connect_to_DB
@@ -162,7 +162,7 @@ object DataModule2: TDataModule2
     SQL.Strings = (
       'Select * from Basket')
     Left = 48
-    Top = 352
+    Top = 336
   end
   object Purchases_Query: TADOQuery
     Connection = Connect_to_DB
@@ -171,6 +171,15 @@ object DataModule2: TDataModule2
     SQL.Strings = (
       'Select * from Purchases')
     Left = 168
-    Top = 312
+    Top = 296
+  end
+  object Tour_Query: TADOQuery
+    Connection = Connect_to_DB
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'Select * from Tours as T;')
+    Left = 168
+    Top = 344
   end
 end

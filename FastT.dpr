@@ -12,7 +12,9 @@ uses
   Hotel in 'Hotel.pas' {Form7},
   WorldTime in 'WorldTime.pas' {Form8},
   Basket in 'Basket.pas' {Form9},
-  CheckOut in 'CheckOut.pas' {Form10};
+  CheckOut in 'CheckOut.pas' {Form10},
+  Tour in 'Tour.pas' {Form11},
+  Records in 'Records.pas';
 
 {$R *.res}
 
@@ -30,5 +32,6 @@ begin
   Application.CreateForm(TForm8, Form8);
   Application.CreateForm(TForm9, Form9);
   Application.CreateForm(TForm10, Form10);
+  Application.CreateForm(TForm11, Form11);
   Application.Run;
 end.

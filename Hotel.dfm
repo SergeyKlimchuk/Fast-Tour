@@ -796,7 +796,7 @@ object Form7: TForm7
       ParentDoubleBuffered = False
       ParentFont = False
       TabOrder = 2
-      PaintData.Color1.Color = clYellow
+      PaintData.Color1.Color = 16744448
       PaintData.CustomGradient = '16744448;16744448;97;0;0;16744448;16744448;0;0;0'
     end
     object PageControl1: TPageControl

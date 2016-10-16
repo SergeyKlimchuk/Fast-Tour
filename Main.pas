@@ -37,6 +37,7 @@ type
     procedure Button_AirClick(Sender: TObject);
     procedure Button_HotelClick(Sender: TObject);
     procedure sBitBtn2Click(Sender: TObject);
+    procedure Button_TourClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -54,7 +55,7 @@ implementation
 
 {$R *.dfm}
 
-Uses Modul, PersonalArea,  AirTicket, Hotel, WorldTime, Basket;
+Uses Modul, PersonalArea,  AirTicket, Hotel, WorldTime, Basket, Tour;
 
 Procedure SHOW_LABEL;
 Begin
@@ -94,6 +95,12 @@ end;
 procedure TForm4.Button_HotelMouseLeave(Sender: TObject);
 begin
 Form4.Label_Info.Visible:= False;
+end;
+
+procedure TForm4.Button_TourClick(Sender: TObject);
+begin
+Form4.Hide;
+Form11.Show;
 end;
 
 procedure TForm4.Button_TourMouseEnter(Sender: TObject);
