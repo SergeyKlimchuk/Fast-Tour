@@ -170,8 +170,8 @@ object DataModule2: TDataModule2
     Parameters = <>
     SQL.Strings = (
       'Select * from Purchases')
-    Left = 168
-    Top = 296
+    Left = 184
+    Top = 16
   end
   object Tour_Query: TADOQuery
     Connection = Connect_to_DB
@@ -181,5 +181,10 @@ object DataModule2: TDataModule2
       'Select * from Tours as T;')
     Left = 168
     Top = 344
+  end
+  object DataSource1: TDataSource
+    DataSet = Tour_Query
+    Left = 168
+    Top = 302
   end
 end

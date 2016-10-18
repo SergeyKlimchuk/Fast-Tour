@@ -23,8 +23,8 @@ Type
       Procedure Destroy;
   end;
 
-  TLine = record
-    Count:Integer;   //Кол-во записей
+  TPage = record
+    Lines:Integer;   //Кол-во записей
     Current:Integer; // Текущая страница
   end;
 

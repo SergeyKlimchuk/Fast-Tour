@@ -32,6 +32,7 @@ type
     Buffer: TADOQuery;
     Purchases_Query: TADOQuery;
     Tour_Query: TADOQuery;
+    DataSource1: TDataSource;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }

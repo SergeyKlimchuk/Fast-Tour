@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, sPanel, Vcl.Buttons,
   sBitBtn, sLabel, acPNG, Vcl.ExtCtrls, acImage, acAlphaImageList,
   System.ImageList, Vcl.ImgList, sComboBox, sEdit, sCheckBox, Vcl.StdCtrls,
-  sBevel, sScrollBox, Records;
+  sBevel, sScrollBox, Records, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls,
+  sTrackBar, Vcl.Mask, sMaskEdit, sCustomComboEdit, sToolEdit;
 
 type
   TForm11 = class(TForm)
@@ -51,6 +52,37 @@ type
     Button_FullInfo: TsBitBtn;
     sLabel38: TsLabel;
     sBitBtn1: TsBitBtn;
+    DBGrid1: TDBGrid;
+    sPanel1: TsPanel;
+    sLabel2: TsLabel;
+    sLabel3: TsLabel;
+    sBevel1: TsBevel;
+    sBevel2: TsBevel;
+    sEdit2: TsEdit;
+    sLabel4: TsLabel;
+    sEdit3: TsEdit;
+    sLabel5: TsLabel;
+    sLabel6: TsLabel;
+    sBevel3: TsBevel;
+    sComboBox5: TsComboBox;
+    sLabel7: TsLabel;
+    sBevel4: TsBevel;
+    sComboBox6: TsComboBox;
+    sLabel8: TsLabel;
+    sDateEdit1: TsDateEdit;
+    sLabel9: TsLabel;
+    sLabel10: TsLabel;
+    sDateEdit2: TsDateEdit;
+    sCheckBox2: TsCheckBox;
+    sEdit4: TsEdit;
+    sEdit5: TsEdit;
+    sLabel11: TsLabel;
+    sLabel12: TsLabel;
+    sLabel13: TsLabel;
+    sBevel5: TsBevel;
+    sBevel6: TsBevel;
+    sCheckBox3: TsCheckBox;
+    sCheckBox4: TsCheckBox;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure sEdit2KeyPress(Sender: TObject; var Key: Char);
     procedure FormResize(Sender: TObject);
@@ -61,6 +93,10 @@ type
     procedure PanelOnClick(Sender: TObject);
     procedure sLabel26Click(Sender: TObject);
     procedure sBitBtn1Click(Sender: TObject);
+    procedure sCheckBox1Click(Sender: TObject);
+    procedure sEdit2Exit(Sender: TObject);
+    procedure sEdit3Exit(Sender: TObject);
+    procedure sCheckBox4Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -71,8 +107,9 @@ var
   Form11: TForm11;
 
   Hotels_List:Array of THotel_Line;
-  Line:Tline;
-  
+  Page:TPage;
+  Page_Count:Integer;
+
   Procedure BUILD_PAGE(Index: Integer);
   Procedure BUILD_LINE(Index: Integer);
   Procedure Panel_Active(Index: Integer);
@@ -111,13 +148,13 @@ procedure TForm11.FormCreate(Sender: TObject);
 Var
   I:Integer;
 begin
-Line.Current:= 1;
-Line.Count:= 6;
+Page.Current:= 1;
+Page.Lines:= 6;
 BackGround.Picture.LoadFromFile('Textures\BackGround\Plane.png');
 BackGround.Width:= ClientWidth;
 BackGround.Height:= ClientHeight;
-SetLength(Hotels_List, Line.Count);
-for I:= 0 to (Line.Count - 1) do
+SetLength(Hotels_List, Page.Lines);
+for I:= 0 to (Page.Lines - 1) do
   Begin
   Hotels_List[I].Create(8, (8 + (I * 80) + (I * 8)), I, Main_Scroll);
   Hotels_List[I].Main_Panel.Tag:= I;
@@ -139,11 +176,14 @@ procedure TForm11.sBitBtn1Click(Sender: TObject);
 Var
   MSG: String;
 begin
-MSG:= 'SELECT * FROM Hotels WHERE (ID= ' + DataModule2.Tour_Query.Fields.FieldByName('Hotel_ID').AsString + ')';
-if sEdit1.Text <> '' then
-  MSG:= MSG + ' AND (Name LIKE ''' + sEdit1.Text + '*'')';
-
-With DataModule2.Buffer do
+MSG:= 'SELECT H.*, A.* FROM Hotels AS H, Air_Ticket AS A, Tours AS T WHERE (((H.ID )=[T].[Hotel_ID]) AND ((A.ID_of_recrod )=[T].[Air_ID])';
+if (sComboBox2.ItemIndex > 0) then MSG:= MSG + ' AND ([H].[Country]=''' + sComboBox2.Text + ''')'; // ƒобавл€ем страну сортировки
+MSG:= MSG + ' AND ([H].[Stars]=''' + sComboBox1.Text + ''')';   // ≈сли мы добавили им€ отел€ то поиск по имени отел€
+MSG:= MSG + ' AND ([H].[Food] LIKE ''%' + sComboBox3.Text + '%'')';   // ≈сли мы добавили им€ отел€ то поиск по имени отел€
+if sEdit1.Text <> '' then MSG:= MSG + ' AND ([H].[Name] LIKE ''' + sEdit1.Text + '%'')'; // ≈сли мы добавили им€ отел€ то поиск по имени отел€
+MSG:= MSG + ')';
+ShowMessage(MSG);
+With DataModule2.Tour_Query do
   Begin
   Active:= False;
   SQL.Clear;
@@ -151,13 +191,36 @@ With DataModule2.Buffer do
   Active:= True;
   End;
 
-ShowMessage('Count = ' + IntToStr(DataModule2.Buffer.RecordCount));
-ShowMessage('!!!!!!!!> ' + MSG);
+BUILD_PAGE(1);
+end;
+
+procedure TForm11.sCheckBox1Click(Sender: TObject);
+begin
+if sCheckBox1.Checked = True then
+  DBGrid1.Visible:= True
+    else
+      DBGrid1.Visible:= False;
+end;
+
+procedure TForm11.sCheckBox4Click(Sender: TObject);
+begin
+if sCheckBox4.Checked = True then
+  sPanel1.Visible:= True else sPanel1.Visible:= False;
+end;
+
+procedure TForm11.sEdit2Exit(Sender: TObject);
+begin
+if sEdit2.Text = '' then sEdit2.Text:='0';
 end;
 
 procedure TForm11.sEdit2KeyPress(Sender: TObject; var Key: Char);
 begin
-if key in ['0'..'9'] then key:= #0;
+if Not (key in ['0'..'9', #8]) then key:= #0;
+end;
+
+procedure TForm11.sEdit3Exit(Sender: TObject);
+begin
+if sEdit3.Text = '' then sEdit3.Text:='0';
 end;
 
 procedure TForm11.sLabel26Click(Sender: TObject);
@@ -178,28 +241,33 @@ Var
   I, Rest: Integer;
 Begin
 DataModule2.Tour_Query.First;
-DataModule2.Tour_Query.MoveBy((Index - 1) * Line.Count);
-
-Rest:= DataModule2.Tour_Query.RecordCount - ((Line.Current - 1) * Line.Count);
-  
-I:= 0;
-while (DataModule2.Tour_Query.Eof = False) And (I < (Rest - 1)) And (I <= (Line.Count - 1)) do
+DataModule2.Tour_Query.MoveBy((Index - 1) * Page.Lines);
+Rest:= DataModule2.Tour_Query.RecordCount - ((Page.Current - 1) * Page.Lines);
+I:= 1;
+ShowMessage(IntToStr(Rest));
+while (DataModule2.Tour_Query.Eof = False) And (I <= (Rest)) And (I <= (Page.Lines)) do
   Begin
-  BUILD_LINE(I);
+  BUILD_LINE(I - 1);
   I:= I + 1;
   DataModule2.Tour_Query.Next;
   End;
-  
-Rest:= (DataModule2.Tour_Query.RecordCount - ((Line.Current - 1) * Line.Count));
-if (Rest >= Line.Count) then
-  for I:= 1 to (Line.Count) do
+Rest:= (DataModule2.Tour_Query.RecordCount - ((Page.Current - 1) * Page.Lines));
+if (Rest >= Page.Lines) then
+  for I:= 1 to (Page.Lines) do
     Hotels_List[I - 1].Main_Panel.Visible:= True
       else
-        for I:= 1 to (Line.Count) do
+        for I:= 1 to (Page.Lines) do
           if I <= Rest then
             Hotels_List[I - 1].Main_Panel.Visible:= True
               else   
-                Hotels_List[I - 1].Main_Panel.Visible:= False; 
+                Hotels_List[I - 1].Main_Panel.Visible:= False;
+
+Page_Count:= DataModule2.Tour_Query.RecordCount div Page.Lines;
+if (DataModule2.Tour_Query.RecordCount mod Page.Lines) > 0 then
+  Page_Count:= Page_Count + 1;
+if (Page_Count > 1) then Form11.Button_Next.Enabled:= False;
+Page.Current:= 1;
+Form11.Button_Prior.Enabled:= False;
 End;
 
 Procedure BUILD_LINE(Index: Integer);
@@ -207,23 +275,17 @@ Var
   S: String;
   I: Integer;
 Begin
-With DataModule2.Buffer do
-  Begin
-  Active:= False;
-  SQl.Clear;
-  SQL.Add('Select * From Hotels H Where H.ID=' + DataModule2.Tour_Query.Fields.FieldByName('Hotel_ID').AsString);
-  Active:= True;
-  End;
-
-Hotels_List[Index].Lbl_Name.Caption:=     DataModule2.Buffer.Fields.FieldByName('Name').AsString;
-Hotels_List[Index].Panel_level.Left:= Hotels_List[Index].Lbl_Name.Left + Hotels_List[Index].Lbl_Name.Width + 4;
-Hotels_List[Index].Lbl_Country.Caption:=  DataModule2.Buffer.Fields.FieldByName('Country').AsString + ',';
-Hotels_List[Index].Lbl_City.Caption:=     DataModule2.Buffer.Fields.FieldByName('City').AsString;
-Hotels_List[Index].Lbl_City.Left:= Hotels_List[Index].Lbl_Country.Left + Hotels_List[Index].Lbl_Country.Width + 4; 
-Hotels_List[Index].Panel_level.Caption:=  DataModule2.Buffer.Fields.FieldByName('Stars').AsString;
+Hotels_List[Index].Lbl_Name.Caption:=     DataModule2.Tour_Query.FieldByName('Name').AsString;
+Hotels_List[Index].Lbl_Country.Caption:=  DataModule2.Tour_Query.FieldByName('Country').AsString + ',';
+Hotels_List[Index].Lbl_City.Caption:=     DataModule2.Tour_Query.FieldByName('City').AsString;
+Hotels_List[Index].Panel_level.Caption:=  DataModule2.Tour_Query.FieldByName('Stars').AsString;
 //Hotels_List[Index].Photo.Assign(DataModule2.Tour_Query.FieldByName('Photo'));
-Hotels_List[Index].Panel_level.Refresh; 
-S:= DataModule2.Buffer.FieldByName('Comment').AsString;
+Hotels_List[Index].Panel_level.Refresh;
+//...
+Hotels_List[Index].Panel_level.Left:= Hotels_List[Index].Lbl_Name.Left + Hotels_List[Index].Lbl_Name.Width + 4;
+Hotels_List[Index].Lbl_City.Left:=    Hotels_List[Index].Lbl_Country.Left + Hotels_List[Index].Lbl_Country.Width + 4;
+//...
+S:= DataModule2.Tour_Query.FieldByName('Comment').AsString;
 if (S.Length > 163) then
   Begin
   Hotels_List[Index].Lbl_Comment.ShowHint:= True;
@@ -232,11 +294,12 @@ if (S.Length > 163) then
   End 
 else 
   Hotels_List[Index].Lbl_Comment.ShowHint:= False;
+//
 Hotels_List[Index].Lbl_Comment.Caption:= S;
 Hotels_List[Index].Lbl_Comment.Width:= 330;
 Hotels_List[Index].Lbl_Comment.Height:=64;
 //...
-S:=DataModule2.Hotel_Query.FieldByName('Tags').AsString;
+S:= DataModule2.Tour_Query.FieldByName('Tags').AsString;
 Hotels_List[Index].Lbl_Tag1.Visible:=False;
 Hotels_List[Index].Lbl_Tag2.Visible:=False;
 Hotels_List[Index].Lbl_Tag3.Visible:=False;
