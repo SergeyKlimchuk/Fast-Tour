@@ -2492,6 +2492,7 @@ object Form11: TForm11
       Width = 700
       Height = 400
       TabOrder = 4
+      Visible = False
       object sLabel2: TsLabel
         Left = 246
         Top = 17

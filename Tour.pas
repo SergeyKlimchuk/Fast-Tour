@@ -182,7 +182,7 @@ MSG:= MSG + ' AND ([H].[Stars]=''' + sComboBox1.Text + ''')';   // Если мы добав
 MSG:= MSG + ' AND ([H].[Food] LIKE ''%' + sComboBox3.Text + '%'')';   // Если мы добавили имя отеля то поиск по имени отеля
 if sEdit1.Text <> '' then MSG:= MSG + ' AND ([H].[Name] LIKE ''' + sEdit1.Text + '%'')'; // Если мы добавили имя отеля то поиск по имени отеля
 MSG:= MSG + ')';
-ShowMessage(MSG);
+//ShowMessage(MSG);
 With DataModule2.Tour_Query do
   Begin
   Active:= False;
@@ -190,7 +190,7 @@ With DataModule2.Tour_Query do
   SQL.Add(MSG);
   Active:= True;
   End;
-
+Lbl_Records_count.Caption:= 'По вашему запросу было найдено: ' + IntToStr(DataModule2.Tour_Query.RecordCount) + ' записей!';
 BUILD_PAGE(1);
 end;
 
@@ -244,7 +244,6 @@ DataModule2.Tour_Query.First;
 DataModule2.Tour_Query.MoveBy((Index - 1) * Page.Lines);
 Rest:= DataModule2.Tour_Query.RecordCount - ((Page.Current - 1) * Page.Lines);
 I:= 1;
-ShowMessage(IntToStr(Rest));
 while (DataModule2.Tour_Query.Eof = False) And (I <= (Rest)) And (I <= (Page.Lines)) do
   Begin
   BUILD_LINE(I - 1);
