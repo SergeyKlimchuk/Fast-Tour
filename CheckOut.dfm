@@ -1885,7 +1885,7 @@ object Form10: TForm10
     end
     object sBitBtn2: TsBitBtn
       Left = 734
-      Top = 236
+      Top = 232
       Width = 140
       Height = 32
       Caption = '   '#1057#1083#1077#1076#1091#1102#1097#1080#1081' '#1096#1072#1075'    '
@@ -2187,6 +2187,7 @@ object Form10: TForm10
       MaxLength = 2
       ParentFont = False
       TabOrder = 8
+      OnKeyPress = sEdit7KeyPress
       OnKeyUp = sEdit7KeyUp
     end
     object sEdit8: TsEdit
@@ -2203,6 +2204,7 @@ object Form10: TForm10
       MaxLength = 2
       ParentFont = False
       TabOrder = 9
+      OnKeyPress = sEdit8KeyPress
     end
   end
   object sPanel1: TsPanel

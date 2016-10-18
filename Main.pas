@@ -20,6 +20,7 @@ type
     Button_Tour: TsBitBtn;
     sBitBtn1: TsBitBtn;
     sBitBtn2: TsBitBtn;
+    sLabel1: TsLabel;
     procedure FormCreate(Sender: TObject);
     procedure sSpeedButton5Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -38,6 +39,7 @@ type
     procedure Button_HotelClick(Sender: TObject);
     procedure sBitBtn2Click(Sender: TObject);
     procedure Button_TourClick(Sender: TObject);
+    procedure sLabel1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -55,7 +57,7 @@ implementation
 
 {$R *.dfm}
 
-Uses Modul, PersonalArea,  AirTicket, Hotel, WorldTime, Basket, Tour;
+Uses Modul, PersonalArea,  AirTicket, Hotel, WorldTime, Basket, Tour, LogPass;
 
 Procedure SHOW_LABEL;
 Begin
@@ -99,6 +101,7 @@ end;
 
 procedure TForm4.Button_TourClick(Sender: TObject);
 begin
+//ShowMessage('В разработке: [Стадия 3] - (Связь реляционных баз)!');
 Form4.Hide;
 Form11.Show;
 end;
@@ -160,6 +163,15 @@ end;
 procedure TForm4.sBitBtn2MouseLeave(Sender: TObject);
 begin
 Form4.Label_Info.Visible:= False;
+end;
+
+procedure TForm4.sLabel1Click(Sender: TObject);
+begin
+Form3.sLabel3.Visible:= False;
+Form3.sBevel1.Visible:= False;
+Form3.sEdit2.Text:= '';
+Form4.Hide;
+Form3.Show;
 end;
 
 procedure TForm4.sSpeedButton5Click(Sender: TObject);

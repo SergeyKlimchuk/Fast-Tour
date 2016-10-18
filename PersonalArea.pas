@@ -70,11 +70,9 @@ type
     sButton3: TsButton;
     sButton4: TsButton;
     sLabel14: TsLabel;
-    sLabel16: TsLabel;
-    sLabel17: TsLabel;
-    sLabel18: TsLabel;
     sGradientPanel1: TsGradientPanel;
     Purchases_List: TsScrollBox;
+    sLabel16: TsLabel;
     procedure sButton2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button4Click(Sender: TObject);
@@ -91,6 +89,7 @@ type
     procedure sButton3Click(Sender: TObject);
     procedure sButton4Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure sDateEdit1Exit(Sender: TObject);
   private
     { Private declarations }
   public
@@ -180,7 +179,7 @@ Purchases[Index].Lbl_Name.UseSkinColor:= False;
 Purchases[Index].Lbl_Name.Font.Style:= [fsBold];
 case DataModule2.Purchases_Query.FieldByName('Type_Product').AsInteger of
 1:Purchases[Index].Lbl_Name.Caption:= DataModule2.Buffer.FieldByName('City_D').AsString + ' -> ' + DataModule2.Buffer.FieldByName('City_A').AsString;
-2:Purchases[Index].Lbl_Name.Caption:= DataModule2.Buffer.FieldByName('H_Name').AsString;
+2:Purchases[Index].Lbl_Name.Caption:= DataModule2.Buffer.Fields.FieldByName('Name').AsString;
 3:;
 end;
 Purchases[Index].Lbl_Name.Left:= (363 div 2) - (Purchases[Index].Lbl_Name.Width div 2);
@@ -323,6 +322,7 @@ end;
 
 procedure TForm5.FormShow(Sender: TObject);
 begin
+DELETE_LINES;
 if (DataModule2.Purchases_Query.RecordCount > 0) then
   Begin
   With DataModule2.Purchases_Query do
@@ -332,7 +332,6 @@ if (DataModule2.Purchases_Query.RecordCount > 0) then
     SQL.Add('Select * From Purchases Where ID_Buyer=' + DataModule2.Reg_Query.FieldByName('ID').AsString);
     Active:= True;
     End;
-  DELETE_LINES;
   ADD_LINES;
   End;
 end;
@@ -388,13 +387,46 @@ Form5.sImage1.Picture.Assign(DataModule2.Reg_Query.FieldByName('U_Picture'));
 End;
 
 procedure TForm5.sButton4Click(Sender: TObject);
+const
+  Mails:Array [1..3] of String = ('@mail.ru', '@gmail.com', '@yandex.ru');
 Var
   jpg: TJPEGImage;
   bmp: TBitmap;
+  Mail: String;
+  I, D: Integer;
 begin
+if (Edit_MailB = True) AND (sEdit2.Text=DataModule2.Reg_Query.Fields.Fields[2].AsString) then
+  Begin
+    D:= 0;
+    if (Length(sEdit5.Text) <> 0)then
+      for I:= 1 to Length(sEdit5.Text) do
+        if sEdit5.Text[I] = '@' then
+          D:= D + 1;
+    if (D <> 1) then
+      begin
+      ShowMessage('Проверьте корректность почты!');
+      Abort;
+      end;
+    Mail:= Copy(sEdit5.Text, Pos('@', sEdit5.Text), length(sEdit5.Text) - Pos('@', sEdit5.Text) + 1);
+    Mail:=LowerCase(Mail);
+    ShowMessage(Mail);
+    if (Mail = '@mail.ru') or (Mail = '@gmail.com') or (Mail = '@yandex.ru') then
+      Begin
+      DataModule2.Reg_Query.Edit;
+      DataModule2.Reg_Query.Fields.Fields[5].AsString := sEdit5.Text ;
+      DataModule2.Reg_Query.Post;
+      End
+    else
+      Begin
+      ShowMessage('Данная почта не поддерживается нашим приложением! Почты которые поддерживаются: "Mail.ru", "Gmail.com", "Yandex.ru"');
+      End;
+  End
+    else
+      if (sEdit2.Text <> DataModule2.Reg_Query.Fields.Fields[2].AsString) then
+        ShowMessage('Некоторые данные не были изменены, т.к. текущий пароль был введён не верно!');
+
   if (Edit_PictureB = True) then
     Set_Image;
-
 
   DataModule2.Reg_Query.Edit;
 
@@ -408,39 +440,33 @@ begin
     DataModule2.Reg_Query.Fields.Fields[9].AsString := Copy(sComboBox1.Text,1,3) ;
 
   if Edit_DateB=True then
-    DataModule2.Reg_Query.Fields.Fields[10].AsString := sDateEdit1.Text ;
+    if sDateEdit1.Date > Now then
+      ShowMessage('Дата рождения не может быть больше чем текущая дата!')
+        else
+          DataModule2.Reg_Query.Fields.Fields[10].AsString := sDateEdit1.Text ;
 
-  if Edit_TimeB=True then
+  if Edit_TimeB = True then
     DataModule2.Reg_Query.Fields.Fields[11].AsString := sComboBox2.Text ;
 
-  if Edit_Secret_Q=True then
+  if Edit_Secret_Q = True then
     DataModule2.Reg_Query.Fields.Fields[12].AsString := IntToStr(sComboBox3.ItemIndex) ;
 
-  if (Edit_Secret_A=True) and (sEdit6.Text<>'') then
+  if (Edit_Secret_A = True) and (sEdit6.Text <> '') then
     DataModule2.Reg_Query.Fields.Fields[13].AsString := sEdit6.Text ;
 
 DataModule2.Reg_Query.Post;
 
-
-  if Edit_MailB=True then
-    Begin
-    if sEdit2.Text=DataModule2.Reg_Query.Fields.Fields[2].AsString then
-    Begin
-    DataModule2.Reg_Query.Edit;
-    DataModule2.Reg_Query.Fields.Fields[5].AsString := sEdit5.Text ;
-    DataModule2.Reg_Query.Post;
-    End else ECHO_WARNING:=True;
-    End;
-
-  if Edit_ActualPassB=True then
-    Begin
-    if sEdit2.Text=DataModule2.Reg_Query.Fields.Fields[2].AsString then
+if Edit_ActualPassB=True then
+  Begin
+  if sEdit2.Text=DataModule2.Reg_Query.Fields.Fields[2].AsString then
     Begin
     DataModule2.Reg_Query.Edit;
     DataModule2.Reg_Query.Fields.Fields[2].AsString := sEdit1.Text ;
     DataModule2.Reg_Query.Post;
-    End else ECHO_WARNING:=True;
-    End;
+    End
+      else
+        ECHO_WARNING:=True;
+  End;
 
 if (ECHO_WARNING=True) AND ((Edit_PictureB=True) OR (Edit_TimeB=True) OR (Edit_DateB=True) OR (Edit_SexB=True) OR (Edit_NameB=True) OR (Edit_SecNameB=True) OR (Edit_ActualPassB=True))
 then ShowMessage('Изменения были сохранены, кроме тех что требуют пароля!') else ShowMessage('Все изменения были сохранены!');
@@ -468,6 +494,12 @@ end;
 procedure TForm5.sDateEdit1Change(Sender: TObject);
 begin
 Edit_DateB:=True;
+end;
+
+procedure TForm5.sDateEdit1Exit(Sender: TObject);
+begin
+if sDateEdit1.Text = '  .  .    ' then
+  sDateEdit1.Date:= Now;
 end;
 
 procedure TForm5.sEdit1KeyPress(Sender: TObject; var Key: Char);

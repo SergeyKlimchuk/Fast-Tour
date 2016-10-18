@@ -14,7 +14,6 @@ object Form11: TForm11
   OnClose = FormClose
   OnCreate = FormCreate
   OnResize = FormResize
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object BackGround: TsImage
@@ -281,6 +280,7 @@ object Form11: TForm11
           FFFEFEFFFEFEFEFEFEFFFEFEFFFEFEFFFFFEFFFEFEFEFFFEFFFFFEFFFEFEFFFE
           FEFFFEFEFFFEFEFFFFFEFEFEFEFEFEFEFFFDFEFFFEFEFFFEFEFFFEFEFFFEFEFF
           FEFEFFFEFEFEFFFFFFFEFEFFFDFFFFFEFEFFFEFEFEFEFEFFFFFEFFFE0000}
+        OnClick = sLabel26Click
         SkinData.SkinSection = 'CHECKBOX'
       end
       object sLabel26: TsLabel
@@ -294,6 +294,7 @@ object Form11: TForm11
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
+        OnClick = sLabel26Click
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -2389,6 +2390,15 @@ object Form11: TForm11
           TabOrder = 1
           ShowFocus = False
         end
+      end
+      object sBitBtn1: TsBitBtn
+        Left = 385
+        Top = 129
+        Width = 200
+        Height = 25
+        Caption = #1055#1086#1080#1089#1082
+        TabOrder = 5
+        OnClick = sBitBtn1Click
       end
     end
     object Main_Scroll: TsScrollBox

@@ -117,15 +117,15 @@ object Form3: TForm3
       OnMouseUp = sSpeedButton3MouseUp
     end
     object sBevel1: TsBevel
-      Left = 0
+      Left = 72
       Top = 193
-      Width = 340
+      Width = 195
       Height = 4
       Style = bsRaised
       Visible = False
     end
     object sLabel3: TsLabel
-      Left = 77
+      Left = 84
       Top = 174
       Width = 165
       Height = 13
@@ -154,7 +154,6 @@ object Form3: TForm3
       Font.Style = []
       ParentFont = False
       TabOrder = 0
-      Text = 'sd2030'
     end
     object sEdit2: TsEdit
       Left = 24
@@ -170,7 +169,6 @@ object Form3: TForm3
       ParentFont = False
       PasswordChar = '*'
       TabOrder = 1
-      Text = '211572'
       OnKeyDown = sEdit2KeyDown
     end
     object sCheckBox1: TsCheckBox

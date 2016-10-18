@@ -105,6 +105,8 @@ type
     procedure sEdit2KeyPress(Sender: TObject; var Key: Char);
     procedure sEdit5KeyPress(Sender: TObject; var Key: Char);
     procedure sEdit6KeyPress(Sender: TObject; var Key: Char);
+    procedure sEdit7KeyPress(Sender: TObject; var Key: Char);
+    procedure sEdit8KeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -532,6 +534,15 @@ If not (Key in ['0'..'9', #8]) then
   End;
 end;
 
+procedure TForm10.sEdit7KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['0'..'9', #8]) then
+  Begin
+  Key:= #0;
+  Beep;
+  End;
+end;
+
 procedure TForm10.sEdit7KeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
@@ -539,11 +550,20 @@ if Length(sEdit7.Text) = 2 then
   ActiveControl:= sEdit8;
 end;
 
+procedure TForm10.sEdit8KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['0'..'9', #8]) then
+  Begin
+  Key:= #0;
+  Beep;
+  End;
+end;
+
 Function GET_WAY_NAME(O_Type:Integer):String;
 Begin
   case O_Type of
   1:Result:= DataModule2.Buffer.FieldByName('City_D').AsString + ' -> ' + DataModule2.Buffer.FieldByName('City_A').AsString;
-  2:Result:= '"' + DataModule2.Buffer.FieldByName('H_Name').AsString + '"';
+  2:Result:= '"' + DataModule2.Buffer.FieldByName('Name').AsString + '"';
   3:Result:= '';  
   end;
 End;

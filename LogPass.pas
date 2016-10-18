@@ -108,6 +108,7 @@ I:Integer;
 Next1:Boolean;
 begin
 NewPassword:=Hard_Password(10);
+sEdit1.Text:= sEdit3.Text;
 if mode0=False then
   Begin
   if sEdit4.Text=REFRESH_KODE then
@@ -151,7 +152,7 @@ if Datamodule2.Reg_Query.Fields.Fields[13].AsString=sEdit4.Text then
   sEdit3.Enabled:=True;
   sPanel3.Height:=89;
   sLabel4.Visible:=True;
-  Showmessage('≈сли ответ на секретный вопрос правильный то мы сгенерируем новый пароль и отправим его вам на почту!');
+  Showmessage('≈сли код востановлени€ правильный, то мы отправим новый пароль вам на почту!');
   end;
 end;
 

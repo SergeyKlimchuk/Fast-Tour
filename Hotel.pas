@@ -170,9 +170,9 @@ while (CDate < Finish) do
   Begin
   CDate:=IncDay(CDate, 1);
   if Length(IntToStr(monthof(CDate))) = 1 then
-    Price:= DataModule2.Hotel_Query.FieldByName('H_Price_0' + IntToStr(monthof(CDate))).AsString
+    Price:= DataModule2.Hotel_Query.FieldByName('Price_0' + IntToStr(monthof(CDate))).AsString
       else
-        Price:= DataModule2.Hotel_Query.FieldByName('H_Price_' + IntToStr(monthof(CDate))).AsString;
+        Price:= DataModule2.Hotel_Query.FieldByName('Price_' + IntToStr(monthof(CDate))).AsString;
   Res:= Res + StrToInt(Copy(Price,1,Length(Price)-1));
   End;
 Result:= Res;
@@ -396,7 +396,7 @@ if (Form7.sDateEdit2.Date > IncMonth((Form7.sDateEdit1.Date), 3)) then
   Abort;
   End;
 
-if (Form7.sDateEdit2.Date < Form7.sDateEdit2.Date) then
+if (Form7.sDateEdit2.Date < Form7.sDateEdit1.Date) then
   Begin
   ShowMessage('Дата окончания бронирования не должна быть меньше чем день начала бронирования!');
   Abort;
@@ -488,9 +488,9 @@ With Form7 do
     for I:=2 to Line do
       DataModule2.Hotel_Query.Next;
 
-  Lbl_HotelName.Caption:=DataModule2.Hotel_Query.FieldByName('H_Name').AsString;
+  Lbl_HotelName.Caption:=DataModule2.Hotel_Query.Fields.FieldByName('Name').AsString;
   sBevel3.Width:=Lbl_HotelName.Width;
-  Panel_Stars.Caption:=DataModule2.Hotel_Query.FieldByName('H_Stars').AsString;
+  Panel_Stars.Caption:=DataModule2.Hotel_Query.FieldByName('Stars').AsString;
   Panel_Stars.Left:=sbevel3.Left+sbevel3.Width+3;
   if Label_tag1[Line].visible=True then
     Begin Lbl_tag1.Caption:=Label_tag1[Line].Caption; Lbl_tag1.Visible:=True; end
@@ -507,32 +507,32 @@ With Form7 do
   if Label_tag4[Line].visible=True then
     Begin Lbl_tag4.Caption:=Label_tag4[Line].Caption; Lbl_tag4.Visible:=True; end
       else Lbl_tag4.Visible:=False;
-  lbl_HotelInfo.Caption:=DataModule2.Hotel_Query.FieldByName('H_Comment').AsString;
+  lbl_HotelInfo.Caption:=DataModule2.Hotel_Query.FieldByName('Comment').AsString;
   lbl_HotelInfo.Height:=100;
   lbl_HotelInfo.Width:=400;
   Price_Panel.Caption:='     Цена:  ' + Label_Price[Line].caption;
-  info_image.Picture.Assign(DataModule2.Hotel_Query.FieldByName('H_Photo'));
+  info_image.Picture.Assign(DataModule2.Hotel_Query.FieldByName('Photo'));
 
-  lbl_info_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('H_About_hotel').AsString;
+  lbl_info_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('About_hotel').AsString;
   lbl_info_hotel.Width:=388;
-  lbl_type_info_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('H_Type_Rooms').AsString;
+  lbl_type_info_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('Type_Rooms').AsString;
   lbl_type_info_hotel.Width:=388;
-  lbl_food_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('H_Food').AsString;
+  lbl_food_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('Food').AsString;
   lbl_food_hotel.Width:=388;
-  lbl_rooms_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('H_About_Room').AsString;
+  lbl_rooms_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('About_Room').AsString;
   lbl_rooms_hotel.Width:=388;
-  lbl_Place_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('H_About_Place').AsString;
+  lbl_Place_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('About_Place').AsString;
   lbl_Place_hotel.Width:=388;
-  lbl_Children_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('H_About_For_Childrens').AsString;
+  lbl_Children_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('About_For_Childrens').AsString;
   lbl_Children_hotel.Width:=388;
-  lbl_Entertainment_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('H_About_Entertainment').AsString;
+  lbl_Entertainment_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('About_Entertainment').AsString;
   lbl_Entertainment_hotel.Width:=388;
-  lbl_Kids_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('H_About_Baby').AsString;
+  lbl_Kids_hotel.Caption:=DataModule2.Hotel_Query.FieldByName('About_Baby').AsString;
   lbl_Kids_hotel.Width:=388;
-  Lbl_Phone.Caption:=DataModule2.Hotel_Query.FieldByName('H_Phone').AsString;
-  Lbl_Fax.Caption:=DataModule2.Hotel_Query.FieldByName('H_Fax').AsString;
-  Lbl_Web.Caption:=DataModule2.Hotel_Query.FieldByName('H_Internet_Address').AsString;
-  Lbl_Web.URL:=DataModule2.Hotel_Query.FieldByName('H_Internet_Address').AsString;
+  Lbl_Phone.Caption:=DataModule2.Hotel_Query.FieldByName('Phone').AsString;
+  Lbl_Fax.Caption:=DataModule2.Hotel_Query.FieldByName('Fax').AsString;
+  Lbl_Web.Caption:=DataModule2.Hotel_Query.FieldByName('Internet_Address').AsString;
+  Lbl_Web.URL:=DataModule2.Hotel_Query.FieldByName('Internet_Address').AsString;
   Info_Panel.Visible:=True;
   End;
 End;
@@ -675,12 +675,12 @@ Var
   S :String;
 Begin
 Panel_mas[Index].Visible:=True;
-Label_name[Index].Caption:=DataModule2.Hotel_Query.FieldByName('H_Name').AsString;
-Label_country[Index].Caption:=DataModule2.Hotel_Query.FieldByName('H_Country').AsString+',';
+Label_name[Index].Caption:=DataModule2.Hotel_Query.Fields.FieldByName('Name').AsString;
+Label_country[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Country').AsString+',';
 Label_city[Index].Left:=Label_country[Index].Left+Label_country[Index].Width+6;
-Label_city[Index].Caption:=DataModule2.Hotel_Query.FieldByName('H_City').AsString;
+Label_city[Index].Caption:=DataModule2.Hotel_Query.FieldByName('City').AsString;
 //...
-S:=DataModule2.Hotel_Query.FieldByName('H_Comment').AsString;
+S:=DataModule2.Hotel_Query.FieldByName('Comment').AsString;
 if Length(S)>183 then
   Begin
   Label_comment[Index].ShowHint:=True;
@@ -690,17 +690,17 @@ if Length(S)>183 then
 Label_comment[Index].Caption:=S;
 Label_comment[Index].Width:=390;
 //... Недофича (Нужен запрос онлайн времени!)
-if DataModule2.Hotel_Query.FieldByName('H_FixPrice').AsString='Да' then
-  Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('H_Price').AsString
+if DataModule2.Hotel_Query.FieldByName('FixPrice').AsString='Да' then
+  Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Price').AsString
     else
-      Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('H_Price_'+Copy(DateToStr(Now),4,2)).AsString;
+      Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Price_'+Copy(DateToStr(Now),4,2)).AsString;
 //...
 GPanel_star[Index].Left:=Label_name[Index].Left+Label_name[Index].Width+6;
-GPanel_star[Index].Caption:=DataModule2.Hotel_Query.FieldByName('H_Stars').AsString;
+GPanel_star[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Stars').AsString;
 //...
-Image_photo[Index].Picture.Assign(DataModule2.Hotel_Query.FieldByName('H_Photo'));
+Image_photo[Index].Picture.Assign(DataModule2.Hotel_Query.FieldByName('Photo'));
 //...
-S:=DataModule2.Hotel_Query.FieldByName('H_Tags').AsString;
+S:=DataModule2.Hotel_Query.FieldByName('Tags').AsString;
 Label_tag1[Index].Visible:=False;
 Label_tag2[Index].Visible:=False;
 Label_tag3[Index].Visible:=False;

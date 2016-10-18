@@ -285,12 +285,15 @@ object Form5: TForm5
       Caption = #1054#1090#1074#1077#1090' '#1085#1072' '#1074#1086#1087#1088#1086#1089':'
     end
     object sLabel14: TsLabel
-      Left = 287
+      Left = 288
       Top = 104
       Width = 9
       Height = 19
+      Hint = #1044#1083#1103' '#1080#1079#1084#1077#1085#1077#1085#1080#1103' '#1076#1072#1085#1085#1086#1075#1086' '#1087#1086#1083#1103' '#1090#1088#1077#1073#1091#1077#1090#1089#1103' '#1074#1074#1086#1076' '#1090#1077#1082#1091#1097#1077#1075#1086' '#1087#1072#1088#1086#1083#1103'!'
       Caption = '*'
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -16
@@ -302,34 +305,11 @@ object Form5: TForm5
       Top = 137
       Width = 9
       Height = 19
+      Hint = #1044#1083#1103' '#1080#1079#1084#1077#1085#1077#1085#1080#1103' '#1076#1072#1085#1085#1086#1075#1086' '#1087#1086#1083#1103' '#1090#1088#1077#1073#1091#1077#1090#1089#1103' '#1074#1074#1086#1076' '#1090#1077#1082#1091#1097#1077#1075#1086' '#1087#1072#1088#1086#1083#1103'!'
       Caption = '*'
       ParentFont = False
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -16
-      Font.Name = 'Tahoma'
-      Font.Style = []
-    end
-    object sLabel17: TsLabel
-      Left = 369
-      Top = 348
-      Width = 9
-      Height = 19
-      Caption = '*'
-      ParentFont = False
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -16
-      Font.Name = 'Tahoma'
-      Font.Style = []
-    end
-    object sLabel18: TsLabel
-      Left = 367
-      Top = 377
-      Width = 9
-      Height = 19
-      Caption = '*'
-      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -16
@@ -454,6 +434,7 @@ object Form5: TForm5
       TabOrder = 6
       Text = '  .  .    '
       OnChange = sDateEdit1Change
+      OnExit = sDateEdit1Exit
       GlyphMode.Blend = 0
       GlyphMode.Grayed = False
     end

@@ -50,8 +50,8 @@ type
     Button_Choose: TsBitBtn;
     Button_FullInfo: TsBitBtn;
     sLabel38: TsLabel;
+    sBitBtn1: TsBitBtn;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure FormShow(Sender: TObject);
     procedure sEdit2KeyPress(Sender: TObject; var Key: Char);
     procedure FormResize(Sender: TObject);
     procedure sLabel38Click(Sender: TObject);
@@ -59,6 +59,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure Button_InfoClick(Sender: TObject);
     procedure PanelOnClick(Sender: TObject);
+    procedure sLabel26Click(Sender: TObject);
+    procedure sBitBtn1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -79,7 +81,7 @@ implementation
 
 {$R *.dfm}
 
-uses Main, Modul;
+uses Main, Modul, Basket;
 
 procedure TForm11.PanelOnClick(Sender: TObject);
 Begin
@@ -106,25 +108,11 @@ end;
 end;
 
 procedure TForm11.FormCreate(Sender: TObject);
-begin
-Line.Current:= 1;
-Line.Count:= 6;
-end;
-
-procedure TForm11.FormResize(Sender: TObject);
-begin
-BackGround.Width:= ClientWidth;
-BackGround.Height:= ClientHeight;
-Main_Panel.Left:= (ClientWidth div 2) - 485;
-Main_Panel.Height:= ClientHeight;
-Explorer_Panel.Top:= Main_Panel.Height - 156;
-Main_Scroll.Height:= Explorer_Panel.Top - 59;
-end;
-
-procedure TForm11.FormShow(Sender: TObject);
 Var
   I:Integer;
 begin
+Line.Current:= 1;
+Line.Count:= 6;
 BackGround.Picture.LoadFromFile('Textures\BackGround\Plane.png');
 BackGround.Width:= ClientWidth;
 BackGround.Height:= ClientHeight;
@@ -137,9 +125,45 @@ for I:= 0 to (Line.Count - 1) do
   End;
 end;
 
+procedure TForm11.FormResize(Sender: TObject);
+begin
+BackGround.Width:= ClientWidth;
+BackGround.Height:= ClientHeight;
+Main_Panel.Left:= (ClientWidth div 2) - 485;
+Main_Panel.Height:= ClientHeight;
+Explorer_Panel.Top:= Main_Panel.Height - 156;
+Main_Scroll.Height:= Explorer_Panel.Top - 59;
+end;
+
+procedure TForm11.sBitBtn1Click(Sender: TObject);
+Var
+  MSG: String;
+begin
+MSG:= 'SELECT * FROM Hotels WHERE (ID= ' + DataModule2.Tour_Query.Fields.FieldByName('Hotel_ID').AsString + ')';
+if sEdit1.Text <> '' then
+  MSG:= MSG + ' AND (Name LIKE ''' + sEdit1.Text + '*'')';
+
+With DataModule2.Buffer do
+  Begin
+  Active:= False;
+  SQL.Clear;
+  SQL.Add(MSG);
+  Active:= True;
+  End;
+
+ShowMessage('Count = ' + IntToStr(DataModule2.Buffer.RecordCount));
+ShowMessage('!!!!!!!!> ' + MSG);
+end;
+
 procedure TForm11.sEdit2KeyPress(Sender: TObject; var Key: Char);
 begin
 if key in ['0'..'9'] then key:= #0;
+end;
+
+procedure TForm11.sLabel26Click(Sender: TObject);
+begin
+Form11.Hide;
+Form9.Show;
 end;
 
 procedure TForm11.sLabel38Click(Sender: TObject);
@@ -153,6 +177,7 @@ Procedure BUILD_PAGE(Index: Integer);
 Var
   I, Rest: Integer;
 Begin
+DataModule2.Tour_Query.First;
 DataModule2.Tour_Query.MoveBy((Index - 1) * Line.Count);
 
 Rest:= DataModule2.Tour_Query.RecordCount - ((Line.Current - 1) * Line.Count);
@@ -190,15 +215,15 @@ With DataModule2.Buffer do
   Active:= True;
   End;
 
-Hotels_List[Index].Lbl_Name.Caption:=     DataModule2.Buffer.Fields.FieldByName('H_Name').AsString;
+Hotels_List[Index].Lbl_Name.Caption:=     DataModule2.Buffer.Fields.FieldByName('Name').AsString;
 Hotels_List[Index].Panel_level.Left:= Hotels_List[Index].Lbl_Name.Left + Hotels_List[Index].Lbl_Name.Width + 4;
-Hotels_List[Index].Lbl_Country.Caption:=  DataModule2.Buffer.Fields.FieldByName('H_Country').AsString + ',';
-Hotels_List[Index].Lbl_City.Caption:=     DataModule2.Buffer.Fields.FieldByName('H_City').AsString;
+Hotels_List[Index].Lbl_Country.Caption:=  DataModule2.Buffer.Fields.FieldByName('Country').AsString + ',';
+Hotels_List[Index].Lbl_City.Caption:=     DataModule2.Buffer.Fields.FieldByName('City').AsString;
 Hotels_List[Index].Lbl_City.Left:= Hotels_List[Index].Lbl_Country.Left + Hotels_List[Index].Lbl_Country.Width + 4; 
-Hotels_List[Index].Panel_level.Caption:=  DataModule2.Buffer.Fields.FieldByName('H_Stars').AsString;
-//Hotels_List[Index].Photo.Assign(DataModule2.Tour_Query.FieldByName('H_Photo'));
+Hotels_List[Index].Panel_level.Caption:=  DataModule2.Buffer.Fields.FieldByName('Stars').AsString;
+//Hotels_List[Index].Photo.Assign(DataModule2.Tour_Query.FieldByName('Photo'));
 Hotels_List[Index].Panel_level.Refresh; 
-S:= DataModule2.Buffer.FieldByName('H_Comment').AsString;
+S:= DataModule2.Buffer.FieldByName('Comment').AsString;
 if (S.Length > 163) then
   Begin
   Hotels_List[Index].Lbl_Comment.ShowHint:= True;
@@ -211,7 +236,7 @@ Hotels_List[Index].Lbl_Comment.Caption:= S;
 Hotels_List[Index].Lbl_Comment.Width:= 330;
 Hotels_List[Index].Lbl_Comment.Height:=64;
 //...
-S:=DataModule2.Hotel_Query.FieldByName('H_Tags').AsString;
+S:=DataModule2.Hotel_Query.FieldByName('Tags').AsString;
 Hotels_List[Index].Lbl_Tag1.Visible:=False;
 Hotels_List[Index].Lbl_Tag2.Visible:=False;
 Hotels_List[Index].Lbl_Tag3.Visible:=False;

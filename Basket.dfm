@@ -339,8 +339,8 @@ object Form9: TForm9
       ShowFocus = False
     end
     object Info: TsBitBtn
-      Left = 106
-      Top = -3
+      Left = 100
+      Top = 0
       Width = 50
       Height = 50
       Hint = #1057#1087#1088#1072#1074#1082#1072' '#1087#1086' '#1076#1072#1085#1085#1086#1084#1091' '#1084#1077#1085#1102'!'

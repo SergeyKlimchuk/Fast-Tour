@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, sPanel, Vcl.StdCtrls,
-  Vcl.Buttons, sBitBtn, sScrollBox, sBevel, sLabel, sButton, acImage, sComboBox, Dateutils;
+  Vcl.Buttons, sBitBtn, sScrollBox, sBevel, sLabel, sButton, acImage, sComboBox, Dateutils,
+  Data.DB, Vcl.Grids, Vcl.DBGrids;
 
 type
 
@@ -348,8 +349,8 @@ while (DataModule2.Basket_Query.Eof= False) do
   if B_Type = 'Air' then   // Air
     Lines[I].Label_Way_Name.Caption:= DataModule2.Buffer.FieldByName('City_D').AsString+' -> '+DataModule2.Buffer.FieldByName('City_A').AsString;
   if B_Type = 'Hotel' then // Hotel
-    Lines[I].Label_Way_Name.Caption:= DataModule2.Buffer.FieldByName('H_Name').AsString;
-    
+    Lines[I].Label_Way_Name.Caption:= DataModule2.Buffer.Fields.FieldByName('Name').AsString;
+
   // Формирование типового лейбла
   Lines[I].Label_Time_Country:= TsLabel.Create(Form9);
   Lines[I].Label_Time_Country.Parent:= Lines[I].Panel_Main;
@@ -365,9 +366,9 @@ while (DataModule2.Basket_Query.Eof= False) do
     );
   if B_Type = 'Hotel' then // Hotel
     Lines[I].Label_Time_Country.Caption:=
-      DataModule2.Buffer.FieldByName('H_Country').AsString +
+      DataModule2.Buffer.FieldByName('Country').AsString +
       ' / ' +
-      DataModule2.Buffer.FieldByName('H_City').AsString;
+      DataModule2.Buffer.FieldByName('City').AsString;
 
   // Формирование изображения
   Lines[I].Picture:= TsImage.Create(Form9);
@@ -380,7 +381,7 @@ while (DataModule2.Basket_Query.Eof= False) do
 //  if B_Type = 'Air' then
 //    Lines[I].Picture.Picture.Assign(DataModule2.Buffer.FieldByName(''));
   if B_Type = 'Hotel' then
-    Lines[I].Picture.Picture.Assign(DataModule2.Buffer.FieldByName('H_Photo'));
+    Lines[I].Picture.Picture.Assign(DataModule2.Buffer.FieldByName('Photo'));
 //  if B_Type = 'Tour' then                                                               ДОДЕЛАТЬ
 //    Lines[I].Picture.Picture.Assign(DataModule2.Buffer.FieldByName(''));
   // Формирование Bevel'а
