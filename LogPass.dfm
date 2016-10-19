@@ -154,6 +154,7 @@ object Form3: TForm3
       Font.Style = []
       ParentFont = False
       TabOrder = 0
+      Text = 'sd2030'
     end
     object sEdit2: TsEdit
       Left = 24
@@ -169,6 +170,7 @@ object Form3: TForm3
       ParentFont = False
       PasswordChar = '*'
       TabOrder = 1
+      Text = '211572'
       OnKeyDown = sEdit2KeyDown
     end
     object sCheckBox1: TsCheckBox

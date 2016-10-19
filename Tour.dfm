@@ -921,7 +921,6 @@ object Form11: TForm11
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00}
         TabOrder = 1
         TabStop = False
-        OnClick = Button_InfoClick
         ShowFocus = False
       end
       object Button_Print: TsBitBtn
@@ -2084,12 +2083,14 @@ object Form11: TForm11
           Width = 66
           Height = 20
           Caption = #1080' '#1083#1091#1095#1096#1077
+          Checked = True
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWhite
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+          State = cbChecked
           TabOrder = 2
           OnClick = sCheckBox1Click
           ImgChecked = 0
@@ -2417,7 +2418,7 @@ object Form11: TForm11
       end
       object sCheckBox4: TsCheckBox
         Left = 521
-        Top = 130
+        Top = 127
         Width = 135
         Height = 20
         Caption = #1055#1086#1082#1072#1079#1072#1090#1100' '#1076#1086#1087'. '#1092#1080#1083#1100#1090#1088
@@ -2970,6 +2971,62 @@ object Form11: TForm11
         TabOrder = 9
         ImgChecked = 0
         ImgUnchecked = 0
+      end
+    end
+    object Info_Panel: TsPanel
+      Left = 0
+      Top = 53
+      Width = 970
+      Height = 506
+      TabOrder = 5
+      object sImage2: TsImage
+        Left = 40
+        Top = 80
+        Width = 300
+        Height = 300
+        Picture.Data = {07544269746D617000000000}
+        SkinData.SkinSection = 'CHECKBOX'
+      end
+      object sBevel8: TsBevel
+        Left = 360
+        Top = 80
+        Width = 600
+        Height = 302
+      end
+      object sGradientPanel4: TsGradientPanel
+        Left = 40
+        Top = 40
+        Width = 300
+        Height = 40
+        Caption = 'BEACH HOTEL SHARJAH'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -16
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 0
+        PaintData.Color1.Color = 16744448
+        PaintData.Color2.Color = 16744448
+        PaintData.Color2.UseSkinColor = False
+      end
+      object sGradientPanel10: TsGradientPanel
+        Left = 360
+        Top = 380
+        Width = 600
+        Height = 40
+        Alignment = taRightJustify
+        Caption = #1057#1090#1086#1080#1084#1086#1089#1090#1100': 970 USD     '
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -16
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 1
+        PaintData.Color1.Color = 16744448
+        PaintData.Color2.Color = 16744448
+        PaintData.Color2.UseSkinColor = False
       end
     end
   end

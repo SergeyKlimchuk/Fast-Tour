@@ -690,7 +690,7 @@ if Length(S)>183 then
 Label_comment[Index].Caption:=S;
 Label_comment[Index].Width:=390;
 //... Недофича (Нужен запрос онлайн времени!)
-if DataModule2.Hotel_Query.FieldByName('FixPrice').AsString='Да' then
+if DataModule2.Hotel_Query.FieldByName('FixPrice').AsBoolean = True then
   Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Price').AsString
     else
       Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Price_'+Copy(DateToStr(Now),4,2)).AsString;

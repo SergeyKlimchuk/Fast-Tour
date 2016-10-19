@@ -809,6 +809,10 @@ object Form7: TForm7
       TabPosition = tpBottom
       object TabSheet1: TTabSheet
         Caption = #1060#1086#1090#1086#1075#1072#1083#1077#1088#1077#1103
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Info_Image: TImage
           Left = 10
           Top = 10
@@ -3565,6 +3569,10 @@ object Form7: TForm7
       object TabSheet2: TTabSheet
         Caption = #1050#1086#1085#1090#1072#1082#1090#1085#1072#1103' '#1080#1085#1092#1086#1088#1084#1072#1094#1080#1103
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Image_Phone: TsImage
           Left = 186
           Top = 117
@@ -3665,6 +3673,10 @@ object Form7: TForm7
             Font.Name = 'Tahoma'
             Font.Style = []
             ParentFont = False
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object lbl_info_hotel: TsLabel
               Left = 3
               Top = 3
@@ -3687,6 +3699,10 @@ object Form7: TForm7
             Font.Name = 'Tahoma'
             Font.Style = []
             ParentFont = False
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object lbl_type_info_hotel: TsLabel
               Left = 3
               Top = 3
@@ -3709,6 +3725,10 @@ object Form7: TForm7
             Font.Name = 'Tahoma'
             Font.Style = []
             ParentFont = False
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object lbl_food_hotel: TsLabel
               Left = 3
               Top = 3
@@ -3731,6 +3751,10 @@ object Form7: TForm7
             Font.Name = 'Tahoma'
             Font.Style = []
             ParentFont = False
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object lbl_rooms_hotel: TsLabel
               Left = 3
               Top = 3
@@ -3753,6 +3777,10 @@ object Form7: TForm7
             Font.Name = 'Tahoma'
             Font.Style = []
             ParentFont = False
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object lbl_Place_hotel: TsLabel
               Left = 3
               Top = 3
@@ -3769,6 +3797,10 @@ object Form7: TForm7
           end
           object sTabSheet6: TsTabSheet
             Caption = #1044#1083#1103' '#1076#1077#1090#1077#1081
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object lbl_Children_hotel: TsLabel
               Left = 3
               Top = 3
@@ -3809,6 +3841,10 @@ object Form7: TForm7
           end
           object sTabSheet8: TsTabSheet
             Caption = #1052#1072#1083#1099#1096#1080' '#1076#1086' 3 '#1083#1077#1090
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object lbl_Kids_hotel: TsLabel
               Left = 3
               Top = 3
