@@ -296,7 +296,7 @@ while (DataModule2.Basket_Query.Eof= False) do
   if DataModule2.Basket_Query.FieldByName('B_Type').AsString = '1' then
     Begin
     B_Type:='Air';
-    DataModule2.Buffer.SQL.Add('Select * From Air_Ticket Where [ID_of_recrod]='+DataModule2.Basket_Query.FieldByName('B_ID').AsString);
+    DataModule2.Buffer.SQL.Add('Select * From Air_Ticket Where [ID]='+DataModule2.Basket_Query.FieldByName('B_ID').AsString);
     End;
   if DataModule2.Basket_Query.FieldByName('B_Type').AsString = '2' then
     Begin

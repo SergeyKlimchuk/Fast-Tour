@@ -52,6 +52,7 @@ Photo.Top:= 10;
 Photo.Width:= 90;
 Photo.Height:= 60;
 Photo.Tag:= Index;
+Photo.Stretch:= True;
 Photo.OnClick:= Form11.PanelOnClick;
 
 Photo_B:= TsBevel.Create(Main_Panel);

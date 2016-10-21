@@ -149,7 +149,7 @@ With DataModule2.Buffer do
   Active:= False;
   SQL.Clear;
   case DataModule2.Purchases_Query.FieldByName('Type_Product').AsInteger of
-  1:SQL.Add('Select * From Air_Ticket Where ID_of_recrod=' + IntToStr(DataModule2.Purchases_Query.FieldByName('ID_Product').AsInteger));
+  1:SQL.Add('Select * From Air_Ticket Where ID=' + IntToStr(DataModule2.Purchases_Query.FieldByName('ID_Product').AsInteger));
   2:SQL.Add('Select * From Hotels Where ID=' + IntToStr(DataModule2.Purchases_Query.FieldByName('ID_Product').AsInteger));
   3:{};
   end;

@@ -161,19 +161,18 @@ uses Modul, Main, Basket;
 Function Get_Price(Start,Finish:TDateTime):Integer;
 var
   CDate:TDateTime;
-  Res:Integer;
-  Price:String;
+  Res, Price:Integer;
 Begin
 Res:= 0;
 CDate:= Start;
 while (CDate < Finish) do
   Begin
   CDate:=IncDay(CDate, 1);
-  if Length(IntToStr(monthof(CDate))) = 1 then
-    Price:= DataModule2.Hotel_Query.FieldByName('Price_0' + IntToStr(monthof(CDate))).AsString
+  if monthof(CDate) <= 9 then
+    Price:= DataModule2.Hotel_Query.FieldByName('Price_0' + IntToStr(monthof(CDate))).AsInteger
       else
-        Price:= DataModule2.Hotel_Query.FieldByName('Price_' + IntToStr(monthof(CDate))).AsString;
-  Res:= Res + StrToInt(Copy(Price,1,Length(Price)-1));
+        Price:= DataModule2.Hotel_Query.FieldByName('Price_' + IntToStr(monthof(CDate))).AsInteger;
+  Res:= Res + Price;
   End;
 Result:= Res;
 End;
@@ -585,7 +584,6 @@ for I:=1 to Line_Count do
   GPanel_star[I].Height:=17;
   GPanel_star[I].Alignment:=taCenter;
   GPanel_star[I].Top:=8;
-  GPanel_star[I].Caption:='3*';
   GPanel_star[I].PaintData.CustomGradient:='16744448;16744448;97;0;0;16744448;16744448;0;0;0';
   GPanel_star[I].Font.Color:=ClWhite;
   Bevel_photo[I].Left:=8;
@@ -611,36 +609,29 @@ for I:=1 to Line_Count do
   Image_photo[I].Stretch:=True;
   Label_name[I].Left:=128;
   Label_name[I].Top:=8;
-  Label_name[I].Caption:='1';
+  Label_name[I].Font.Style:= [fsBold];
   Label_country[I].Left:=128;
   Label_country[I].Top:=27;
-  Label_country[I].Caption:='2';
   Label_city[I].Left:=175;
   Label_city[I].Top:=27;
-  Label_city[I].Caption:='3';
   Label_tag1[I].Left:=128;
   Label_tag1[I].Top:=46;
-  Label_tag1[I].Caption:='4';
   Label_tag1[I].Font.Style:=[fsUnderline];
   Label_tag2[I].Left:=161;
   Label_tag2[I].Top:=46;
-  Label_tag2[I].Caption:='5';
   Label_tag2[I].Font.Style:=[fsUnderline];
   Label_tag3[I].Left:=194;
   Label_tag3[I].Top:=46;
-  Label_tag3[I].Caption:='6';
   Label_tag3[I].Font.Style:=[fsUnderline];
   Label_tag4[I].Left:=227;
   Label_tag4[I].Top:=46;
-  Label_tag4[I].Caption:='7';
   Label_tag4[I].Font.Style:=[fsUnderline];
   Label_comment[I].Left:=442;
   Label_comment[I].Top:=15;
-  Label_comment[I].Caption:='8';
   Label_comment[I].WordWrap:=True;
   Label_price[I].Left:=869;
   Label_price[I].Top:=9;
-  Label_price[I].Caption:='9';
+  Label_price[I].Font.Style:= [fsBold];
   Label_other[I].Left:=869;
   Label_other[I].Top:=41;
   Label_other[I].Caption:='Подробнее...';
@@ -696,7 +687,7 @@ if DataModule2.Hotel_Query.FieldByName('FixPrice').AsBoolean = True then
       Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Price_'+Copy(DateToStr(Now),4,2)).AsString;
 //...
 GPanel_star[Index].Left:=Label_name[Index].Left+Label_name[Index].Width+6;
-GPanel_star[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Stars').AsString;
+GPanel_star[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Stars').AsString + ' *';
 //...
 Image_photo[Index].Picture.Assign(DataModule2.Hotel_Query.FieldByName('Photo'));
 //...
@@ -746,7 +737,6 @@ Begin
 DataModule2.Hotel_Query.First;
 for I:=1 to Line_Count do
   Panel_Mas[I].Visible:=False;
-
 // Перемещение по страницам
 if Index > 1 then
   for I:=2 to Index do
@@ -767,7 +757,6 @@ for I:=0 to Button_Count-1 do
     CButtons[I].State:=cbStay;
     Form7.Button_panel.Canvas.Draw(CButtons[I].Left,CButtons[I].Top, CButtons[I].Paint);
     end;
-
 CButtons[Index - 1].State:=cbLocked;
 Form7.Button_panel.Canvas.Draw(CButtons[Index - 1].Left,CButtons[Index - 1].Top, CButtons[Index - 1].Paint);
 End;

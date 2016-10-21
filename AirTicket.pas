@@ -198,7 +198,7 @@ Label_Air_Company.Caption:= DataModule2.Air_Query.FieldByName('Air_company').AsS
 Label_Air_Company.Left:= sBevel15.Left + ((sBevel15.Width div 2) - (Label_Air_Company.Width div 2));
 Panel_Citys.Caption:= DataModule2.Air_Query.FieldByName('City_D').AsString + ' -> ' + DataModule2.Air_Query.FieldByName('City_A').AsString;
 Panel_Citys.Refresh;
-if DataModule2.Air_Query.FieldByName('Regular').AsString = '+' then
+if DataModule2.Air_Query.FieldByName('Regular').AsBoolean = True then
   Begin
   // Выставляем дни вылетов
   sLabel10.Caption:= 'Летает по: ( ' + StringReplace(DataModule2.Air_Query.FieldByName('Days').AsString, ';', ', ', [rfReplaceAll, rfIgnoreCase]);
@@ -285,7 +285,7 @@ Var
   sLine, Buf    :String;
   sDate1, sDate2:TDateTime;
 Begin
-if (DataModule2.Air_Query.FieldByName('Regular').AsString = '+') then
+if (DataModule2.Air_Query.FieldByName('Regular').AsBoolean = True) then
   sLine:= 'Время перелёта: ' + IntToStr(HourOf(VarToDateTime(DataModule2.Air_Query.FieldByName('Time_D').AsString))) + ':' + IntToStr(MinuteOf(VarToDateTime(DataModule2.Air_Query.FieldByName('Time_D').AsString))) + ' - ' + IntToStr(HourOf(VarToDateTime(DataModule2.Air_Query.FieldByName('Time_A').AsString))) + ':' + IntToStr(MinuteOf(VarToDateTime(DataModule2.Air_Query.FieldByName('Time_A').AsString)))
     else
     begin
@@ -310,7 +310,7 @@ Var
   sLine: String;
   sDate1, sDate2: TDateTime;
 Begin
-if (DataModule2.Air_Query.FieldByName('Regular').AsString = '+') then
+if (DataModule2.Air_Query.FieldByName('Regular').AsBoolean = True) then
   Begin
   sLine:= 'Дни полёта: ' + StringReplace(DataModule2.Air_Query.FieldByName('Days').AsString, ';', ', ',[rfReplaceAll, rfIgnoreCase]);
   Delete(sLine, Length(sLine)-1,  2);
@@ -362,8 +362,8 @@ procedure TForm6.Button_add_OBJECTClick(Sender: TObject);
 begin
 DataModule2.Basket_Query.Insert;
 DataModule2.Basket_Query.FieldByName('B_Type').AsString:= '1';
-DataModule2.Basket_Query.FieldByName('B_ID').AsString:= DataModule2.Air_Query.FieldByName('ID_of_recrod').AsString;
-if (DataModule2.Air_Query.FieldByName('Regular').AsString = '+') then
+DataModule2.Basket_Query.FieldByName('B_ID').AsString:= DataModule2.Air_Query.FieldByName('ID').AsString;
+if (DataModule2.Air_Query.FieldByName('Regular').AsBoolean = True) then
   Begin
   DataModule2.Basket_Query.FieldByName('Date_Start').AsString:= Edit_Date.Text;
   DataModule2.Basket_Query.FieldByName('Date_Finish').AsString:= Edit_Date.Text;
@@ -763,6 +763,7 @@ if (Page_Current + 1) <= Pages_count then
   Next_Button.Enabled:= True;
 // Строим список
 Build_page(Page_Current);
+BackGround_Image.Picture.LoadFromFile('Textures\BackGround\sky.png');
 end;
 
 procedure TForm6.FormResize(Sender: TObject);
@@ -1088,7 +1089,7 @@ Var
   sDate1, sDate2:TDateTime;
 Begin
 // Фиксируем даты
-if (DataModule2.Air_Query.FieldByName('Regular').AsString = '+') then
+if (DataModule2.Air_Query.FieldByName('Regular').AsBoolean = True) then
   if I = 'From' then
     sDate1:= VarToDateTime(DateToStr(Form6.Edit_Date.Date) + ' ' + IntToStr(HourOf(VarToDateTime(DataModule2.Air_Query.FieldByName('Time_D').AsString))) + ':' + IntToStr(MinuteOf(VarToDateTime(DataModule2.Air_Query.FieldByName('Time_D').AsString))))
       else
@@ -1121,7 +1122,7 @@ case sRadioGroup1.ItemIndex of
   2:Label_FClass.Caption:= 'Эконом класс';
 end;
 
-if (DataModule2.Air_Query.FieldByName('Regular').AsString = '+') then
+if (DataModule2.Air_Query.FieldByName('Regular').AsBoolean = True) then
   if (Edit_Date.Tag = 1) then
     Begin
     // Показ формы
