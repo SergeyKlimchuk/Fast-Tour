@@ -89,6 +89,8 @@ type
     Button_Panel: TImage;
     Next_Button: TsBitBtn;
     Prior_button: TsBitBtn;
+    sPanel2: TsPanel;
+    Lbl_Records_count: TsLabel;
     procedure FormCreate(Sender: TObject);
     procedure sLabel1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -765,7 +767,8 @@ panel1.Height:= ClientHeight - 53;
 Explorer_Panel.Top:= Panel1.Height - 180;
 Search_Panel.Top:= Explorer_Panel.Top + 50;
 Main_ScrollBox.Height:= Explorer_Panel.Top;
-sPanel1.Left:= (ClientWidth div 2) - (sPanel1.Width div 2);
+sPanel1.Left:= panel1.Left;
+sPanel2.Left:= Panel1.Left + 506;
 BackGround_Image.Width:= ClientWidth;
 BackGround_Image.Height:= ClientHeight;
 end;
@@ -1008,6 +1011,8 @@ With DataModule2.Air_Query do
   SQL.Add(MSG);
   Active:=True;
   End;
+Lbl_Records_count.Caption:= DataModule2.CHECK_RecordCount(DataModule2.Air_Query.RecordCount);
+Lbl_Records_count.left:= 227 - (Lbl_Records_count.Width div 2);
 // Узнаем точное кол-во страниц (Integer)
 Pages_Count:= (DataModule2.Air_Query.Recordcount Div Panel_Count);
 if (DataModule2.Air_Query.Recordcount Mod Panel_Count) > 0 then

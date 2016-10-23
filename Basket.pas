@@ -31,7 +31,6 @@ type
     Main_Box: TsScrollBox;
     Exit: TsBitBtn;
     Info: TsBitBtn;
-    Nick_Name: TsPanel;
     Choose_Panel: TsGradientPanel;
     Label2: TLabel;
     sButton4: TsButton;
@@ -40,6 +39,9 @@ type
     sComboBox1: TsComboBox;
     Label3: TLabel;
     sBitBtn1: TsBitBtn;
+    sImage1: TsImage;
+    Main_Panel: TsPanel;
+    Nick_Name: TsGradientPanel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure ExitClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
@@ -183,6 +185,7 @@ end;
 procedure TForm9.FormCreate(Sender: TObject);
 begin
 Main_Box.Color:= RGB(204,204,204);
+sImage1.Picture.LoadFromFile('Textures\BackGround\Basket.png');
 end;
 
 procedure TForm9.FormDestroy(Sender: TObject);
@@ -195,10 +198,11 @@ end;
 // Динамическое изменение положений объектов на форме
 procedure TForm9.FormResize(Sender: TObject);
 begin
-Main_Box.Left:= (ClientWidth div 2) - (Main_Box.Width div 2);
-Explorer_Panel.Left:= Main_Box.Left - 2;
-Choose_Panel.Left:= Explorer_Panel.Left;
-Main_Box.Height:= ClientHeight- 110;
+sImage1.Width:=    ClientWidth;
+sImage1.Height:=   ClientHeight;
+Main_Panel.Left:=  (ClientWidth div 2) - 440;
+Main_Panel.Height:= ClientHeight;
+Main_Box.Height:=  Main_Panel.Height - 110;
 Choose_Panel.Top:= Main_Box.Height + 56;
 end;
 
@@ -290,25 +294,21 @@ DataModule2.Basket_Query.First;
 I:=0;
 while (DataModule2.Basket_Query.Eof= False) do
   Begin
+    case DataModule2.Basket_Query.FieldByName('B_Type').AsInteger of
+    1:B_Type:= 'Air';
+    2:B_Type:= 'Hotel';
+    3:B_Type:= 'Tour';
+    end;
   // Формирование запроса
   DataModule2.Buffer.Active:= False;
   DataModule2.Buffer.SQL.Clear;
-  if DataModule2.Basket_Query.FieldByName('B_Type').AsString = '1' then
-    Begin
-    B_Type:='Air';
-    DataModule2.Buffer.SQL.Add('Select * From Air_Ticket Where [ID]='+DataModule2.Basket_Query.FieldByName('B_ID').AsString);
-    End;
-  if DataModule2.Basket_Query.FieldByName('B_Type').AsString = '2' then
-    Begin
-    B_Type:='Hotel';
-    DataModule2.Buffer.SQL.Add('Select * From Hotels Where [ID]='+DataModule2.Basket_Query.FieldByName('B_ID').AsString);
-    End;
-  if DataModule2.Basket_Query.FieldByName('B_Type').AsString = '3' then
-    Begin
-    // Доделать
-    //TPE:='Tour';
-    //DataModule2.Buffer.SQL.Add('Select * From Air_Ticket Where [ID]='+DataModule2.Basket_Query.FieldByName('B_ID').AsString);
-    End;
+  if (B_Type = 'Air') then
+    DataModule2.Buffer.SQL.Add('SELECT * FROM Air_Ticket WHERE [ID]=' + DataModule2.Basket_Query.FieldByName('B_ID').AsString);
+  if (B_Type = 'Hotel') then
+    DataModule2.Buffer.SQL.Add('SELECT * FROM Hotels WHERE [ID]=' + DataModule2.Basket_Query.FieldByName('B_ID').AsString);
+  if (B_Type = 'Tour') then
+    DataModule2.Buffer.SQL.Add('SELECT H.*, A.*, T.* FROM Hotels AS H, Air_Ticket AS A, Tours AS T WHERE (((H.ID )=[T].[Hotel_ID]) AND ((A.ID)=[T].[Air_ID]) AND ([T].[ID]=' + DataModule2.Basket_Query.FieldByName('B_ID').AsString + '))');
+
   DataModule2.Buffer.Active:= True;
   // Цонец формирования запроса
   
@@ -329,11 +329,12 @@ while (DataModule2.Basket_Query.Eof= False) do
   Lines[I].Label_Type.Parent:= Lines[I].Panel_Main;
   Lines[I].Label_Type.Left:= 122;
   Lines[I].Label_Type.Top:= 12;
-  if B_Type='Hotel' then
+  if (B_Type = 'Hotel') then
     Lines[I].Label_Type.Caption:= 'Отель';
-  if B_Type='Air' then
+  if (B_Type = 'Air') then
     Lines[I].Label_Type.Caption:= 'Авиабилет';
-    
+  if (B_Type = 'Tour') then
+    Lines[I].Label_Type.Caption:= 'Тур';
   // Формирование типового лейбла
   Lines[I].Label_Time:= TsLabel.Create(Form9);
   Lines[I].Label_Time.Parent:= Lines[I].Panel_Main;
@@ -350,7 +351,8 @@ while (DataModule2.Basket_Query.Eof= False) do
     Lines[I].Label_Way_Name.Caption:= DataModule2.Buffer.FieldByName('City_D').AsString+' -> '+DataModule2.Buffer.FieldByName('City_A').AsString;
   if B_Type = 'Hotel' then // Hotel
     Lines[I].Label_Way_Name.Caption:= DataModule2.Buffer.Fields.FieldByName('Name').AsString;
-
+  if B_Type = 'Tour' then // Tour
+    Lines[I].Label_Way_Name.Caption:= DataModule2.Buffer.Fields.FieldByName('Name').AsString;
   // Формирование типового лейбла
   Lines[I].Label_Time_Country:= TsLabel.Create(Form9);
   Lines[I].Label_Time_Country.Parent:= Lines[I].Panel_Main;

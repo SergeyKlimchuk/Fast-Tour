@@ -102,9 +102,9 @@ if sComboBox2.Text[4] = ':' then
   NewGMT:= StrToInt(sComboBox2.Text[1] + sComboBox2.Text[2] + sComboBox2.Text[3]);
 
 if NewGMT >= 0 then
-  sPanel5.Caption:= '   Временной пояс: +' + IntTostr(NewGMT) + ':00'
+  sPanel5.Caption:= '   Вторичный временной пояс: +' + IntTostr(NewGMT) + ':00'
     else
-      sPanel5.Caption:= '   Временной пояс: ' + IntTostr(NewGMT) + ':00';
+      sPanel5.Caption:= '   Вторичный временной пояс: ' + IntTostr(NewGMT) + ':00';
 
 Form8.ClientHeight:= 180;
 sPanel6.Visible:= False;

@@ -672,7 +672,7 @@ object Form8: TForm8
     Width = 240
     Height = 25
     Alignment = taLeftJustify
-    Caption = '   '#1042#1088#1077#1084#1077#1085#1085#1086#1081' '#1087#1086#1103#1089': '
+    Caption = '   '#1042#1090#1086#1088#1080#1095#1085#1099#1081' '#1074#1088#1077#1084#1077#1085#1085#1086#1081' '#1087#1086#1103#1089': '
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -777,6 +777,7 @@ object Form8: TForm8
       VerticalAlignment = taAlignTop
       Style = csDropDownList
       Color = clWhite
+      Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -819,6 +820,7 @@ object Form8: TForm8
       Width = 144
       Height = 20
       Caption = #1042#1099#1073#1088#1072#1090#1100' '#1082#1072#1082' '#1074#1090#1086#1088#1080#1095#1085#1099#1081
+      Enabled = False
       TabOrder = 3
       ShowFocus = False
     end

@@ -108,7 +108,6 @@ object Form6: TForm6
         Font.Height = -16
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
-        ExplicitTop = 109
         ExplicitWidth = 55
       end
       object sLabel2: TsLabel
@@ -1916,7 +1915,7 @@ object Form6: TForm6
     end
   end
   object sPanel1: TsPanel
-    Left = 390
+    Left = 160
     Top = -3
     Width = 500
     Height = 50
@@ -3089,6 +3088,26 @@ object Form6: TForm6
       TabOrder = 2
       TabStop = False
       ShowFocus = False
+    end
+  end
+  object sPanel2: TsPanel
+    Left = 666
+    Top = -3
+    Width = 454
+    Height = 50
+    TabOrder = 3
+    object Lbl_Records_count: TsLabel
+      Left = 70
+      Top = 17
+      Width = 315
+      Height = 16
+      Caption = #1055#1086' '#1074#1072#1096#1077#1084#1091' '#1079#1072#1087#1088#1086#1089#1091' '#1073#1099#1083#1086' '#1085#1072#1081#1076#1077#1085#1085#1086': 12 '#1079#1072#1087#1089#1077#1081
+      ParentFont = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
     end
   end
 end

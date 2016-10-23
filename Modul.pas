@@ -39,6 +39,7 @@ type
   public
     procedure Send_Email(Address:String);
     Procedure REFRESH_BASKET;
+    Function CHECK_RecordCount(Index: Integer):String;
   end;
 
 var
@@ -49,20 +50,46 @@ implementation
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
-uses AirTicket, Hotel;
+uses AirTicket, Hotel, Tour;
 
 {$R *.dfm}
 
 Procedure TDataModule2.REFRESH_BASKET;
 Var
   S: String;
+  I: Integer;
 Begin
-if (DataModule2.Basket_Query.RecordCount > 0) then
-  S:= 'В вашей корзине: ' + IntToStr(DataModule2.Basket_Query.RecordCount) + ' товаров!'
-  else
+I:= DataModule2.Basket_Query.RecordCount;
+S:= 'В вашей корзине: ';
+if (I in [1, 21, 31, 41]) then
+  S:= S + IntToStr(I) + ' товар!';
+if (I in [2..4, 22..24, 32..34, 42..44]) then
+  S:= S + IntToStr(I) + ' товара!';
+if (I in [5..10, 25..30, 35..40, 45..50]) then
+  S:= S + IntToStr(I) + ' товаров!';
+if (I = 0) then
     S:= 'Нет товаров!';
-Form6.Label_Basket_Count.Caption:= S;
-Form7.Label_Basket_Count.Caption:= S;
+Form6.Label_Basket_Count.Caption:=  S;
+Form7.Label_Basket_Count.Caption:=  S;
+Form11.Label_Basket_Count.Caption:= S;
+End;
+
+Function TDataModule2.CHECK_RecordCount(Index: Integer):String;
+Var
+  Number, Str: String;
+Begin
+Number:= IntToStr(Index);
+if (Index = 0) then
+  Str:= 'По вашему запросу не было найдено записей!'
+else
+  Str:= 'По вашему запросу было найден';
+if (Number[Number.length] = '1') and (Index <> 11) then
+  Str:= Str + 'а: ' + Number + ' запись!';
+if (Number[Number.length] in ['2'..'4']) then
+  Str:= Str + 'о: ' + Number + ' записи!';
+if (Number[Number.length] in ['5'..'9', '0']) then
+  Str:= Str + 'о: ' + Number + ' записей!';
+Result:= Str;
 End;
 
 procedure TDataModule2.DataModuleCreate(Sender: TObject);

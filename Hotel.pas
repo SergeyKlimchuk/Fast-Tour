@@ -219,17 +219,11 @@ With DataModule2.Hotel_Query do
   if sComboBox2.ItemIndex > 0 then S:= S + ' AND (H.Country=''' + sComboBox2.Text + ''')';
   if sCheckBox1.Checked then S:= S + ' AND (H.Stars>=' + IntToStr(sComboBox1.ItemIndex + 1) + ')'
     else S:= S + ' AND (H.Stars=' + IntToStr(sComboBox1.ItemIndex + 1) + ')';
-  if sCheckBox3.Checked then
-    Begin
-    if sCheckBox6.Checked then
-      S:= S + ' AND ()'
-
-    End;
-
   SQL.Add(S);
   Active:= True;
   End;
-  ShowMessage('Line> "' + S + '" | RC>' + IntToStr(DataModule2.Hotel_Query.RecordCount));
+Lbl_Records_count.Caption:= DataModule2.CHECK_RecordCount(DataModule2.Hotel_Query.RecordCount);
+Lbl_Records_count.left:= 232 - (Lbl_Records_count.Width div 2);
 if (DataModule2.Hotel_Query.RecordCount > 0) then
   Begin
   // Находим кол-во страниц
@@ -387,7 +381,6 @@ var
 begin
 Application.HintHidePause:= 50000;
 Add_objects;
-DataModule2.REFRESH_BASKET;
 // Для создания проекта
 Image_Comment.Picture.LoadFromFile( 'Textures\Comment.png' );
 Image_Tag.Picture.LoadFromFile( 'Textures\Tag.png' );

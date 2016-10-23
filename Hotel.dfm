@@ -1800,6 +1800,7 @@ object Form7: TForm7
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 3
+    Visible = False
     PaintData.Color1.Color = 16764315
     PaintData.CustomGradient = '16764315;16777215;97;0;0;16777215;16777215;0;0;0'
     object sBevel3: TsBevel
@@ -2259,7 +2260,7 @@ object Form7: TForm7
       Top = 22
       Width = 548
       Height = 346
-      ActivePage = TabSheet3
+      ActivePage = TabSheet1
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWhite
       Font.Height = -13

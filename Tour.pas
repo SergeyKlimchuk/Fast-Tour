@@ -50,35 +50,6 @@ type
     Button_FullInfo: TsBitBtn;
     sBitBtn1: TsBitBtn;
     DBGrid1: TDBGrid;
-    sPanel1: TsPanel;
-    sLabel2: TsLabel;
-    sLabel3: TsLabel;
-    sBevel1: TsBevel;
-    sBevel2: TsBevel;
-    sEdit2: TsEdit;
-    sLabel4: TsLabel;
-    sEdit3: TsEdit;
-    sLabel5: TsLabel;
-    sLabel6: TsLabel;
-    sBevel3: TsBevel;
-    sComboBox5: TsComboBox;
-    sLabel7: TsLabel;
-    sBevel4: TsBevel;
-    sComboBox6: TsComboBox;
-    sLabel8: TsLabel;
-    sDateEdit1: TsDateEdit;
-    sLabel9: TsLabel;
-    sLabel10: TsLabel;
-    sDateEdit2: TsDateEdit;
-    sCheckBox2: TsCheckBox;
-    sEdit4: TsEdit;
-    sEdit5: TsEdit;
-    sLabel11: TsLabel;
-    sLabel12: TsLabel;
-    sLabel13: TsLabel;
-    sBevel5: TsBevel;
-    sBevel6: TsBevel;
-    sCheckBox3: TsCheckBox;
     sCheckBox4: TsCheckBox;
     Info_Panel: TsPanel;
     sGradientPanel4: TsGradientPanel;
@@ -132,8 +103,7 @@ type
     Label_FTo: TsLabel;
     Image2: TImage;
     sBitBtn5: TsBitBtn;
-    sPanel2: TsPanel;
-    sGradientPanel11: TsGradientPanel;
+    sPanel2: TsGradientPanel;
     sBevel22: TsBevel;
     Lbl_HotelName: TsLabel;
     Lbl_tag1: TsLabel;
@@ -145,8 +115,6 @@ type
     Image_tag: TsImage;
     sBitBtn4: TsBitBtn;
     sBitBtn6: TsBitBtn;
-    Panel_Stars: TsGradientPanel;
-    Price_panel: TsGradientPanel;
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
     Info_Image: TImage;
@@ -178,6 +146,39 @@ type
     lbl_Entertainment_hotel: TsLabel;
     sTabSheet8: TsTabSheet;
     lbl_Kids_hotel: TsLabel;
+    Panel_Stars: TsGradientPanel;
+    Price_panel: TsGradientPanel;
+    sPanel1: TsPanel;
+    sLabel2: TsLabel;
+    sLabel3: TsLabel;
+    sBevel1: TsBevel;
+    sBevel2: TsBevel;
+    sLabel4: TsLabel;
+    sLabel5: TsLabel;
+    sLabel6: TsLabel;
+    sBevel3: TsBevel;
+    sLabel7: TsLabel;
+    sBevel4: TsBevel;
+    sLabel8: TsLabel;
+    sLabel9: TsLabel;
+    sLabel10: TsLabel;
+    sBevel5: TsBevel;
+    Image3: TImage;
+    sBevel23: TsBevel;
+    sLabel1: TsLabel;
+    sBevel6: TsBevel;
+    sEdit2: TsEdit;
+    sEdit3: TsEdit;
+    sComboBox5: TsComboBox;
+    sComboBox6: TsComboBox;
+    sDateEdit1: TsDateEdit;
+    sDateEdit2: TsDateEdit;
+    sCheckBox3: TsCheckBox;
+    sCheckBox5: TsCheckBox;
+    sCheckBox6: TsCheckBox;
+    sCheckBox7: TsCheckBox;
+    sCheckBox8: TsCheckBox;
+    sCheckBox9: TsCheckBox;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure sEdit2KeyPress(Sender: TObject; var Key: Char);
     procedure FormResize(Sender: TObject);
@@ -201,6 +202,8 @@ type
     procedure sBitBtn4Click(Sender: TObject);
     procedure Button_FullInfoClick(Sender: TObject);
     procedure Button_LeaveClick(Sender: TObject);
+    procedure sDateEdit2Exit(Sender: TObject);
+    procedure sDateEdit1Exit(Sender: TObject);
   private
     { Private declarations }
   public
@@ -333,7 +336,7 @@ end;
 
 procedure TForm11.sBitBtn1Click(Sender: TObject);
 Var
-  MSG: String;
+  MSG, F1, F2: String;
   R, G, B, DR, DG, DB: Double;
   I: Integer;
 begin
@@ -345,6 +348,24 @@ if (sCheckBox1.Checked = True) then                                             
   MSG:= MSG + ' AND ([H].[Stars]>=' + IntToStr(sComboBox1.ItemIndex + 1) + ')'
     else
       MSG:= MSG + ' AND ([H].[Stars]=' + IntToStr(sComboBox1.ItemIndex + 1) + ')';
+if sCheckBox3.Checked then
+  Begin
+  if sCheckBox5.Checked then
+    MSG:= MSG + ' AND (DateDiff("d", T.Date_Start, T.Date_Finish) BETWEEN ' + sEdit2.Text + ' AND ' + sEdit3.Text + ' )';
+  if sCheckBox6.Checked then
+    MSG:= MSG + ' AND (T.Peoples=' + IntToStr(sComboBox5.ItemIndex) + ')';
+  if sCheckBox7.Checked then
+    MSG:= MSG + ' AND (T.Type=' + IntToStr(sComboBox6.ItemIndex) + ')';
+  if (sCheckBox8.Checked) And (sDateEdit1.Text <> '  .  .    ') And (sDateEdit2.Text <> '  .  .    ') then
+    Begin
+    F1:= StringReplace(sDateEdit1.Text, '.', '/', [rfReplaceAll, rfIgnoreCase]); F1 := '#' + F1 + '#';
+    F2:= StringReplace(sDateEdit2.Text, '.', '/', [rfReplaceAll, rfIgnoreCase]); F2 := '#' + F2 + '#';
+    MSG:= MSG + ' AND (T.Date_Start BETWEEN ' + F1 + ' AND ' + F2 + ')';
+    End;
+  if sCheckBox9.Checked then MSG:= MSG + ' AND (T.Date_Start>=' + DateTimeToStr(Now) + ')';
+  End;
+
+
 MSG:= MSG + ')';
 //ShowMessage(MSG);
 With DataModule2.Tour_Query do
@@ -359,6 +380,7 @@ Page_Count:= (DataModule2.Tour_Query.RecordCount div Page.Lines);
 if (DataModule2.Tour_Query.RecordCount mod Page.Lines) > 0 then
   Page_Count:= (Page_Count + 1);
 SetLength(CButtons, Page_Count);
+
 BUILD_PAGE(1);
 // Отрисовываем задний фон
 R:=255.0; DR:= (247 - R) / 48;
@@ -373,44 +395,95 @@ for I:= 0 to 49 do
   G:= G + DG;
   B:= B + DB;
   End;
-// Переформатирование кнопок
-for I:= 0 to Page_Count - 1 do
-  begin
-  CButtons[I].BorderWidth:= 1;
-  CButtons[I].Left:= I * 35;
-  CButtons[I].Top:= 8;
-  CButtons[I].Height:= 32;
-  CButtons[I].Width:= 32;
-  CButtons[I].BorderRadius:= 8;
-  CButtons[I].BorderColor:= RGB(220,220,220);
-  CButtons[I].Color:= RGB(237,237,237);
-  CButtons[I].Color_off:= RGB(0,128,255);
-  CButtons[I].BackColor:= ClWhite;
-  CButtons[I].BackGradient.Enabled:= True;
-  CButtons[I].BackGradient.Color1:= RGB(253,253,253);
-  CButtons[I].BackGradient.Color2:= RGB(248,248,248);
-  CButtons[I].Gradient.Color1:= RGB(254,254,254);
-  CButtons[I].Gradient.Color2:= RGB(221,221,221);
-  CButtons[I].Caption:= IntToStr(I + 1);
-  if (I = 0) then
-    CButtons[I].State:= cbLocked
-      else
-        CButtons[I].State:= cbStay;
-  CButtons[I].Create;
-  Panel_Button.Canvas.Draw(CButtons[I].Left, CButtons[I].Top, CButtons[I].Paint);
-  end;
+if (DataModule2.Tour_Query.RecordCount > 0) then
+  Begin
+  // Переформатирование кнопок
+  for I:= 0 to Page_Count - 1 do
+    begin
+    CButtons[I].BorderWidth:= 1;
+    CButtons[I].Left:= I * 35;
+    CButtons[I].Top:= 8;
+    CButtons[I].Height:= 32;
+    CButtons[I].Width:= 32;
+    CButtons[I].BorderRadius:= 8;
+    CButtons[I].BorderColor:= RGB(220,220,220);
+    CButtons[I].Color:= RGB(237,237,237);
+    CButtons[I].Color_off:= RGB(0,128,255);
+    CButtons[I].BackColor:= ClWhite;
+    CButtons[I].BackGradient.Enabled:= True;
+    CButtons[I].BackGradient.Color1:= RGB(253,253,253);
+    CButtons[I].BackGradient.Color2:= RGB(248,248,248);
+    CButtons[I].Gradient.Color1:= RGB(254,254,254);
+    CButtons[I].Gradient.Color2:= RGB(221,221,221);
+    CButtons[I].Caption:= IntToStr(I + 1);
+    if (I = 0) then
+      CButtons[I].State:= cbLocked
+        else
+          CButtons[I].State:= cbStay;
+    CButtons[I].Create;
+    Panel_Button.Canvas.Draw(CButtons[I].Left, CButtons[I].Top, CButtons[I].Paint);
+    end;
+  End;
 end;
+
+Function Get_Price(Start,Finish:TDateTime):Integer;
+var
+  CDate: TDateTime;
+  Res, Price: Integer;
+Begin
+Res:= 0;
+CDate:= Start;
+while (CDate < Finish) do
+  Begin
+  CDate:=IncDay(CDate, 1);
+  if monthof(CDate) <= 9 then
+    Price:= DataModule2.Tour_Query.FieldByName('Price_0' + IntToStr(monthof(CDate))).AsInteger
+  else
+    Price:= DataModule2.Tour_Query.FieldByName('Price_'  + IntToStr(monthof(CDate))).AsInteger;
+  Res:= Res + Price;
+  End;
+Result:= Res;
+End;
+
+Function _Price:Integer;
+Var
+  Price: Integer;
+Begin
+With DataModule2.Tour_Query do
+  Begin
+  if FieldByName('Castom_Price').AsBoolean then
+    Price:= FieldByName('T.Price').AsInteger
+  else
+    Begin
+    Price:= Get_Price(FieldByName('Date_Start').AsDateTime, FieldByName('Date_Finish').AsDateTime)
+    End;
+    case FieldByName('Fly_Class').AsInteger of
+    1:Price:= Price + FieldByName('Price_FC').AsInteger;
+    2:Price:= Price + FieldByName('Price_FC').AsInteger;
+    3:Price:= Price + FieldByName('Price_FC').AsInteger;
+    end;
+  Result:= Price;
+  End;
+
+End;
 
 procedure TForm11.sBitBtn2Click(Sender: TObject);
 begin
-With DataModule2.Basket_Query do
+With DataModule2.Tour_Query do
   Begin
-  Insert;
-  FieldByName('B_Type').AsInteger:= 3;
-  FieldByName('B_ID').AsInteger:=   DataModule2.Tour_Query.FieldByName('ID').AsInteger;
-  FieldByName('Air_ID').AsInteger:= DataModule2.Tour_Query.FieldByName('A.ID').AsInteger;
-  FieldByName('Hotel_ID').AsInteger:= DataModule2.Tour_Query.FieldByName('H.ID').AsInteger;
+  DataModule2.Basket_Query.Insert;
+  DataModule2.Basket_Query.FieldByName('B_Type').AsInteger:= 3;
+  DataModule2.Basket_Query.FieldByName('B_ID').AsInteger:= FieldByName('T.ID').AsInteger;
+  DataModule2.Basket_Query.FieldByName('Date_Start').AsDateTime:= FieldByName('Date_Start').AsDateTime;
+  DataModule2.Basket_Query.FieldByName('Date_Finish').AsDateTime:= FieldByName('Date_Finish').AsDateTime;
+  DataModule2.Basket_Query.FieldByName('Fly_Class').AsInteger:= FieldByName('Fly_Class').AsInteger;
+  ShowMessage(IntTostr(_Price));
+  DataModule2.Basket_Query.FieldByName('Price').AsInteger:= _Price;
+  DataModule2.Basket_Query.Post;
   End;
+Info_Panel.Visible:= False;
+DataModule2.REFRESH_BASKET;
+ShowMessage('Тур был успешно добавлен в корзину');
 end;
 
 procedure TForm11.sBitBtn3Click(Sender: TObject);
@@ -436,6 +509,40 @@ begin
 sPanel1.Visible:= sCheckBox4.Checked;
 end;
 
+
+
+procedure TForm11.sDateEdit1Exit(Sender: TObject);
+Var
+  Error: Boolean;
+begin
+  Try
+  Error:= True;
+  if (sDateEdit1.Date <= Now) or (sDateEdit1.Date > Now) then Error:= False;
+  Finally
+  if Error then
+    Begin
+    sDateEdit1.Date:= Now;
+    ShowMessage('Была замечена ошибка в первой дате, теперь она испралена!');
+    End;
+  End;
+end;
+
+procedure TForm11.sDateEdit2Exit(Sender: TObject);
+Var
+  Error: Boolean;
+begin
+  Try
+  Error:= True;
+  if sDateEdit2.Date >= sDateEdit1.Date then Error:= False;
+  Finally
+  if Error then
+    Begin
+    sDateEdit2.Date:= sDateEdit1.Date;
+    ShowMessage('Была замечена ошибка во второй дате, теперь она испралена!');
+    End;
+  End;
+end;
+
 procedure TForm11.sEdit2Exit(Sender: TObject);
 begin
 if sEdit2.Text = '' then sEdit2.Text:= '0';
@@ -457,24 +564,7 @@ Form11.Hide;
 Form9.Show;
 end;
 
-Function Get_Price(Start,Finish:TDateTime):Integer;
-var
-  CDate: TDateTime;
-  Res, Price: Integer;
-Begin
-Res:= 0;
-CDate:= Start;
-while (CDate < Finish) do
-  Begin
-  CDate:=IncDay(CDate, 1);
-  if monthof(CDate) <= 9 then
-    Price:= DataModule2.Tour_Query.FieldByName('Price_0' + IntToStr(monthof(CDate))).AsInteger
-  else
-    Price:= DataModule2.Tour_Query.FieldByName('Price_'  + IntToStr(monthof(CDate))).AsInteger;
-  Res:= Res + Price;
-  End;
-Result:= Res;
-End;
+
 
 procedure Set_Tags(Line:String);
 var
@@ -619,40 +709,48 @@ Procedure BUILD_PAGE(Index: Integer);
 Var
   I, Rest: Integer;
 Begin
-DataModule2.Tour_Query.First;
-DataModule2.Tour_Query.MoveBy((Index - 1) * Page.Lines);
-Rest:= DataModule2.Tour_Query.RecordCount - ((Page.Current - 1) * Page.Lines);
-I:= 1;
-while (DataModule2.Tour_Query.Eof = False) And (I <= (Rest)) And (I <= (Page.Lines)) do
+if (DataModule2.Tour_Query.RecordCount > 0) then
   Begin
-  BUILD_LINE(I - 1);
-  I:= I + 1;
-  DataModule2.Tour_Query.Next;
+  DataModule2.Tour_Query.First;
+  DataModule2.Tour_Query.MoveBy((Index - 1) * Page.Lines);
+  Rest:= DataModule2.Tour_Query.RecordCount - ((Page.Current - 1) * Page.Lines);
+  I:= 1;
+  while (DataModule2.Tour_Query.Eof = False) And (I <= (Rest)) And (I <= (Page.Lines)) do
+    Begin
+    BUILD_LINE(I - 1);
+    I:= I + 1;
+    DataModule2.Tour_Query.Next;
+    End;
+  Rest:= (DataModule2.Tour_Query.RecordCount - ((Index - 1) * Page.Lines));
+  if (Rest >= Page.Lines) then
+    for I:= 1 to (Page.Lines) do
+      Hotels_List[I - 1].Main_Panel.Visible:= True
+        else
+          for I:= 1 to (Page.Lines) do
+            if I <= Rest then
+              Hotels_List[I - 1].Main_Panel.Visible:= True
+                else
+                  Hotels_List[I - 1].Main_Panel.Visible:= False;
+
+  Page_Count:= DataModule2.Tour_Query.RecordCount div Page.Lines;
+  if (DataModule2.Tour_Query.RecordCount mod Page.Lines) > 0 then
+    Page_Count:= Page_Count + 1;
+  if (Index < Page_Count) then Form11.Button_Next.Enabled:= True else Form11.Button_Next.Enabled:= False;
+  if (Index = 1) then Form11.Button_Prior.Enabled:= False else Form11.Button_Prior.Enabled:= True;
+
+  //...
+  CButtons[Page.Current - 1].State:= cbStay;
+  Form11.Panel_Button.Canvas.Draw(CButtons[Page.Current - 1].Left, CButtons[Page.Current - 1].Top, CButtons[Page.Current - 1].Paint);
+  CButtons[Index - 1].State:= cbLocked;
+  Form11.Panel_Button.Canvas.Draw(CButtons[Index - 1].Left, CButtons[Index - 1].Top, CButtons[Index - 1].Paint);
+  //...
+  Page.Current:= Index;
+  End
+else
+  Begin
+  for I:= 1 to (Page.Lines) do Hotels_List[I - 1].Main_Panel.Visible:= False;
+
   End;
-Rest:= (DataModule2.Tour_Query.RecordCount - ((Index - 1) * Page.Lines));
-if (Rest >= Page.Lines) then
-  for I:= 1 to (Page.Lines) do
-    Hotels_List[I - 1].Main_Panel.Visible:= True
-      else
-        for I:= 1 to (Page.Lines) do
-          if I <= Rest then
-            Hotels_List[I - 1].Main_Panel.Visible:= True
-              else
-                Hotels_List[I - 1].Main_Panel.Visible:= False;
-
-Page_Count:= DataModule2.Tour_Query.RecordCount div Page.Lines;
-if (DataModule2.Tour_Query.RecordCount mod Page.Lines) > 0 then
-  Page_Count:= Page_Count + 1;
-if (Index < Page_Count) then Form11.Button_Next.Enabled:= True else Form11.Button_Next.Enabled:= False;
-if (Index = 1) then Form11.Button_Prior.Enabled:= False else Form11.Button_Prior.Enabled:= True;
-
-//...
-CButtons[Page.Current - 1].State:= cbStay;
-Form11.Panel_Button.Canvas.Draw(CButtons[Page.Current - 1].Left, CButtons[Page.Current - 1].Top, CButtons[Page.Current - 1].Paint);
-CButtons[Index - 1].State:= cbLocked;
-Form11.Panel_Button.Canvas.Draw(CButtons[Index - 1].Left, CButtons[Index - 1].Top, CButtons[Index - 1].Paint);
-//...
-Page.Current:= Index;
 End;
 
 Procedure BUILD_LINE(Index: Integer);
@@ -666,20 +764,31 @@ Hotels_List[Index].Lbl_City.Caption:=     DataModule2.Tour_Query.FieldByName('Ci
 Hotels_List[Index].Panel_level.Caption:=  DataModule2.Tour_Query.FieldByName('Stars').AsString + ' *';
 Hotels_List[Index].Photo.Picture.Assign(DataModule2.Tour_Query.FieldByName('Photo'));
 //...
-if (DataModule2.Tour_Query.FieldByName('FixPrice').AsBoolean= True) then
-  Hotels_List[Index].Lbl_Price.Caption:= 'от: ' + IntToStr(DataModule2.Tour_Query.FieldByName('Price_EC').AsInteger + DataModule2.Tour_Query.FieldByName('H.Price').AsInteger) + ' USD'
-    else
-      Begin
-      D:= D.MaxValue;
-      for I:= 1 to 12 do
-        Begin
-        if (I < 10) AND (DataModule2.Tour_Query.FieldByName('Price_0' + IntToStr(I) ).AsInteger < D) then
-          D:= DataModule2.Tour_Query.FieldByName('Price_0' + IntToStr(I) ).AsInteger;
-        if (I >= 10) AND (DataModule2.Tour_Query.FieldByName('Price_' + IntToStr(I) ).AsInteger < D) then
-          D:= DataModule2.Tour_Query.FieldByName('Price_' + IntToStr(I) ).AsInteger;
-        End;
-      Hotels_List[Index].Lbl_Price.Caption:= 'от: ' + IntToStr(D + DataModule2.Tour_Query.FieldByName('Price_EC').AsInteger) + ' USD';
-      End;
+if (DataModule2.Tour_Query.FieldByName('Castom_Price').AsBoolean= True) then
+  Begin
+  Hotels_List[Index].Lbl_Price.Caption:= IntToStr(DataModule2.Tour_Query.FieldByName('T.Price').AsInteger) + ' USD';
+  Hotels_List[Index].Lbl_Visual_Price.Caption:= 'Цена:';
+  End
+else
+  Begin
+  D:= D.MaxValue;
+  if (DataModule2.Tour_Query.FieldByName('FixPrice').AsBoolean= True) then
+    D:= DataModule2.Tour_Query.FieldByName('H.Price').AsInteger
+  else
+  for I:= 1 to 12 do
+    Begin
+    if (I < 10) AND (DataModule2.Tour_Query.FieldByName('Price_0' + IntToStr(I) ).AsInteger < D) then
+      D:= DataModule2.Tour_Query.FieldByName('Price_0' + IntToStr(I) ).AsInteger;
+    if (I >= 10) AND (DataModule2.Tour_Query.FieldByName('Price_' + IntToStr(I) ).AsInteger < D) then
+      D:= DataModule2.Tour_Query.FieldByName('Price_' + IntToStr(I) ).AsInteger;
+    End;
+  case DataModule2.Tour_Query.FieldByName('Fly_Class').Asinteger of
+  1:D:= D + DataModule2.Tour_Query.FieldByName('Price_FC').Asinteger;
+  2:D:= D + DataModule2.Tour_Query.FieldByName('Price_BC').Asinteger;
+  3:D:= D + DataModule2.Tour_Query.FieldByName('Price_EC').Asinteger;
+  end;
+  Hotels_List[Index].Lbl_Price.Caption:= 'от: ' + IntToStr(D);
+  End;
 Hotels_List[Index].Lbl_Price.Left:= Hotels_List[Index].Lbl_Visual_Price.Left - ((Hotels_List[Index].Lbl_Price.Width - Hotels_List[Index].Lbl_Visual_Price.Width) div 2);
 //...
 //Hotels_List[Index].Photo.Assign(DataModule2.Tour_Query.FieldByName('Photo'));
