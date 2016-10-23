@@ -488,18 +488,21 @@ end;
 
 procedure TForm5.sBitBtn1Click(Sender: TObject);
 begin
+sImage2.Picture:= Nil;
 sPanel2.Visible:= False;
 Panel_INFO_Air.Visible:= False;
 end;
 
 procedure TForm5.sBitBtn2Click(Sender: TObject);
 begin
+sImage2.Picture:= Nil;
 sPanel2.Visible:= False;
 Panel_INFO_Hotel.Visible:= False;
 end;
 
 procedure TForm5.sBitBtn6Click(Sender: TObject);
 begin
+sImage2.Picture:= Nil;
 sPanel2.Visible:= False;
 Panel_INFO_Tour.Visible:= False;
 end;
