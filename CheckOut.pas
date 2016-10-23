@@ -180,9 +180,9 @@ With DataModule2.Buffer do
   Active:= False;
   SQL.Clear;
     case StrToInt(DataModule2.Basket_Query.FieldByName('B_Type').AsString) of
-    1:SQL.Add('Select * From Air_Ticket Where ID_of_recrod=' + DataModule2.Basket_Query.FieldByName('B_ID').AsString);
+    1:SQL.Add('Select * From Air_Ticket Where ID=' + DataModule2.Basket_Query.FieldByName('B_ID').AsString);
     2:SQL.Add('Select * From Hotels Where ID=' + DataModule2.Basket_Query.FieldByName('B_ID').AsString);
-    3:;
+    3:SQL.Add('Select * From Tours Where ID=' + DataModule2.Basket_Query.FieldByName('B_ID').AsString);
     end;
   Active:= True;
   End;

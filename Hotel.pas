@@ -8,18 +8,18 @@ uses
   Vcl.ExtCtrls, sBevel, acImage, sSkinManager, sButton, Vcl.ComCtrls,
   Vcl.Imaging.jpeg, Vcl.OleCtrls, SHDocVw, acWebBrowser, Data.DB, Data.Win.ADODB,
   acAlphaHints, Vcl.Grids, Vcl.DBGrids, sDialogs, PNGImage, Vcl.Buttons, sBitBtn,
-  sPageControl, BTNlib, acPNG, Vcl.Mask, sMaskEdit, sCustomComboEdit, sToolEdit, Dateutils;
+  sPageControl, BTNlib, acPNG, Vcl.Mask, sMaskEdit, sCustomComboEdit, sToolEdit, Dateutils,
+  sScrollBox, sEdit, sCheckBox, sComboBox;
 
 type
   TForm7 = class(TForm)
-    Info_Panel: TsPanel;
     Panel_Stars: TsGradientPanel;
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
     Info_Image: TImage;
     TabSheet2: TTabSheet;
     Price_panel: TsGradientPanel;
-    sGradientPanel4: TsGradientPanel;
+    Info_Panel: TsGradientPanel;
     sBevel3: TsBevel;
     Lbl_HotelName: TsLabel;
     Lbl_tag1: TsLabel;
@@ -29,16 +29,10 @@ type
     lbl_HotelInfo: TsLabel;
     Image_Comment: TsImage;
     Image_tag: TsImage;
-    Back_Gradient: TsGradientPanel;
     Control_Panel: TsPanel;
     sBitBtn1: TsBitBtn;
     sBitBtn2: TsBitBtn;
     Button_Exit: TsBitBtn;
-    Explorer_Panel: TsPanel;
-    Next_Button: TsBitBtn;
-    Prior_button: TsBitBtn;
-    Lbl_Records_count: TsLabel;
-    Button_Panel: TImage;
     Button_add_OBJECT: TsBitBtn;
     sBitBtn3: TsBitBtn;
     Image_Phone: TsImage;
@@ -50,7 +44,6 @@ type
     sBevel4: TsBevel;
     Lbl_Web: TsWebLabel;
     Image_Web: TsImage;
-    sBitBtn4: TsBitBtn;
     sBitBtn5: TsBitBtn;
     sImage1: TsImage;
     sLabel26: TsLabel;
@@ -82,6 +75,29 @@ type
     sButton2: TsButton;
     BackGround_Image_Shadow: TsImage;
     BackGround_Image: TsImage;
+    sPanel3: TsPanel;
+    sPanel2: TsPanel;
+    Explorer_Panel: TsPanel;
+    Button_Panel: TImage;
+    Next_Button: TsBitBtn;
+    Prior_button: TsBitBtn;
+    sScrollBox1: TsScrollBox;
+    sPanel4: TsPanel;
+    Lbl_Records_count: TsLabel;
+    sGradientPanel2: TsGradientPanel;
+    sGradientPanel8: TsGradientPanel;
+    sComboBox1: TsComboBox;
+    sCheckBox1: TsCheckBox;
+    sGradientPanel3: TsGradientPanel;
+    sGradientPanel9: TsGradientPanel;
+    sComboBox3: TsComboBox;
+    sGradientPanel5: TsGradientPanel;
+    sEdit1: TsEdit;
+    sGradientPanel1: TsGradientPanel;
+    sGradientPanel6: TsGradientPanel;
+    sGradientPanel7: TsGradientPanel;
+    sComboBox2: TsComboBox;
+    Button1: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
     Procedure Show_info1(Sender: TObject);
@@ -107,6 +123,11 @@ type
     procedure sLabel26Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure sButton2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure sEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure sEdit3KeyPress(Sender: TObject; var Key: Char);
+    procedure sEdit4KeyPress(Sender: TObject; var Key: Char);
+    procedure sEdit5KeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -140,8 +161,7 @@ var
   Label_price  :Array [1..Line_Count] of tsLabel;//
   Label_other  :Array [1..Line_Count] of tsLabel;//
   //..........................................//
-  Pages_mas    :Array              of tsLabel;//
-  //..........................................//
+
 
   Page_Current:Integer;
 
@@ -162,20 +182,103 @@ Function Get_Price(Start,Finish:TDateTime):Integer;
 var
   CDate:TDateTime;
   Res, Price:Integer;
+  LP: String;
 Begin
 Res:= 0;
 CDate:= Start;
+if DataModule2.Hotel_Query.FieldByName('FixPrice').AsBoolean = True then
 while (CDate < Finish) do
   Begin
   CDate:=IncDay(CDate, 1);
-  if monthof(CDate) <= 9 then
-    Price:= DataModule2.Hotel_Query.FieldByName('Price_0' + IntToStr(monthof(CDate))).AsInteger
-      else
-        Price:= DataModule2.Hotel_Query.FieldByName('Price_' + IntToStr(monthof(CDate))).AsInteger;
+  Price:= DataModule2.Hotel_Query.FieldByName('Price').AsInteger;
+  Res:= Res + Price;
+  End
+else
+while (CDate < Finish) do
+  Begin
+  CDate:=IncDay(CDate, 1);
+  LP:= IntToStr(monthof(CDate));
+  if LP.Length = 1 then LP:= '0' + LP;
+  Price:= DataModule2.Hotel_Query.FieldByName('Price_' + LP).AsInteger;
   Res:= Res + Price;
   End;
 Result:= Res;
 End;
+
+procedure TForm7.Button1Click(Sender: TObject);
+Var
+  S: String;
+  R, G, B, DR, DG, DB: Double;
+  I: Integer;
+begin
+With DataModule2.Hotel_Query do
+  Begin
+  Active:= False;
+  SQL.Clear;
+  S:= 'SELECT * FROM HOTELS AS H WHERE (H.Food LIKE ''%' + sComboBox3.Text + '%'')';
+  if sComboBox2.ItemIndex > 0 then S:= S + ' AND (H.Country=''' + sComboBox2.Text + ''')';
+  if sCheckBox1.Checked then S:= S + ' AND (H.Stars>=' + IntToStr(sComboBox1.ItemIndex + 1) + ')'
+    else S:= S + ' AND (H.Stars=' + IntToStr(sComboBox1.ItemIndex + 1) + ')';
+  if sCheckBox3.Checked then
+    Begin
+    if sCheckBox6.Checked then
+      S:= S + ' AND ()'
+
+    End;
+
+  SQL.Add(S);
+  Active:= True;
+  End;
+  ShowMessage('Line> "' + S + '" | RC>' + IntToStr(DataModule2.Hotel_Query.RecordCount));
+if (DataModule2.Hotel_Query.RecordCount > 0) then
+  Begin
+  // Находим кол-во страниц
+  Button_Count:=(DataModule2.Hotel_Query.Recordcount Div Line_Count);
+  if (DataModule2.Hotel_Query.Recordcount Mod Line_Count) > 0 then
+    Button_Count:= Button_Count + 1;
+  // Отрисовываем задний фон
+  R:=255.0; DR:= (247 - R) / Button_Panel.Height;
+  G:=255.0; DG:= (247 - G) / Button_Panel.Height;
+  B:=255.0; DB:= (247 - B) / Button_Panel.Height;
+  for I:= 0 to Button_Panel.Height+1 do
+    Begin
+    Button_Panel.Canvas.Pen.Color:=RGB(Trunc(R), Trunc(G), Trunc(B));
+    Button_Panel.Canvas.MoveTo(0, I);
+    Button_Panel.Canvas.LineTo(Button_Panel.Width, I);
+    R:= R + DR;
+    G:= G + DG;
+    B:= B + DB;
+    End;
+
+  SetLength(CButtons,Button_Count);
+  for I:= 0 to Button_count-1 do
+    begin
+    CButtons[I].BorderWidth:=1;
+    CButtons[I].Left:= I * 35;
+    CButtons[I].Top:=8;
+    CButtons[I].Height:=32;
+
+    CButtons[I].Width:=32;
+    CButtons[I].BorderRadius:=8;
+    CButtons[I].BorderColor:=RGB(220,220,220);
+    CButtons[I].Color:=RGB(237,237,237);
+    CButtons[I].Color_off:=RGB(0,128,255);
+    CButtons[I].BackColor:=ClWhite;
+    CButtons[I].BackGradient.Enabled:= True;
+    CButtons[I].BackGradient.Color1:= RGB(253,253,253);
+    CButtons[I].BackGradient.Color2:= RGB(248,248,248);
+    CButtons[I].Gradient.Color1:=RGB(254,254,254);
+    CButtons[I].Gradient.Color2:=RGB(221,221,221);
+    CButtons[I].Caption:=IntToStr(I+1);
+    CButtons[I].State:=cbStay;
+    CButtons[I].Create;
+    Button_panel.Canvas.Draw(CButtons[I].Left,CButtons[I].Top, CButtons[I].Paint);
+    end;
+  //...
+  CButtons[0].State:=cbLocked;
+  End;
+BUILD_PAGE(1);
+end;
 
 procedure TForm7.Button_add_OBJECTClick(Sender: TObject);
 begin
@@ -198,6 +301,8 @@ end;
 procedure TForm7.Button_ExitClick(Sender: TObject);
 begin
 Info_Panel.Visible:= False;
+sDateEdit1.Text:= '';
+sDateEdit2.Text:= '';
 end;
 
 procedure TForm7.Button_PanelMouseDown(Sender: TObject; Button: TMouseButton;
@@ -264,10 +369,6 @@ for I:=0 to Button_Count-1 do
     if Page_Current<>(X div 35)+1 then
       Begin
       Build_Page((X div 35)+1);
-      Page_Current:=(X div 35)+1;
-
-      if Page_Current+1 > Length(Pages_mas) then Next_button.Enabled:= False else Next_button.Enabled:= True;
-      if Page_Current-1 < 1 then Prior_button.Enabled:= False else Prior_button.Enabled:= True;
       End;
 end;
 
@@ -294,10 +395,6 @@ Image_Phone.Picture.LoadFromFile( 'Textures\Phone.png' );
 Image_Fax.Picture.LoadFromFile( 'Textures\Fax.png' );
 Image_Web.Picture.LoadFromFile( 'Textures\Web.png' );
 
-// Создание списка
-SetLength( Pages_mas , (DataModule2.Hotel_Query.Recordcount Div Line_Count) );
-if (DataModule2.Hotel_Query.Recordcount Mod Line_Count) > 0 then
-  SetLength( Pages_mas , Length(Pages_mas)+1 );
 // Кнопки експлорера
 Button_Count:=(DataModule2.Hotel_Query.Recordcount Div Line_Count);
 if (DataModule2.Hotel_Query.Recordcount Mod Line_Count) > 0 then
@@ -342,25 +439,24 @@ for I:=0 to Button_count-1 do
 CButtons[0].State:=cbLocked;
 Page_Current:=1;
 Build_Page(Page_Current);
-if Length(Pages_mas)>1 then
+if Button_Count > 1 then
 Next_Button.Enabled:=True;
 Lbl_Records_count.Caption:='По вашему запросу было найденно: '+IntToStr(DataModule2.Hotel_Query.Recordcount)+' записей';
-Lbl_Records_count.Left:=Back_Gradient.Width-Lbl_Records_count.width-10;
+//Lbl_Records_count.Left:=Back_Gradient.Width-Lbl_Records_count.width-10;
 end;
 
 procedure TForm7.FormResize(Sender: TObject);
 var
   I: Integer;
 begin
-Panel_mas[1].Left:= (ClientWidth div 2) - (Panel_mas[1].Width div 2);
-for I:=2 to Line_Count do Panel_mas[I].Left:= Panel_mas[1].Left;
-Info_Panel.Left:= (Clientwidth div 2) - (Info_Panel.Width div 2);
-Back_Gradient.Left:= Panel_mas[1].Left;
-Back_Gradient.Height:= ((Line_Count + 1) * 70) + 200;
 BackGround_Image.Width:= ClientWidth;
 BackGround_Image.Height:= ClientHeight;
-Control_Panel.Left:= (ClientWidth div 2) - (Control_Panel.Width div 2);
-Explorer_Panel.Top:=Panel_mas[Line_Count].Top+Panel_mas[Line_Count].Height;
+sPanel3.Left:= (ClientWidth div 2) - 480;
+sPanel4.Left:= (sPanel3.Left + sPanel3.Width - 464);
+Control_Panel.Left:= sPanel3.Left;
+sPanel3.Height:= ClientHeight - 52;
+sPanel2.Top:= sPanel3.Height - 156;
+sScrollBox1.Height:= sPanel2.Top - 12;
 end;
 
 procedure TForm7.FormShow(Sender: TObject);
@@ -402,7 +498,7 @@ if (Form7.sDateEdit2.Date < Form7.sDateEdit1.Date) then
   End;
 
 // Скрываем прудпредительный знак
-Form7.Price_Panel.Caption:= '     Цена:  ' + IntToStr(Get_Price(Form7.sDateEdit1.Date, Form7.sDateEdit2.Date))+'$';
+Form7.Price_Panel.Caption:= '     Цена:  ' + IntToStr(Get_Price(Form7.sDateEdit1.Date, Form7.sDateEdit2.Date))+' $';
 Form7.Price_Panel.Refresh;
 // Показываем кнопку добавления
 Form7.Button_add_OBJECT.Enabled:= True;
@@ -411,6 +507,26 @@ End;
 procedure TForm7.sButton2Click(Sender: TObject);
 begin
 CHK_Date;
+end;
+
+procedure TForm7.sEdit2KeyPress(Sender: TObject; var Key: Char);
+begin
+if Not (key in ['0'..'9', #8]) then Key:= #0;
+end;
+
+procedure TForm7.sEdit3KeyPress(Sender: TObject; var Key: Char);
+begin
+if Not (key in ['0'..'9', #8]) then Key:= #0;
+end;
+
+procedure TForm7.sEdit4KeyPress(Sender: TObject; var Key: Char);
+begin
+if Not (key in ['0'..'9', #8]) then Key:= #0;
+end;
+
+procedure TForm7.sEdit5KeyPress(Sender: TObject; var Key: Char);
+begin
+if Not (key in ['0'..'9', #8]) then Key:= #0;
 end;
 
 Procedure TForm7.Show_info1(Sender: TObject);
@@ -458,17 +574,15 @@ end;
 procedure TForm7.Prior_buttonClick(Sender: TObject);
 begin
 Next_button.Enabled:= True;
-Dec(Page_Current);
-Build_Page(Page_Current);
+Build_Page(Page_Current - 1);
 if Page_Current-1 < 1 then Prior_button.Enabled:= False;
 end;
 
 procedure TForm7.Next_ButtonClick(Sender: TObject);
 begin
 Prior_button.Enabled:= True;
-Inc(Page_Current);
-Build_Page(Page_Current);
-if Page_Current+1 > Length(Pages_mas) then Next_button.Enabled:= False;
+Build_Page(Page_Current + 1);
+if Page_Current+1 > Button_Count then Next_button.Enabled:= False;
 end;
 
 Procedure Get_INFO(Line:Integer);
@@ -532,6 +646,7 @@ With Form7 do
   Lbl_Fax.Caption:=DataModule2.Hotel_Query.FieldByName('Fax').AsString;
   Lbl_Web.Caption:=DataModule2.Hotel_Query.FieldByName('Internet_Address').AsString;
   Lbl_Web.URL:=DataModule2.Hotel_Query.FieldByName('Internet_Address').AsString;
+  Info_Panel.Left:= (Clientwidth div 2) - (Info_Panel.Width div 2);
   Info_Panel.Visible:=True;
   End;
 End;
@@ -544,7 +659,7 @@ Begin
 for I:=1 to Line_Count do
   Begin
   Panel_mas[I]:=TSpanel.create(Form7);
-  Panel_mas[I].Parent:=Form7;
+  Panel_mas[I].Parent:= Form7.sScrollBox1;
   GPanel_star[I]:=TsGradientPanel.create(Form7);
   GPanel_star[I].Parent:=Panel_mas[I];
   Bevel_photo[I]:=TsBevel.create(Form7);
@@ -576,10 +691,10 @@ for I:=1 to Line_Count do
   Label_other[I]:=TsLabel.Create(Form7);
   Label_other[I].Parent:=Panel_mas[I];
 
-  Panel_mas[I].Left:=155;
-  Panel_mas[I].Width:=970;
+  Panel_mas[I].Left:=0;
+  Panel_mas[I].Width:=935;
   Panel_mas[I].Height:=70;
-  Panel_mas[I].Top:=(I*70);
+  Panel_mas[I].Top:=((I - 1) * 70) + (I * 10);
   GPanel_star[I].Width:=30;
   GPanel_star[I].Height:=17;
   GPanel_star[I].Alignment:=taCenter;
@@ -591,12 +706,12 @@ for I:=1 to Line_Count do
   Bevel_photo[I].Width:=106;
   Bevel_photo[I].Height:=56;
 
-  Bevel_1[I].Left:=434;
+  Bevel_1[I].Left:=400;
   Bevel_1[I].Top:=0;
   Bevel_1[I].Width:=2;
   Bevel_1[I].Height:=73;
 
-  Bevel_2[I].Left:=855;
+  Bevel_2[I].Left:=830;
   Bevel_2[I].Top:=0;
   Bevel_2[I].Width:=2;
   Bevel_2[I].Height:=73;
@@ -617,22 +732,27 @@ for I:=1 to Line_Count do
   Label_tag1[I].Left:=128;
   Label_tag1[I].Top:=46;
   Label_tag1[I].Font.Style:=[fsUnderline];
+  Label_tag1[I].Cursor:= crHandPoint;
   Label_tag2[I].Left:=161;
   Label_tag2[I].Top:=46;
   Label_tag2[I].Font.Style:=[fsUnderline];
+  Label_tag2[I].Cursor:= crHandPoint;
   Label_tag3[I].Left:=194;
   Label_tag3[I].Top:=46;
   Label_tag3[I].Font.Style:=[fsUnderline];
+  Label_tag3[I].Cursor:= crHandPoint;
   Label_tag4[I].Left:=227;
   Label_tag4[I].Top:=46;
   Label_tag4[I].Font.Style:=[fsUnderline];
-  Label_comment[I].Left:=442;
+  Label_tag4[I].Cursor:= crHandPoint;
+  Label_comment[I].Left:=406;
   Label_comment[I].Top:=15;
   Label_comment[I].WordWrap:=True;
-  Label_price[I].Left:=869;
+  Label_price[I].Left:=836;
   Label_price[I].Top:=9;
+  Label_price[I].Font.Size:= 12;
   Label_price[I].Font.Style:= [fsBold];
-  Label_other[I].Left:=869;
+  Label_other[I].Left:=836;
   Label_other[I].Top:=41;
   Label_other[I].Caption:='Подробнее...';
   Label_other[I].Cursor:=crHandPoint;
@@ -682,9 +802,9 @@ Label_comment[Index].Caption:=S;
 Label_comment[Index].Width:=390;
 //... Недофича (Нужен запрос онлайн времени!)
 if DataModule2.Hotel_Query.FieldByName('FixPrice').AsBoolean = True then
-  Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Price').AsString
+  Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Price').AsString + ' USD'
     else
-      Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Price_'+Copy(DateToStr(Now),4,2)).AsString;
+      Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Price_'+Copy(DateToStr(Now),4,2)).AsString + ' USD';
 //...
 GPanel_star[Index].Left:=Label_name[Index].Left+Label_name[Index].Width+6;
 GPanel_star[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Stars').AsString + ' *';
@@ -734,31 +854,42 @@ Procedure Build_Page(Index:Integer);
 var
   I, D: Integer;
 Begin
-DataModule2.Hotel_Query.First;
-for I:=1 to Line_Count do
-  Panel_Mas[I].Visible:=False;
-// Перемещение по страницам
-if Index > 1 then
-  for I:=2 to Index do
-    for D:=1 to Line_Count do DataModule2.Hotel_Query.Next;
-// Вывод текущей страницы
-I:=1;
-if DataModule2.Hotel_Query.RecordCount>0 then
-while (DataModule2.Hotel_Query.Eof=False) AND (I<=Line_Count) do
+if (DataModule2.Hotel_Query.RecordCount > 0) then
   Begin
-  Build_Line(I);
-  DataModule2.Hotel_Query.Next;
-  Inc(I);
+  DataModule2.Hotel_Query.First;
+  for I:=1 to Line_Count do
+    Panel_Mas[I].Visible:=False;
+  // Перемещение по страницам
+  if Index > 1 then
+    for I:=2 to Index do
+      for D:=1 to Line_Count do DataModule2.Hotel_Query.Next;
+  // Вывод текущей страницы
+  I:=1;
+  if DataModule2.Hotel_Query.RecordCount>0 then
+  while (DataModule2.Hotel_Query.Eof=False) AND (I<=Line_Count) do
+    Begin
+    Build_Line(I);
+    DataModule2.Hotel_Query.Next;
+    Inc(I);
+    End;
+  // Изменение кнопок
+  for I:=0 to Button_Count - 1 do
+    if CButtons[I].State=cbLocked then
+      begin
+      CButtons[I].State:=cbStay;
+      Form7.Button_panel.Canvas.Draw(CButtons[I].Left,CButtons[I].Top, CButtons[I].Paint);
+      end;
+  CButtons[Index - 1].State:=cbLocked;
+  Form7.Button_panel.Canvas.Draw(CButtons[Index - 1].Left,CButtons[Index - 1].Top, CButtons[Index - 1].Paint);
+  Page_Current:=Index;
+  if Index + 1 > Button_Count then Form7.Next_button.Enabled:= False else Form7.Next_button.Enabled:= True;
+  if Index - 1 < 1 then Form7.Prior_button.Enabled:= False else Form7.Prior_button.Enabled:= True;
+  End
+else
+  Begin
+  for I:= 1 to Line_Count do
+    Panel_Mas[I].Visible:= False;
   End;
-// Изменение кнопок
-for I:=0 to Button_Count-1 do 
-  if CButtons[I].State=cbLocked then
-    begin
-    CButtons[I].State:=cbStay;
-    Form7.Button_panel.Canvas.Draw(CButtons[I].Left,CButtons[I].Top, CButtons[I].Paint);
-    end;
-CButtons[Index - 1].State:=cbLocked;
-Form7.Button_panel.Canvas.Draw(CButtons[Index - 1].Left,CButtons[Index - 1].Top, CButtons[Index - 1].Paint);
 End;
 
 end.

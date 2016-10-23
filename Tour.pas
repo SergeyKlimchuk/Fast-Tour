@@ -21,13 +21,10 @@ type
     Label_Basket_Count: TsLabel;
     Button_Exit: TsBitBtn;
     Button_Info: TsBitBtn;
-    Button_Print: TsBitBtn;
     Button_Setting: TsBitBtn;
     Indo_Panel: TsPanel;
     Lbl_Records_count: TsLabel;
-    sLabel1: TsLabel;
     Button_Refresh: TsBitBtn;
-    sComboBox4: TsComboBox;
     Explorer_Panel: TsPanel;
     sGradientPanel5: TsGradientPanel;
     sEdit1: TsEdit;
@@ -49,9 +46,8 @@ type
     Main_Scroll: TsScrollBox;
     sPanel7: TsPanel;
     sBevel7: TsBevel;
-    Button_Choose: TsBitBtn;
+    Button_Leave: TsBitBtn;
     Button_FullInfo: TsBitBtn;
-    sLabel38: TsLabel;
     sBitBtn1: TsBitBtn;
     DBGrid1: TDBGrid;
     sPanel1: TsPanel;
@@ -185,7 +181,6 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure sEdit2KeyPress(Sender: TObject; var Key: Char);
     procedure FormResize(Sender: TObject);
-    procedure sLabel38Click(Sender: TObject);
     procedure Button_ExitClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure PanelOnClick(Sender: TObject);
@@ -196,7 +191,6 @@ type
     procedure sEdit3Exit(Sender: TObject);
     procedure sCheckBox4Click(Sender: TObject);
     procedure Button_RefreshClick(Sender: TObject);
-    procedure Button_ChooseClick(Sender: TObject);
     procedure sBitBtn3Click(Sender: TObject);
     procedure Button_NextClick(Sender: TObject);
     procedure Button_PriorClick(Sender: TObject);
@@ -205,6 +199,8 @@ type
     procedure sLabel29Click(Sender: TObject);
     procedure sLabel27Click(Sender: TObject);
     procedure sBitBtn4Click(Sender: TObject);
+    procedure Button_FullInfoClick(Sender: TObject);
+    procedure Button_LeaveClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -238,15 +234,22 @@ If (sender is TsGradientPanel) then Panel_Active((Sender as TsGradientPanel).Tag
 If (sender is TsLabel) then Panel_Active((Sender as TsLabel).Tag);
 End;
 
-procedure TForm11.Button_ChooseClick(Sender: TObject);
-begin
-GET_INFO((Sender as TsBitBtn).Tag);
-end;
-
 procedure TForm11.Button_ExitClick(Sender: TObject);
 begin
 Form11.Hide;
 Form4.Show;
+end;
+
+procedure TForm11.Button_FullInfoClick(Sender: TObject);
+begin
+GET_INFO((Sender as TsBitBtn).Tag);
+end;
+
+procedure TForm11.Button_LeaveClick(Sender: TObject);
+begin
+
+sBevel7.Visible:= False;
+sPanel7.Visible:= False;
 end;
 
 procedure TForm11.Button_NextClick(Sender: TObject);
@@ -335,13 +338,13 @@ Var
   I: Integer;
 begin
 MSG:= 'SELECT H.*, A.*, T.* FROM Hotels AS H, Air_Ticket AS A, Tours AS T WHERE (((H.ID )=[T].[Hotel_ID]) AND ((A.ID)=[T].[Air_ID])';
-if (sComboBox2.ItemIndex > 0) then MSG:= MSG + ' AND ([H].[Country]=''' + sComboBox2.Text + ''')';
-if (sCheckBox1.Checked = True) then
+if sEdit1.Text <> '' then MSG:= MSG + ' AND ([H].[Name] LIKE ''' + sEdit1.Text + '%'')';           // Название отеля
+if (sComboBox2.ItemIndex > 0) then MSG:= MSG + ' AND ([H].[Country]=''' + sComboBox2.Text + ''')'; // Страна
+MSG:= MSG + ' AND ([H].[Food] LIKE ''%' + sComboBox3.Text + '%'')';                                // Тип питания
+if (sCheckBox1.Checked = True) then                                                                // Уровень отеля
   MSG:= MSG + ' AND ([H].[Stars]>=' + IntToStr(sComboBox1.ItemIndex + 1) + ')'
     else
       MSG:= MSG + ' AND ([H].[Stars]=' + IntToStr(sComboBox1.ItemIndex + 1) + ')';
-MSG:= MSG + ' AND ([H].[Food] LIKE ''%' + sComboBox3.Text + '%'')';
-if sEdit1.Text <> '' then MSG:= MSG + ' AND ([H].[Name] LIKE ''' + sEdit1.Text + '%'')';
 MSG:= MSG + ')';
 //ShowMessage(MSG);
 With DataModule2.Tour_Query do
@@ -430,8 +433,7 @@ end;
 
 procedure TForm11.sCheckBox4Click(Sender: TObject);
 begin
-if sCheckBox4.Checked = True then
-  sPanel1.Visible:= True else sPanel1.Visible:= False;
+sPanel1.Visible:= sCheckBox4.Checked;
 end;
 
 procedure TForm11.sEdit2Exit(Sender: TObject);
@@ -613,13 +615,6 @@ begin
 Panel_FullInfo.Visible:= False;
 end;
 
-procedure TForm11.sLabel38Click(Sender: TObject);
-begin
-sLabel38.Visible:= False;
-sBevel7.Visible:= False;
-sPanel7.Visible:= False;
-end;
-
 Procedure BUILD_PAGE(Index: Integer);
 Var
   I, Rest: Integer;
@@ -672,7 +667,7 @@ Hotels_List[Index].Panel_level.Caption:=  DataModule2.Tour_Query.FieldByName('St
 Hotels_List[Index].Photo.Picture.Assign(DataModule2.Tour_Query.FieldByName('Photo'));
 //...
 if (DataModule2.Tour_Query.FieldByName('FixPrice').AsBoolean= True) then
-  Hotels_List[Index].Lbl_Price.Caption:= 'от: ' + IntToStr(DataModule2.Tour_Query.FieldByName('Price_EC').AsInteger + DataModule2.Tour_Query.FieldByName('H.Price').AsInteger) + ' KZT'
+  Hotels_List[Index].Lbl_Price.Caption:= 'от: ' + IntToStr(DataModule2.Tour_Query.FieldByName('Price_EC').AsInteger + DataModule2.Tour_Query.FieldByName('H.Price').AsInteger) + ' USD'
     else
       Begin
       D:= D.MaxValue;
@@ -683,7 +678,7 @@ if (DataModule2.Tour_Query.FieldByName('FixPrice').AsBoolean= True) then
         if (I >= 10) AND (DataModule2.Tour_Query.FieldByName('Price_' + IntToStr(I) ).AsInteger < D) then
           D:= DataModule2.Tour_Query.FieldByName('Price_' + IntToStr(I) ).AsInteger;
         End;
-      Hotels_List[Index].Lbl_Price.Caption:= 'от: ' + IntToStr(D + DataModule2.Tour_Query.FieldByName('Price_EC').AsInteger) + ' KZT';
+      Hotels_List[Index].Lbl_Price.Caption:= 'от: ' + IntToStr(D + DataModule2.Tour_Query.FieldByName('Price_EC').AsInteger) + ' USD';
       End;
 Hotels_List[Index].Lbl_Price.Left:= Hotels_List[Index].Lbl_Visual_Price.Left - ((Hotels_List[Index].Lbl_Price.Width - Hotels_List[Index].Lbl_Visual_Price.Width) div 2);
 //...
@@ -793,11 +788,9 @@ Procedure Panel_Active(Index: Integer);
 Begin
 Form11.sBevel7.Top:= (8 + (Index * 80) + (Index * 8));
 Form11.sPanel7.Top:= Form11.sBevel7.Top + 4;
-Form11.sLabel38.Top:= Form11.sBevel7.Top + Form11.sBevel7.Height + 4; 
 Form11.sBevel7.Visible:= True;
 Form11.sPanel7.Visible:= True;
-Form11.sLabel38.Visible:= True;
-Form11.Button_Choose.Tag:= Index;
+Form11.Button_FullInfo.Tag:= Index;
 End;
 
 end.
