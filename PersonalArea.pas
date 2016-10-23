@@ -123,6 +123,7 @@ type
     sBitBtn2: TsBitBtn;
     sBevel5: TsBevel;
     sPanel2: TsPanel;
+    sImage2: TsImage;
     procedure sButton2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button4Click(Sender: TObject);
@@ -183,7 +184,22 @@ uses Main, Modul, LogPass, Tour;
 procedure TForm5.GET_INFO(Sender: TObject);
 Var
   S, D: String;
+  bmp:TbitMap;
+  bmp2: TPicture;
 Begin
+bmp:=tbitmap.Create;
+bmp2:=TPicture.Create;
+bmp2.LoadFromFile('Textures\BackGround\Shadow.png');
+bmp.Width:=form5.Width-15;
+bmp.Height:=form5.Height-30;
+BitBlt(bmp.Canvas.Handle,0,0,form5.Width,form5.Height,getdc(form5.handle),0,0,SRCCOPY);
+SPanel2.BringToFront;
+sPanel2.Visible:= True;
+sImage2.Picture.Assign(bmp);
+sImage2.Canvas.Draw(0,0,bmp2.Bitmap);
+bmp2.Free;
+bmp.Free;
+
 DataModule2.Purchases_Query.First;
 DataModule2.Purchases_Query.MoveBy((Sender as TsLabel).Tag);
 if (DataModule2.Purchases_Query.FieldByName('Type_Product').AsInteger = 3) then
@@ -472,16 +488,19 @@ end;
 
 procedure TForm5.sBitBtn1Click(Sender: TObject);
 begin
+sPanel2.Visible:= False;
 Panel_INFO_Air.Visible:= False;
 end;
 
 procedure TForm5.sBitBtn2Click(Sender: TObject);
 begin
+sPanel2.Visible:= False;
 Panel_INFO_Hotel.Visible:= False;
 end;
 
 procedure TForm5.sBitBtn6Click(Sender: TObject);
 begin
+sPanel2.Visible:= False;
 Panel_INFO_Tour.Visible:= False;
 end;
 
