@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, acImage, sPanel,
   Vcl.StdCtrls, sLabel, sButton, JPEG, Vcl.DBCtrls, sEdit, sBevel, Vcl.Mask,
   sMaskEdit, sCustomComboEdit, sToolEdit, sComboBox, Vcl.Buttons, sBitBtn,
-  sScrollBox;
+  sScrollBox, acPNG, DateUtils;
 
 type
 
@@ -73,6 +73,56 @@ type
     sGradientPanel1: TsGradientPanel;
     Purchases_List: TsScrollBox;
     sLabel16: TsLabel;
+    Panel_INFO_Tour: TsPanel;
+    Image3: TImage;
+    sBitBtn6: TsBitBtn;
+    sLabel17: TsLabel;
+    sLabel18: TsLabel;
+    sLabel19: TsLabel;
+    sLabel20: TsLabel;
+    sLabel21: TsLabel;
+    sLabel22: TsLabel;
+    sLabel23: TsLabel;
+    sLabel24: TsLabel;
+    sLabel25: TsLabel;
+    sLabel26: TsLabel;
+    sLabel27: TsLabel;
+    sLabel28: TsLabel;
+    sLabel29: TsLabel;
+    Panel_INFO_Air: TsPanel;
+    Image1: TImage;
+    sLabel30: TsLabel;
+    sLabel31: TsLabel;
+    sLabel32: TsLabel;
+    sLabel33: TsLabel;
+    sLabel34: TsLabel;
+    sLabel35: TsLabel;
+    sLabel36: TsLabel;
+    sLabel37: TsLabel;
+    sLabel38: TsLabel;
+    sLabel39: TsLabel;
+    sLabel40: TsLabel;
+    sLabel41: TsLabel;
+    sLabel42: TsLabel;
+    sBitBtn1: TsBitBtn;
+    Panel_INFO_Hotel: TsPanel;
+    Image2: TImage;
+    sLabel43: TsLabel;
+    sLabel44: TsLabel;
+    sLabel45: TsLabel;
+    sLabel46: TsLabel;
+    sLabel47: TsLabel;
+    sLabel48: TsLabel;
+    sLabel49: TsLabel;
+    sLabel50: TsLabel;
+    sLabel51: TsLabel;
+    sLabel52: TsLabel;
+    sLabel53: TsLabel;
+    sLabel54: TsLabel;
+    sLabel55: TsLabel;
+    sBitBtn2: TsBitBtn;
+    sBevel5: TsBevel;
+    sPanel2: TsPanel;
     procedure sButton2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button4Click(Sender: TObject);
@@ -90,6 +140,10 @@ type
     procedure sButton4Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure sDateEdit1Exit(Sender: TObject);
+    procedure sBitBtn6Click(Sender: TObject);
+    procedure GET_INFO(Sender: TObject);
+    procedure sBitBtn2Click(Sender: TObject);
+    procedure sBitBtn1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -124,7 +178,86 @@ implementation
 
 {$R *.dfm}
 
-uses Main, Modul, LogPass;
+uses Main, Modul, LogPass, Tour;
+
+procedure TForm5.GET_INFO(Sender: TObject);
+Var
+  S, D: String;
+Begin
+DataModule2.Purchases_Query.First;
+DataModule2.Purchases_Query.MoveBy((Sender as TsLabel).Tag);
+if (DataModule2.Purchases_Query.FieldByName('Type_Product').AsInteger = 3) then
+Begin
+With DataModule2.Buffer do
+  Begin
+  Active:= False;
+  SQL.Clear;
+  SQL.Add('SELECT H.*, A.*, T.* FROM Hotels AS H, Air_Ticket AS A, Tours AS T WHERE (((H.ID )=[T].[Hotel_ID]) AND ((A.ID)=[T].[Air_ID]) AND (T.ID=' + DataModule2.Purchases_Query.FieldByName('ID_Product').AsString + '))');
+  Active:= True;
+  // Заполнение
+  sLabel19.Caption:= FieldByName('Name').AsString;
+  sLabel25.Caption:= Form11.sComboBox5.Items[FieldByName('Peoples').AsInteger];
+  sLabel26.Caption:= FieldByName('Food_Type').AsString;
+  D:= IntToStr(Daysbetween(DataModule2.Purchases_Query.FieldByName('Date_Start').AsDateTime, DataModule2.Purchases_Query.FieldByName('Date_Finish').AsDateTime));
+  if D[D.Length] = '1' then
+    S:= ' День';
+  if D[D.Length] in ['2'..'4'] then
+    S:= ' Дня';
+  if D[D.Length] in ['5'..'9', '0'] then
+    S:= ' Дней';
+  sLabel27.Caption:= D + S;
+  sLabel28.Caption:= DataModule2.Purchases_Query.FieldByName('Price').AsString + ' $';
+  sLabel29.Caption:= DateTimeToStr(DataModule2.Purchases_Query.FieldByName('Buy_Time').AsDateTime);
+  Panel_INFO_Tour.Visible:= True;
+  End;
+End;
+
+if (DataModule2.Purchases_Query.FieldByName('Type_Product').AsInteger = 2) then
+Begin
+With DataModule2.Buffer do
+  Begin
+  Active:= False;
+  SQL.Clear;
+  SQL.Add('SELECT H.* FROM Hotels AS H WHERE (H.ID=' + DataModule2.Purchases_Query.FieldByName('ID_Product').AsString + ')');
+  Active:= True;
+  // Заполнение
+  sLabel45.Caption:= FieldByName('Name').AsString;
+  sLabel51.Caption:= FieldByName('Country').AsString + ' \ ' + FieldByName('City').AsString;
+  sLabel52.Caption:= DateTimeToStr(DataModule2.Purchases_Query.FieldByName('Date_Start').AsDateTime);
+  D:= IntToStr(Daysbetween(DataModule2.Purchases_Query.FieldByName('Date_Start').AsDateTime, DataModule2.Purchases_Query.FieldByName('Date_Finish').AsDateTime));
+  if D[D.Length] = '1' then
+    S:= ' День';
+  if D[D.Length] in ['2'..'4'] then
+    S:= ' Дня';
+  if D[D.Length] in ['5'..'9', '0'] then
+    S:= ' Дней';
+  sLabel53.Caption:= D + S;
+  sLabel54.Caption:= DataModule2.Purchases_Query.FieldByName('Price').AsString + ' $';
+  sLabel55.Caption:= DateTimeToStr(DataModule2.Purchases_Query.FieldByName('Buy_Time').AsDateTime);
+  Panel_INFO_Hotel.Visible:= True;
+  End;
+End;
+
+if (DataModule2.Purchases_Query.FieldByName('Type_Product').AsInteger = 1) then
+Begin
+With DataModule2.Buffer do
+  Begin
+  Active:= False;
+  SQL.Clear;
+  SQL.Add('SELECT A.* FROM Air_Ticket AS A WHERE (A.ID=' + DataModule2.Purchases_Query.FieldByName('ID_Product').AsString + ')');
+  Active:= True;
+  // Заполнение
+  sLabel32.Caption:= FieldByName('City_D').AsString + ' -> ' + FieldByName('City_A').AsString;
+  sLabel38.Caption:= FieldByName('Air_company').AsString;
+  sLabel39.Caption:= DateTimeToStr(DataModule2.Purchases_Query.FieldByName('Date_Start').AsDateTime) + ' ' + TimeToStr(TimeOf(FieldByName('Time_D').AsDateTime));
+  sLabel40.Caption:= DateTimeToStr(DataModule2.Purchases_Query.FieldByName('Date_Finish').AsDateTime) + ' ' + TimeToStr(TimeOf(FieldByName('Time_A').AsDateTime));
+  sLabel41.Caption:= DataModule2.Purchases_Query.FieldByName('Price').AsString + ' $';
+  sLabel42.Caption:= DateTimeToStr(DataModule2.Purchases_Query.FieldByName('Buy_Time').AsDateTime);
+  Panel_INFO_Air.Visible:= True;
+  End;
+End;
+End;
+
 
 Procedure ADD_LINES;
 Var
@@ -149,9 +282,9 @@ With DataModule2.Buffer do
   Active:= False;
   SQL.Clear;
   case DataModule2.Purchases_Query.FieldByName('Type_Product').AsInteger of
-  1:SQL.Add('Select * From Air_Ticket Where ID=' + IntToStr(DataModule2.Purchases_Query.FieldByName('ID_Product').AsInteger));
-  2:SQL.Add('Select * From Hotels Where ID=' + IntToStr(DataModule2.Purchases_Query.FieldByName('ID_Product').AsInteger));
-  3:{};
+  1:SQL.Add('SELECT * FROM Air_Ticket WHERE ID=' + IntToStr(DataModule2.Purchases_Query.FieldByName('ID_Product').AsInteger));
+  2:SQL.Add('SELECT * FROM Hotels WHERE ID=' + IntToStr(DataModule2.Purchases_Query.FieldByName('ID_Product').AsInteger));
+  3:SQL.Add('SELECT T.*, [H].[Name] FROM Tours AS T, Hotels AS H WHERE ((H.ID)=[T].[Hotel_ID]) AND (T.ID=' + IntToStr(DataModule2.Purchases_Query.FieldByName('ID_Product').AsInteger) + ')');
   end;
   Active:= True;
   End;
@@ -178,9 +311,9 @@ Purchases[Index].Lbl_Name.Font.Color:= ClWhite;
 Purchases[Index].Lbl_Name.UseSkinColor:= False;
 Purchases[Index].Lbl_Name.Font.Style:= [fsBold];
 case DataModule2.Purchases_Query.FieldByName('Type_Product').AsInteger of
-1:Purchases[Index].Lbl_Name.Caption:= DataModule2.Buffer.FieldByName('City_D').AsString + ' -> ' + DataModule2.Buffer.FieldByName('City_A').AsString;
-2:Purchases[Index].Lbl_Name.Caption:= DataModule2.Buffer.Fields.FieldByName('Name').AsString;
-3:;
+1:Purchases[Index].Lbl_Name.Caption:= 'Билет: ' + DataModule2.Buffer.FieldByName('City_D').AsString + ' -> ' + DataModule2.Buffer.FieldByName('City_A').AsString;
+2:Purchases[Index].Lbl_Name.Caption:= 'Отель: ' + DataModule2.Buffer.Fields.FieldByName('Name').AsString;
+3:Purchases[Index].Lbl_Name.Caption:= 'Тур: ' + DataModule2.Buffer.Fields.FieldByName('Name').AsString;
 end;
 Purchases[Index].Lbl_Name.Left:= (363 div 2) - (Purchases[Index].Lbl_Name.Width div 2);
 // Вторичная Панель
@@ -248,8 +381,9 @@ Purchases[Index].Lbl_Info.Top:= 26;
 Purchases[Index].Lbl_Info.Font.Style:= [fsUnderLine];
 Purchases[Index].Lbl_Info.UseSkinColor:= False;
 Purchases[Index].Lbl_Info.Cursor:= crHandPoint;
-Purchases[Index].Lbl_Info.Tag:= DataModule2.Purchases_Query.FieldByName('ID_Product').AsInteger;
+Purchases[Index].Lbl_Info.Tag:= Index;
 Purchases[Index].Lbl_Info.Caption:= 'Подробнее';
+Purchases[Index].Lbl_Info.OnClick:=Form5.GET_INFO;
 End;
 
 Procedure DELETE_LINES;
@@ -334,6 +468,21 @@ if (DataModule2.Purchases_Query.RecordCount > 0) then
     End;
   ADD_LINES;
   End;
+end;
+
+procedure TForm5.sBitBtn1Click(Sender: TObject);
+begin
+Panel_INFO_Air.Visible:= False;
+end;
+
+procedure TForm5.sBitBtn2Click(Sender: TObject);
+begin
+Panel_INFO_Hotel.Visible:= False;
+end;
+
+procedure TForm5.sBitBtn6Click(Sender: TObject);
+begin
+Panel_INFO_Tour.Visible:= False;
 end;
 
 procedure TForm5.sButton1Click(Sender: TObject);

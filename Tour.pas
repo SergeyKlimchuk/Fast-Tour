@@ -49,7 +49,6 @@ type
     Button_Leave: TsBitBtn;
     Button_FullInfo: TsBitBtn;
     sBitBtn1: TsBitBtn;
-    DBGrid1: TDBGrid;
     sCheckBox4: TsCheckBox;
     Info_Panel: TsPanel;
     sGradientPanel4: TsGradientPanel;
@@ -147,7 +146,6 @@ type
     sTabSheet8: TsTabSheet;
     lbl_Kids_hotel: TsLabel;
     Panel_Stars: TsGradientPanel;
-    Price_panel: TsGradientPanel;
     sPanel1: TsPanel;
     sLabel2: TsLabel;
     sLabel3: TsLabel;
@@ -429,45 +427,31 @@ end;
 Function Get_Price(Start,Finish:TDateTime):Integer;
 var
   CDate: TDateTime;
-  Res, Price: Integer;
-Begin
-Res:= 0;
-CDate:= Start;
-while (CDate < Finish) do
-  Begin
-  CDate:=IncDay(CDate, 1);
-  if monthof(CDate) <= 9 then
-    Price:= DataModule2.Tour_Query.FieldByName('Price_0' + IntToStr(monthof(CDate))).AsInteger
-  else
-    Price:= DataModule2.Tour_Query.FieldByName('Price_'  + IntToStr(monthof(CDate))).AsInteger;
-  Res:= Res + Price;
-  End;
-Result:= Res;
-End;
-
-Function _Price:Integer;
-Var
   Price: Integer;
 Begin
-With DataModule2.Tour_Query do
-  Begin
-  if FieldByName('Castom_Price').AsBoolean then
-    Price:= FieldByName('T.Price').AsInteger
-  else
+Price:= 0;
+CDate:= Start;
+if (DataModule2.Tour_Query.FieldByName('FixPrice').AsBoolean) then
+  while (CDate < Finish) do
     Begin
-    Price:= Get_Price(FieldByName('Date_Start').AsDateTime, FieldByName('Date_Finish').AsDateTime)
+    CDate:= IncDay(CDate, 1);
+    Price:= Price + DataModule2.Tour_Query.FieldByName('H.Price').AsInteger;
+    End
+else
+  while (CDate < Finish) do
+    Begin
+    CDate:= IncDay(CDate, 1);
+    if (monthof(CDate) <= 9) then
+      Price:= Price + DataModule2.Tour_Query.FieldByName('Price_0' + IntToStr(monthof(CDate))).AsInteger
+    else
+      Price:= Price + DataModule2.Tour_Query.FieldByName('Price_'  + IntToStr(monthof(CDate))).AsInteger;
     End;
-    case FieldByName('Fly_Class').AsInteger of
-    1:Price:= Price + FieldByName('Price_FC').AsInteger;
-    2:Price:= Price + FieldByName('Price_FC').AsInteger;
-    3:Price:= Price + FieldByName('Price_FC').AsInteger;
-    end;
-  Result:= Price;
-  End;
-
+Result:= Price;
 End;
 
 procedure TForm11.sBitBtn2Click(Sender: TObject);
+Var
+  D: Integer;
 begin
 With DataModule2.Tour_Query do
   Begin
@@ -477,8 +461,23 @@ With DataModule2.Tour_Query do
   DataModule2.Basket_Query.FieldByName('Date_Start').AsDateTime:= FieldByName('Date_Start').AsDateTime;
   DataModule2.Basket_Query.FieldByName('Date_Finish').AsDateTime:= FieldByName('Date_Finish').AsDateTime;
   DataModule2.Basket_Query.FieldByName('Fly_Class').AsInteger:= FieldByName('Fly_Class').AsInteger;
-  ShowMessage(IntTostr(_Price));
-  DataModule2.Basket_Query.FieldByName('Price').AsInteger:= _Price;
+  D:= 0;
+  With DataModule2.Tour_Query do
+    Begin
+    if (FieldByName('Castom_Price').AsBoolean) then
+      D:= FieldByName('T.Price').AsInteger
+    else
+      Begin
+      D:= Get_Price(FieldByName('Date_Start').AsDateTime, FieldByName('Date_Finish').AsDateTime);
+        case FieldByName('Fly_Class').Asinteger of
+        1:D:= D + FieldByName('Price_FC').Asinteger;
+        2:D:= D + FieldByName('Price_BC').Asinteger;
+        3:D:= D + FieldByName('Price_EC').Asinteger;
+        end;
+      End;
+    End;
+
+  DataModule2.Basket_Query.FieldByName('Price').AsInteger:= D;
   DataModule2.Basket_Query.Post;
   End;
 Info_Panel.Visible:= False;
@@ -629,10 +628,6 @@ With DataModule2.Tour_Query do
   Lbl_HotelName.Caption:= Fields.FieldByName('Name').AsString;
   Panel_Stars.Caption:=   FieldByName('Stars').AsString + ' *';
   lbl_HotelInfo.Caption:= FieldByName('Comment').AsString;
-  if FieldByName('FixPrice').AsBoolean = True then
-    Price_Panel.Caption:='Цена:  ' + IntToStr(FieldByName('H.Price').asInteger)
-  else
-    Price_Panel.Caption:='Цена:  ' + IntToStr(Get_Price(FieldByName('Date_Start').asDateTime, FieldByName('Date_Finish').asDateTime));
   Set_Tags(FieldByName('Tags').AsString);
   info_image.Picture.Assign(FieldByName('Photo'));
   Lbl_Phone.Caption:= FieldByName('Phone').AsString;
@@ -693,9 +688,9 @@ Panel_FullInfo.Visible:= True;
 Label_FWay.Caption:= DataModule2.Tour_Query.FieldByName('City_D').AsString + ' -> ' + DataModule2.Tour_Query.FieldByName('City_A').AsString;
 Label_FAirCompany.Caption:= DataModule2.Tour_Query.FieldByName('Air_Company').AsString;
   case DataModule2.Tour_Query.FieldByName('Fly_Class').AsInteger of
-  1:Label_FClass.Caption:= 'Эконом класс';
+  3:Label_FClass.Caption:= 'Эконом класс';
   2:Label_FClass.Caption:= 'Бизнес класс';
-  3:Label_FClass.Caption:= 'Первый класс';
+  1:Label_FClass.Caption:= 'Первый класс';
   end;
 _Date;
 end;
@@ -764,32 +759,23 @@ Hotels_List[Index].Lbl_City.Caption:=     DataModule2.Tour_Query.FieldByName('Ci
 Hotels_List[Index].Panel_level.Caption:=  DataModule2.Tour_Query.FieldByName('Stars').AsString + ' *';
 Hotels_List[Index].Photo.Picture.Assign(DataModule2.Tour_Query.FieldByName('Photo'));
 //...
-if (DataModule2.Tour_Query.FieldByName('Castom_Price').AsBoolean= True) then
+D:= 0;
+With DataModule2.Tour_Query do
   Begin
-  Hotels_List[Index].Lbl_Price.Caption:= IntToStr(DataModule2.Tour_Query.FieldByName('T.Price').AsInteger) + ' USD';
-  Hotels_List[Index].Lbl_Visual_Price.Caption:= 'Цена:';
-  End
-else
-  Begin
-  D:= D.MaxValue;
-  if (DataModule2.Tour_Query.FieldByName('FixPrice').AsBoolean= True) then
-    D:= DataModule2.Tour_Query.FieldByName('H.Price').AsInteger
+  if (FieldByName('Castom_Price').AsBoolean) then
+    D:= FieldByName('T.Price').AsInteger
   else
-  for I:= 1 to 12 do
     Begin
-    if (I < 10) AND (DataModule2.Tour_Query.FieldByName('Price_0' + IntToStr(I) ).AsInteger < D) then
-      D:= DataModule2.Tour_Query.FieldByName('Price_0' + IntToStr(I) ).AsInteger;
-    if (I >= 10) AND (DataModule2.Tour_Query.FieldByName('Price_' + IntToStr(I) ).AsInteger < D) then
-      D:= DataModule2.Tour_Query.FieldByName('Price_' + IntToStr(I) ).AsInteger;
+    D:= Get_Price(FieldByName('Date_Start').AsDateTime, FieldByName('Date_Finish').AsDateTime);
+      case FieldByName('Fly_Class').Asinteger of
+      1:D:= D + FieldByName('Price_FC').Asinteger;
+      2:D:= D + FieldByName('Price_BC').Asinteger;
+      3:D:= D + FieldByName('Price_EC').Asinteger;
+      end;
     End;
-  case DataModule2.Tour_Query.FieldByName('Fly_Class').Asinteger of
-  1:D:= D + DataModule2.Tour_Query.FieldByName('Price_FC').Asinteger;
-  2:D:= D + DataModule2.Tour_Query.FieldByName('Price_BC').Asinteger;
-  3:D:= D + DataModule2.Tour_Query.FieldByName('Price_EC').Asinteger;
-  end;
-  Hotels_List[Index].Lbl_Price.Caption:= 'от: ' + IntToStr(D);
   End;
-Hotels_List[Index].Lbl_Price.Left:= Hotels_List[Index].Lbl_Visual_Price.Left - ((Hotels_List[Index].Lbl_Price.Width - Hotels_List[Index].Lbl_Visual_Price.Width) div 2);
+Hotels_List[Index].Lbl_Price.Caption:=IntToStr(D);
+Hotels_List[Index].Lbl_Price.Left:= Hotels_List[Index].Lbl_Visual_Price.Left;
 //...
 //Hotels_List[Index].Photo.Assign(DataModule2.Tour_Query.FieldByName('Photo'));
 Hotels_List[Index].Panel_level.Refresh;
@@ -857,6 +843,8 @@ if (S.Length > 38) then
 End;
 
 Procedure GET_INFO(Index: Integer);
+var
+  DaysCount, D: Integer;
 Begin
 With DataModule2.Tour_Query do
   Begin
@@ -873,11 +861,12 @@ With DataModule2.Tour_Query do
     5:Form11.sLabel25.Caption:='5 звезд ';
     End;
   // Кол-во дней
-  if FieldByName('T.Days').AsInteger = (1 or 21 or 31) then
-    Form11.slabel15.Caption:= IntToStr(FieldByName('T.Days').AsInteger) + ' день' else
-      if FieldByName('T.Days').AsInteger = (2 or 3 or 4 or 22 or 23 or 24) then
-        Form11.slabel15.Caption:= IntToStr(FieldByName('T.Days').AsInteger) + ' дня' else
-          Form11.slabel15.Caption:= IntToStr(FieldByName('T.Days').AsInteger) + ' дней';
+  DaysCount:= DaysBetween(FieldByName('Date_Start').AsDateTime, FieldByName('Date_Finish').AsDateTime);
+  if DaysCount = (1 or 21 or 31) then
+    Form11.slabel15.Caption:= IntToStr(DaysCount) + ' день' else
+      if DaysCount = (2 or 3 or 4 or 22 or 23 or 24) then
+        Form11.slabel15.Caption:= IntToStr(DaysCount) + ' дня' else
+          Form11.slabel15.Caption:= IntToStr(DaysCount) + ' дней';
   // Тип заселения
   Form11.slabel17.Caption:= Form11.sComboBox5.Items[Fields.FieldByName('Peoples').AsInteger];
   // Тип тура
@@ -888,6 +877,23 @@ With DataModule2.Tour_Query do
   // Даты
   Form11.slabel21.Caption:= DateTimeToStr(Fields.FieldByName('Date_Start').AsDateTime);
   Form11.slabel22.Caption:= DateTimeToStr(Fields.FieldByName('Date_Finish').AsDateTime);
+  // Цена
+  D:= 0;
+  With DataModule2.Tour_Query do
+    Begin
+    if (FieldByName('Castom_Price').AsBoolean) then
+      D:= FieldByName('T.Price').AsInteger
+    else
+      Begin
+      D:= Get_Price(FieldByName('Date_Start').AsDateTime, FieldByName('Date_Finish').AsDateTime);
+        case FieldByName('Fly_Class').Asinteger of
+        1:D:= D + FieldByName('Price_FC').Asinteger;
+        2:D:= D + FieldByName('Price_BC').Asinteger;
+        3:D:= D + FieldByName('Price_EC').Asinteger;
+        end;
+      End;
+    End;
+  Form11.sGradientPanel10.Caption:= IntToStr(D) + ' USD     ';
   End;
 Form11.Info_Panel.Visible:= True;
 End;

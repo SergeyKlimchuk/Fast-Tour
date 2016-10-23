@@ -367,13 +367,13 @@ With DataModule2 do
   // Подготовка первой базы
   Purchases_Query.Active:= False;
   Purchases_Query.SQL.Clear;
-  Purchases_Query.SQL.Add('Select * From Purchases');
+  Purchases_Query.SQL.Add('SELECT * FROM Purchases');
   Purchases_Query.Active:= True;
   Purchases_Query.First;
   // Подготовка второй базы
   Basket_Query.Active:= False;
   Basket_Query.SQL.Clear;
-  Basket_Query.SQL.Add('Select * From Basket');
+  Basket_Query.SQL.Add('SELECT * FROM Basket');
   Basket_Query.Active:= True;
   Basket_Query.First;
   for I:= 1 to Basket_Query.RecordCount do
@@ -383,6 +383,9 @@ With DataModule2 do
     Purchases_Query.FieldByName('ID_Product').AsInteger:= DataModule2.Basket_Query.FieldByName('B_ID').AsInteger;
     Purchases_Query.FieldByName('Buy_Time').AsDateTime:= Now;
     Purchases_Query.FieldByName('Type_Product').AsInteger:= DataModule2.Basket_Query.FieldByName('B_Type').AsInteger;
+    Purchases_Query.FieldByName('Price').AsInteger:= DataModule2.Basket_Query.FieldByName('Price').AsInteger;
+    Purchases_Query.FieldByName('Date_Start').AsDateTime:= DataModule2.Basket_Query.FieldByName('Date_Start').AsDateTime;
+    Purchases_Query.FieldByName('Date_Finish').AsDateTime:= DataModule2.Basket_Query.FieldByName('Date_Finish').AsDateTime;
     Purchases_Query.Post;
     Basket_Query.Next;
     End;

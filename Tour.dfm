@@ -25,20 +25,6 @@ object Form11: TForm11
     Stretch = True
     SkinData.SkinSection = 'CHECKBOX'
   end
-  object DBGrid1: TDBGrid
-    Left = 0
-    Top = 0
-    Width = 1185
-    Height = 323
-    DataSource = DataModule2.DataSource1
-    TabOrder = 1
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -11
-    TitleFont.Name = 'Tahoma'
-    TitleFont.Style = []
-    Visible = False
-  end
   object Main_Panel: TsPanel
     Left = 155
     Top = 0
@@ -4605,8 +4591,8 @@ object Form11: TForm11
     end
   end
   object sPanel2: TsGradientPanel
-    Left = 676
-    Top = 619
+    Left = 140
+    Top = 160
     Width = 1000
     Height = 400
     Alignment = taLeftJustify
@@ -4616,7 +4602,7 @@ object Form11: TForm11
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 2
+    TabOrder = 1
     Visible = False
     PaintData.Color1.Color = 16764315
     PaintData.CustomGradient = '16764315;16777215;97;0;0;16777215;16777215;0;0;0'
@@ -4831,7 +4817,7 @@ object Form11: TForm11
     end
     object sBitBtn6: TsBitBtn
       Left = 975
-      Top = 3
+      Top = 0
       Width = 25
       Height = 25
       Caption = 'X'
@@ -4932,7 +4918,7 @@ object Form11: TForm11
       Top = 22
       Width = 548
       Height = 346
-      ActivePage = TabSheet1
+      ActivePage = TabSheet3
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWhite
       Font.Height = -13
@@ -4943,7 +4929,6 @@ object Form11: TForm11
       TabPosition = tpBottom
       object TabSheet1: TTabSheet
         Caption = #1060#1086#1090#1086#1075#1072#1083#1077#1088#1077#1103
-        ExplicitHeight = 310
         object Info_Image: TImage
           Left = 10
           Top = 10
@@ -5033,10 +5018,6 @@ object Form11: TForm11
       object TabSheet3: TTabSheet
         Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object lbl_room_hotel: TsPageControl
           Left = 3
           Top = 3
@@ -5234,24 +5215,6 @@ object Form11: TForm11
       ParentFont = False
       TabOrder = 3
       PaintData.Color1.Color = clYellow
-      PaintData.CustomGradient = '16744448;16744448;97;0;0;16744448;16744448;0;0;0'
-    end
-    object Price_panel: TsGradientPanel
-      Left = 16
-      Top = 312
-      Width = 392
-      Height = 30
-      Caption = #1062#1077#1085#1072':  250$'
-      DoubleBuffered = False
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWhite
-      Font.Height = -19
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-      ParentDoubleBuffered = False
-      ParentFont = False
-      TabOrder = 4
-      PaintData.Color1.Color = 16744448
       PaintData.CustomGradient = '16744448;16744448;97;0;0;16744448;16744448;0;0;0'
     end
   end
