@@ -327,6 +327,7 @@ while (DataModule2.Basket_Query.Eof= False) do
   // Формирование типового лейбла
   Lines[I].Label_Type:= TsLabel.Create(Form9);
   Lines[I].Label_Type.Parent:= Lines[I].Panel_Main;
+  Lines[I].Label_Type.Font.Style:= [fsBold];
   Lines[I].Label_Type.Left:= 122;
   Lines[I].Label_Type.Top:= 12;
   if (B_Type = 'Hotel') then
@@ -350,9 +351,9 @@ while (DataModule2.Basket_Query.Eof= False) do
   if B_Type = 'Air' then   // Air
     Lines[I].Label_Way_Name.Caption:= DataModule2.Buffer.FieldByName('City_D').AsString+' -> '+DataModule2.Buffer.FieldByName('City_A').AsString;
   if B_Type = 'Hotel' then // Hotel
-    Lines[I].Label_Way_Name.Caption:= DataModule2.Buffer.Fields.FieldByName('Name').AsString;
+    Lines[I].Label_Way_Name.Caption:= 'Название отеля: ' + DataModule2.Buffer.Fields.FieldByName('Name').AsString;
   if B_Type = 'Tour' then // Tour
-    Lines[I].Label_Way_Name.Caption:= DataModule2.Buffer.Fields.FieldByName('Name').AsString;
+    Lines[I].Label_Way_Name.Caption:= 'Отель: ' + DataModule2.Buffer.Fields.FieldByName('Name').AsString;
   // Формирование типового лейбла
   Lines[I].Label_Time_Country:= TsLabel.Create(Form9);
   Lines[I].Label_Time_Country.Parent:= Lines[I].Panel_Main;
@@ -371,7 +372,18 @@ while (DataModule2.Basket_Query.Eof= False) do
       DataModule2.Buffer.FieldByName('Country').AsString +
       ' / ' +
       DataModule2.Buffer.FieldByName('City').AsString;
-
+  if B_Type = 'Tour' then
+    case DataModule2.Buffer.FieldByName('Peoples').AsInteger of
+    0:Lines[I].Label_Time_Country.Caption:= 'Тип заселения: 1 Взрослый';
+    1:Lines[I].Label_Time_Country.Caption:= 'Тип заселения: 1 Взрослый и 1 Ребёнок';
+    2:Lines[I].Label_Time_Country.Caption:= 'Тип заселения: 1 Взрослый и 2 Ребёнока';
+    3:Lines[I].Label_Time_Country.Caption:= 'Тип заселения: 2 Взрослых';
+    4:Lines[I].Label_Time_Country.Caption:= 'Тип заселения: 2 Взрослых и 1 Ребёнок';
+    5:Lines[I].Label_Time_Country.Caption:= 'Тип заселения: 2 Взрослых и 2 Ребёнока';
+    6:Lines[I].Label_Time_Country.Caption:= 'Тип заселения: 3 Взрослых';
+    7:Lines[I].Label_Time_Country.Caption:= 'Тип заселения: 3 Взрослых и 1 Ребёнок';
+    8:Lines[I].Label_Time_Country.Caption:= 'Тип заселения: 4 Взрослых';
+    end;
   // Формирование изображения
   Lines[I].Picture:= TsImage.Create(Form9);
   Lines[I].Picture.Parent:= Lines[I].Panel_Main;
@@ -380,12 +392,20 @@ while (DataModule2.Basket_Query.Eof= False) do
   Lines[I].Picture.Width:= 100;
   Lines[I].Picture.Height:= 50;
   Lines[I].Picture.Stretch:= True;
-//  if B_Type = 'Air' then
-//    Lines[I].Picture.Picture.Assign(DataModule2.Buffer.FieldByName(''));
+  if B_Type = 'Air' then
+    Begin
+    Lines[I].Picture.Visible:= False;
+    Lines[I].Picture_Bevel.Visible:= False;
+    End
+  else
+    Begin
+    Lines[I].Picture.Visible:= True;
+    Lines[I].Picture_Bevel.Visible:= True;
+    End;
   if B_Type = 'Hotel' then
     Lines[I].Picture.Picture.Assign(DataModule2.Buffer.FieldByName('Photo'));
-//  if B_Type = 'Tour' then                                                               ДОДЕЛАТЬ
-//    Lines[I].Picture.Picture.Assign(DataModule2.Buffer.FieldByName(''));
+  if B_Type = 'Tour' then
+    Lines[I].Picture.Picture.Assign(DataModule2.Buffer.FieldByName('Photo'));
   // Формирование Bevel'а
   Lines[I].Picture_Bevel:=TsBevel.Create(Form9);
   Lines[I].Picture_Bevel.Parent:=Lines[I].Panel_Main;

@@ -91,6 +91,7 @@ type
     Prior_button: TsBitBtn;
     sPanel2: TsPanel;
     Lbl_Records_count: TsLabel;
+    Button_Refresh: TsBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure sLabel1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -123,6 +124,7 @@ type
     procedure sBitBtn3Click(Sender: TObject);
     procedure Edit_DateKeyPress(Sender: TObject; var Key: Char);
     procedure Edit_DateCloseUp(Sender: TObject);
+    procedure Button_RefreshClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -460,6 +462,16 @@ for I:=0 to Button_Count-1 do
       if (Page_Current + 1) > Length(Pages_mas) then Next_button.Enabled:= False else Next_button.Enabled:= True;
       if (Page_Current - 1) < 1 then Prior_button.Enabled:= False else Prior_button.Enabled:= True;
       End;
+end;
+
+procedure TForm6.Button_RefreshClick(Sender: TObject);
+begin
+With DataModule2.Air_Query do
+  Begin
+  Active:= False;
+  Active:= True;
+  End;
+BUILD_PAGE(Page_Current);
 end;
 
 Procedure CHECK_DATE;

@@ -182,7 +182,7 @@ With DataModule2.Buffer do
     case StrToInt(DataModule2.Basket_Query.FieldByName('B_Type').AsString) of
     1:SQL.Add('Select * From Air_Ticket Where ID=' + DataModule2.Basket_Query.FieldByName('B_ID').AsString);
     2:SQL.Add('Select * From Hotels Where ID=' + DataModule2.Basket_Query.FieldByName('B_ID').AsString);
-    3:SQL.Add('Select * From Tours Where ID=' + DataModule2.Basket_Query.FieldByName('B_ID').AsString);
+    3:SQL.Add('SELECT H.*, A.*, T.* FROM Hotels AS H, Air_Ticket AS A, Tours AS T WHERE (((H.ID )=[T].[Hotel_ID]) AND ((A.ID)=[T].[Air_ID]) AND ([T].[ID]=' + DataModule2.Basket_Query.FieldByName('B_ID').AsString + '))');
     end;
   Active:= True;
   End;
@@ -567,7 +567,7 @@ Begin
   case O_Type of
   1:Result:= DataModule2.Buffer.FieldByName('City_D').AsString + ' -> ' + DataModule2.Buffer.FieldByName('City_A').AsString;
   2:Result:= '"' + DataModule2.Buffer.FieldByName('Name').AsString + '"';
-  3:Result:= '';  
+  3:Result:= '"' + DataModule2.Buffer.FieldByName('Name').AsString + '"';
   end;
 End;
 
@@ -597,7 +597,7 @@ if (O_Type = 1) then
   if S[S.Length-1] = ':' then S:= S + '0';
   End;
 // Вторая выборка
-if (O_Type = 2) then
+if (O_Type = 2 or 3) then
   Begin
   Date1:= DataModule2.Basket_Query.FieldByName('Date_Start').AsDateTime;
   Date2:= DataModule2.Basket_Query.FieldByName('Date_Finish').AsDateTime;
@@ -647,9 +647,19 @@ if (O_Type = 1) then
   if (Hours > 0) then Output:= Output + IntToStr(Hours) + 'ч ';
   if (Minutes > 0) then Output:= Output + IntToStr(Minutes - ((Minutes Div 60) * 60)) + 'м';
   End;
-if (O_Type = 2) then
+if (O_Type = 2 or 3) then
   Begin
-  Output:= 'Количество человек = 2'
+    case DataModule2.Basket_Query.FieldByName('Peoples').AsInteger of
+    0:Output:= 'Тип заселения: 1 Взрослый';
+    1:Output:= 'Тип заселения: 1 Взрослый и 1 Ребёнок';
+    2:Output:= 'Тип заселения: 1 Взрослый и 2 Ребёнока';
+    3:Output:= 'Тип заселения: 2 Взрослых';
+    4:Output:= 'Тип заселения: 2 Взрослых и 1 Ребёнок';
+    5:Output:= 'Тип заселения: 2 Взрослых и 2 Ребёнока';
+    6:Output:= 'Тип заселения: 3 Взрослых';
+    7:Output:= 'Тип заселения: 3 Взрослых и 1 Ребёнок';
+    8:Output:= 'Тип заселения: 4 Взрослых';
+    end;
   End;
 // Вывод
 Result:= Output;

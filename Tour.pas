@@ -428,6 +428,7 @@ Function Get_Price(Start,Finish:TDateTime):Integer;
 var
   CDate: TDateTime;
   Price: Integer;
+  S: String;
 Begin
 Price:= 0;
 CDate:= Start;
@@ -441,10 +442,9 @@ else
   while (CDate < Finish) do
     Begin
     CDate:= IncDay(CDate, 1);
-    if (monthof(CDate) <= 9) then
-      Price:= Price + DataModule2.Tour_Query.FieldByName('Price_0' + IntToStr(monthof(CDate))).AsInteger
-    else
-      Price:= Price + DataModule2.Tour_Query.FieldByName('Price_'  + IntToStr(monthof(CDate))).AsInteger;
+    S:= IntToStr(MonthOf(CDate));
+    if (S.Length = 1) then S:= '0' + S;
+    Price:= Price + DataModule2.Tour_Query.FieldByName('Price_' + S).AsInteger;
     End;
 Result:= Price;
 End;
@@ -461,6 +461,7 @@ With DataModule2.Tour_Query do
   DataModule2.Basket_Query.FieldByName('Date_Start').AsDateTime:= FieldByName('Date_Start').AsDateTime;
   DataModule2.Basket_Query.FieldByName('Date_Finish').AsDateTime:= FieldByName('Date_Finish').AsDateTime;
   DataModule2.Basket_Query.FieldByName('Fly_Class').AsInteger:= FieldByName('Fly_Class').AsInteger;
+  DataModule2.Basket_Query.FieldByName('Peoples').AsInteger:= FieldByName('Peoples').AsInteger;
   D:= 0;
   With DataModule2.Tour_Query do
     Begin
@@ -742,10 +743,7 @@ if (DataModule2.Tour_Query.RecordCount > 0) then
   Page.Current:= Index;
   End
 else
-  Begin
   for I:= 1 to (Page.Lines) do Hotels_List[I - 1].Main_Panel.Visible:= False;
-
-  End;
 End;
 
 Procedure BUILD_LINE(Index: Integer);

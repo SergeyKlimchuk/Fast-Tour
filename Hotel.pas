@@ -98,6 +98,10 @@ type
     sGradientPanel7: TsGradientPanel;
     sComboBox2: TsComboBox;
     Button1: TButton;
+    sBevel6: TsBevel;
+    sComboBox4: TsComboBox;
+    sLabel3: TsLabel;
+    Button_Refresh: TsBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
     Procedure Show_info1(Sender: TObject);
@@ -128,6 +132,7 @@ type
     procedure sEdit3KeyPress(Sender: TObject; var Key: Char);
     procedure sEdit4KeyPress(Sender: TObject; var Key: Char);
     procedure sEdit5KeyPress(Sender: TObject; var Key: Char);
+    procedure Button_RefreshClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -286,8 +291,12 @@ DataModule2.Basket_Query.FieldByName('B_ID').AsString:= DataModule2.Hotel_Query.
 DataModule2.Basket_Query.FieldByName('Date_Start').AsString:= sDateEdit1.Text;
 DataModule2.Basket_Query.FieldByName('Date_Finish').AsString:= sDateEdit2.Text;
 DataModule2.Basket_Query.FieldByName('Price').AsString:= IntToStr(Get_Price(sDateEdit1.Date, sDateEdit2.Date));
+DataModule2.Basket_Query.FieldByName('Peoples').AsString:= IntToStr(sComboBox4.ItemIndex);
 DataModule2.Basket_Query.Post;
 Info_Panel.Visible:= False;
+Button_add_OBJECT.Enabled:= False;
+sDateEdit1.Text:= '';
+sDateEdit2.Text:= '';
 DataModule2.REFRESH_BASKET;
 ShowMessage('Отель был успешно добавлен в корзину!');
 end;
@@ -364,6 +373,16 @@ for I:=0 to Button_Count-1 do
       Begin
       Build_Page((X div 35)+1);
       End;
+end;
+
+procedure TForm7.Button_RefreshClick(Sender: TObject);
+begin
+With DataModule2.Hotel_Query do
+  Begin
+  Active:= False;
+  Active:= True;
+  End;
+BUILD_PAGE(Page_Current);
 end;
 
 procedure TForm7.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -596,7 +615,7 @@ With Form7 do
 
   Lbl_HotelName.Caption:=DataModule2.Hotel_Query.Fields.FieldByName('Name').AsString;
   sBevel3.Width:=Lbl_HotelName.Width;
-  Panel_Stars.Caption:=DataModule2.Hotel_Query.FieldByName('Stars').AsString;
+  Panel_Stars.Caption:=DataModule2.Hotel_Query.FieldByName('Stars').AsString + ' *';
   Panel_Stars.Left:=sbevel3.Left+sbevel3.Width+3;
   if Label_tag1[Line].visible=True then
     Begin Lbl_tag1.Caption:=Label_tag1[Line].Caption; Lbl_tag1.Visible:=True; end
@@ -794,10 +813,10 @@ if Length(S)>183 then
 Label_comment[Index].Caption:=S;
 Label_comment[Index].Width:=390;
 //... Недофича (Нужен запрос онлайн времени!)
-if DataModule2.Hotel_Query.FieldByName('FixPrice').AsBoolean = True then
+if DataModule2.Hotel_Query.FieldByName('FixPrice').AsBoolean then
   Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Price').AsString + ' USD'
-    else
-      Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Price_'+Copy(DateToStr(Now),4,2)).AsString + ' USD';
+else
+  Label_price[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Price_' + IntToStr(MonthOf(Now))).AsString + ' USD';
 //...
 GPanel_star[Index].Left:=Label_name[Index].Left+Label_name[Index].Width+6;
 GPanel_star[Index].Caption:=DataModule2.Hotel_Query.FieldByName('Stars').AsString + ' *';
