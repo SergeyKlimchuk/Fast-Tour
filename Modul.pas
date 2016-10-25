@@ -8,7 +8,7 @@ uses
   IdTCPConnection, IdTCPClient, IdExplicitTLSClientServerBase, IdMessageClient,
   IdSMTPBase, IdSMTP, IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack, IdSSL,
   IdSSLOpenSSL, IdCustomTransparentProxy, IdSocks, IdMessage, sDialogs,
-  acAlphaHints;
+  acAlphaHints, IdAttachment;
 
 type
   TDataModule2 = class(TDataModule)
@@ -32,7 +32,15 @@ type
   private
     { Private declarations }
   public
-    procedure Send_Email(Address:String);
+    const
+      KZT= 333;
+      USD= 1;
+      EUR= 0.89;
+      RUB= 62;
+      AUD= 1.32;
+      GBP= 0.79;
+      DKK= 6.65;
+      AED= 3.67;
     Procedure REFRESH_BASKET;
     Function CHECK_RecordCount(Index: Integer):String;
   end;
@@ -115,11 +123,5 @@ begin
   end;
   Connect_to_DB.Connected:= true;
 end;
-
-procedure TDataModule2.Send_Email(Address:String);
-Begin
-
-End;
-
 
 end.

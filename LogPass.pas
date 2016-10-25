@@ -321,7 +321,10 @@ With DataModule2 do
   IdMessage1.Clear;
   IdMessage1.From.Name :='FastTour';
   IdMessage1.From.Address := Mail_Loggin;
-  IdMessage1.Body.Text:='Здравствуйте, '+DataModule2.Reg_Query.Fields.Fields[3].AsString+'! Теперь у вас новый пароль: '+Password;
+  if DataModule2.Reg_Query.Fields.Fields[3].AsString <> '' then
+    IdMessage1.Body.Text:='Здравствуйте, '+DataModule2.Reg_Query.Fields.Fields[3].AsString+'! Теперь у вас новый пароль: '+Password
+  else
+    IdMessage1.Body.Text:='Здравствуйте, '+DataModule2.Reg_Query.Fields.Fields[1].AsString+'! Теперь у вас новый пароль: '+Password;
   //IdMessage1.Body.LoadFromFile('Index.html');
   IdMessage1.Subject:='Сброс пароля учетной записи Fast-Tour';
   idMessage1.Recipients.EMailAddresses:=Email;
@@ -360,6 +363,9 @@ With DataModule2 do
   IdMessage1.Clear;
   IdMessage1.From.Name :='FastTour';
   IdMessage1.From.Address := Mail_Loggin;
+  if DataModule2.Reg_Query.Fields.Fields[3].AsString <> '' then
+    IdMessage1.Body.Text:='Здравствуйте, <b>'+DataModule2.Reg_Query.Fields.Fields[1].AsString+'</b>! Код для востановления: '+REFRESH_KODE
+  else
   IdMessage1.Body.Text:='Здравствуйте, <b>'+DataModule2.Reg_Query.Fields.Fields[3].AsString+'</b>! Код для востановления: '+REFRESH_KODE;
   IdMessage1.Subject:='Сброс пароля учетной записи Fast-Tour';
   idMessage1.Recipients.EMailAddresses:=Mail;

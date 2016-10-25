@@ -3,7 +3,7 @@ unit Records;
 interface
 
 uses
-  sPanel, sBitBtn, sLabel, sBevel, acImage, sScrollBox,Vcl.Graphics, Vcl.Controls, sysUtils;
+  sPanel, sBitBtn, sLabel, sBevel, acImage, sScrollBox,Vcl.Graphics, Vcl.Controls, sysUtils,VCL.Dialogs;
 
 Type
   TAir_Line = record
@@ -47,8 +47,7 @@ Type
   end;
 
   TPage = record
-    Lines:Integer;   //Кол-во записей
-    Current:Integer; // Текущая страница
+    Lines, Current, Count:Integer;
   end;
 
 implementation
@@ -66,6 +65,16 @@ Main_Panel.Width:= 800;
 Main_Panel.Height:= 100;
 Main_Panel.Left:= X;
 Main_Panel.Top:= Y;
+// Лейбел ""
+Panel_Explorer:=TsGradientPanel.create(Main_Panel);
+Panel_Explorer.Parent:= Main_Panel;
+Panel_Explorer.Left:= 600;
+Panel_Explorer.Top:= 0;
+Panel_Explorer.Width:= 200;
+Panel_Explorer.Height:= 100;
+Panel_Explorer.PaintData.Color1.Color:= $00EBEBEB;
+Panel_Explorer.PaintData.Color2.UseSkinColor:= False;
+Panel_Explorer.PaintData.Color2.Color:= $00EBEBEB;
 // Лейбел "Авиакомпания:"
 Label_AirCompany:=TsLabel.create(Main_Panel);
 Label_AirCompany.Parent:= Main_Panel;
@@ -137,16 +146,6 @@ Picture_AirCompany.Width:= 400;
 Picture_AirCompany.Height:= 100;
 Picture_AirCompany.SendToBack;
 // Лейбел ""
-Panel_Explorer:=TsGradientPanel.create(Main_Panel);
-Panel_Explorer.Parent:= Main_Panel;
-Panel_Explorer.Left:= 600;
-Panel_Explorer.Top:= 0;
-Panel_Explorer.Width:= 200;
-Panel_Explorer.Height:= 100;
-Panel_Explorer.PaintData.Color1.Color:= $00EBEBEB;
-Panel_Explorer.PaintData.Color2.UseSkinColor:= False;
-Panel_Explorer.PaintData.Color2.Color:= $00EBEBEB;
-// Лейбел ""
 Label_Price:=TsLabel.create(Main_Panel);
 Label_Price.Parent:= Panel_Explorer;
 Label_Price.Left:= 55;
@@ -188,23 +187,23 @@ End;
 
 Procedure TAir_Line.Destroy;
 Begin
-FreeAndNil(Label_Way);
-FreeAndNil(Label_AirCompany);
-FreeAndNil(Label_Days);
-FreeAndNil(Label_Date);
-FreeAndNil(Label_Info);
-FreeAndNil(Label_Type);
-FreeAndNil(Label_FlightTime);
-FreeAndNil(Label_Price);
-FreeAndNil(Label_Currency);
-FreeAndNil(Label_Message);
-FreeAndNil(Picture_Plane);
-FreeAndNil(Home_Bevel);
-FreeAndNil(Picture_AirCompany);
-FreeAndNil(Panel_Explorer);
-FreeAndNil(Explorer_Bevel);
-FreeAndNil(Picture_AirCompany);
-FreeAndNil(Main_Panel);
+Label_Way.Free;
+Label_AirCompany.Free;
+Label_Days.Free;
+Label_Date.Free;
+Label_Info.Free;
+Label_Type.Free;
+Label_FlightTime.Free;
+Label_Price.Free;
+Label_Currency.Free;
+Label_Message.Free;
+Picture_Plane.Free;
+Picture_AirCompany.Free;
+Home_Bevel.Free;
+Explorer_Bevel.Free;
+Button_Choose.Free;
+Panel_Explorer.Free;
+Main_Panel.Free;
 End;
 
 

@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, sPanel, Vcl.StdCtrls,
   Vcl.Buttons, sBitBtn, sScrollBox, sBevel, sLabel, sButton, acImage, sComboBox, Dateutils,
-  Data.DB, Vcl.Grids, Vcl.DBGrids;
+  Data.DB, Vcl.Grids, Vcl.DBGrids, sPageControl, Vcl.ComCtrls;
 
 type
 
@@ -52,6 +52,7 @@ type
     procedure sButton4Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure sBitBtn1Click(Sender: TObject);
+    procedure GET_ONFO(Sender: TObject);
   private
     { НЕ ГОДНОТА declarations }
   public
@@ -86,6 +87,17 @@ implementation
 {$R *.dfm}
 
 uses Main, Modul, CheckOut;
+
+procedure TForm9.GET_ONFO(Sender: TObject);
+Begin
+With DataModule2.Basket_Query do
+  Begin
+  First;
+  MoveBy((Sender as TBitBtn).Tag - 1);
+
+  End;
+//(Sender as TBitBtn).Tag
+End;
 
 Function Get_difference(A1, B1 :String; A2, B2:String):String;
 Var
@@ -291,8 +303,7 @@ DELETE_LINES;
 SetLength(Lines,DataModule2.Basket_Query.RecordCount);
 // Переход к самому началу
 DataModule2.Basket_Query.First;
-I:=0;
-while (DataModule2.Basket_Query.Eof= False) do
+for I:= 0 to DataModule2.Basket_Query.RecordCount - 1 do
   Begin
     case DataModule2.Basket_Query.FieldByName('B_Type').AsInteger of
     1:B_Type:= 'Air';
@@ -311,7 +322,7 @@ while (DataModule2.Basket_Query.Eof= False) do
 
   DataModule2.Buffer.Active:= True;
   // Цонец формирования запроса
-  
+
   // Формирование панели
   Lines[I].Panel_Main:= TsGradientPanel.Create(Form9);
   Lines[I].Panel_Main.Parent:= Form9.Main_Box;
@@ -342,7 +353,7 @@ while (DataModule2.Basket_Query.Eof= False) do
   Lines[I].Label_Time.Left:= 122;
   Lines[I].Label_Time.Top:= 31;
   Lines[I].Label_Time.Caption:= 
-  DataModule2.Basket_Query.FieldByName('Date_Start').AsString+' - '+DataModule2.Basket_Query.FieldByName('Date_Finish').AsString;  
+  DataModule2.Basket_Query.FieldByName('Date_Start').AsString+' - '+DataModule2.Basket_Query.FieldByName('Date_Finish').AsString;
   // Формирование типового лейбла
   Lines[I].Label_Way_Name:= TsLabel.Create(Form9);
   Lines[I].Label_Way_Name.Parent:= Lines[I].Panel_Main;
@@ -372,6 +383,7 @@ while (DataModule2.Basket_Query.Eof= False) do
       DataModule2.Buffer.FieldByName('Country').AsString +
       ' / ' +
       DataModule2.Buffer.FieldByName('City').AsString;
+
   if B_Type = 'Tour' then
     case DataModule2.Buffer.FieldByName('Peoples').AsInteger of
     0:Lines[I].Label_Time_Country.Caption:= 'Тип заселения: 1 Взрослый';
@@ -384,6 +396,14 @@ while (DataModule2.Basket_Query.Eof= False) do
     7:Lines[I].Label_Time_Country.Caption:= 'Тип заселения: 3 Взрослых и 1 Ребёнок';
     8:Lines[I].Label_Time_Country.Caption:= 'Тип заселения: 4 Взрослых';
     end;
+
+  // Формирование Bevel'а
+  Lines[I].Picture_Bevel:=TsBevel.Create(Form9);
+  Lines[I].Picture_Bevel.Parent:=Lines[I].Panel_Main;
+  Lines[I].Picture_Bevel.Left:= 4;
+  Lines[I].Picture_Bevel.Top:= 4;
+  Lines[I].Picture_Bevel.Width:= 100;
+  Lines[I].Picture_Bevel.Height:= 50;
   // Формирование изображения
   Lines[I].Picture:= TsImage.Create(Form9);
   Lines[I].Picture.Parent:= Lines[I].Panel_Main;
@@ -406,13 +426,7 @@ while (DataModule2.Basket_Query.Eof= False) do
     Lines[I].Picture.Picture.Assign(DataModule2.Buffer.FieldByName('Photo'));
   if B_Type = 'Tour' then
     Lines[I].Picture.Picture.Assign(DataModule2.Buffer.FieldByName('Photo'));
-  // Формирование Bevel'а
-  Lines[I].Picture_Bevel:=TsBevel.Create(Form9);
-  Lines[I].Picture_Bevel.Parent:=Lines[I].Panel_Main;
-  Lines[I].Picture_Bevel.Left:= 4;
-  Lines[I].Picture_Bevel.Top:= 4;
-  Lines[I].Picture_Bevel.Width:= 100;
-  Lines[I].Picture_Bevel.Height:= 50;
+
   // Формирование Bevel'а
   Lines[I].Main_Bevel:=TsBevel.Create(Form9);
   Lines[I].Main_Bevel.Parent:=Lines[I].Panel_Main;
@@ -471,9 +485,7 @@ while (DataModule2.Basket_Query.Eof= False) do
   Lines[I].Label_Currency.Caption:= Copy(Form9.sComboBox1.Items[Form9.sComboBox1.Itemindex], 1, 3);
   // Переход на следующую линию
   DataModule2.Basket_Query.Next;
-  Inc(I);
   End;
-DataModule2.Basket_Query.First;
 End;
 
 end.

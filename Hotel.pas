@@ -5,11 +5,11 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, sPanel, Vcl.StdCtrls, sLabel,
-  Vcl.ExtCtrls, sBevel, acImage, sSkinManager, sButton, Vcl.ComCtrls,
-  Vcl.Imaging.jpeg, Vcl.OleCtrls, SHDocVw, acWebBrowser, Data.DB, Data.Win.ADODB,
+  Vcl.ExtCtrls, sBevel, acImage, sButton, Vcl.ComCtrls,
+  Data.DB, Data.Win.ADODB,
   acAlphaHints, Vcl.Grids, Vcl.DBGrids, sDialogs, PNGImage, Vcl.Buttons, sBitBtn,
-  sPageControl, BTNlib, acPNG, Vcl.Mask, sMaskEdit, sCustomComboEdit, sToolEdit, Dateutils,
-  sScrollBox, sEdit, sCheckBox, sComboBox, sCurrEdit, sCurrencyEdit, sSpinEdit;
+  sPageControl, BTNlib, acPNG, sToolEdit, Dateutils,
+  sScrollBox, sEdit, sCheckBox, sComboBox, Vcl.Mask, sMaskEdit, sCustomComboEdit;
 
 type
   TForm7 = class(TForm)
@@ -44,7 +44,6 @@ type
     sBevel4: TsBevel;
     Lbl_Web: TsWebLabel;
     Image_Web: TsImage;
-    sBitBtn5: TsBitBtn;
     sImage1: TsImage;
     sLabel26: TsLabel;
     Label_Basket_Count: TsLabel;

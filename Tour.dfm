@@ -1852,6 +1852,10 @@ object Form11: TForm11
           Top = 1
           Width = 658
           Height = 48
+          OnMouseDown = Panel_ButtonMouseDown
+          OnMouseLeave = Panel_ButtonMouseLeave
+          OnMouseMove = Panel_ButtonMouseMove
+          OnMouseUp = Panel_ButtonMouseUp
         end
         object Button_Next: TsBitBtn
           Left = 820
@@ -4604,6 +4608,7 @@ object Form11: TForm11
       Width = 958
       Height = 232
       TabOrder = 6
+      Visible = False
       object Image4: TImage
         Left = 0
         Top = 32
@@ -6914,7 +6919,7 @@ object Form11: TForm11
       end
       object sBitBtn8: TsBitBtn
         Left = 480
-        Top = 196
+        Top = 195
         Width = 132
         Height = 25
         Caption = #1055#1088#1080#1085#1103#1090#1100
@@ -6943,7 +6948,7 @@ object Form11: TForm11
         Top = 83
         Width = 145
         Height = 21
-        Hint = #1050#1072#1082' '#1084#1080#1085#1080#1084#1091#1084' 1 '#1089#1080#1084#1074#1086#1083' '#1085#1072' '#1089#1090#1088#1072#1085#1080#1094#1091' '#1080' '#1082#1072#1082' '#1084#1072#1082#1089#1080#1084#1091#1084' 17!'
+        Hint = #1050#1072#1082' '#1084#1080#1085#1080#1084#1091#1084' 1 '#1089#1080#1084#1074#1086#1083' '#1085#1072' '#1089#1090#1088#1072#1085#1080#1094#1091' '#1080' '#1082#1072#1082' '#1084#1072#1082#1089#1080#1084#1091#1084' 8!'
         ParentShowHint = False
         ShowHint = True
         TabOrder = 4
@@ -6953,8 +6958,8 @@ object Form11: TForm11
     end
   end
   object sPanel2: TsGradientPanel
-    Left = 115
-    Top = 556
+    Left = 140
+    Top = 160
     Width = 1000
     Height = 400
     Alignment = taLeftJustify
@@ -7280,7 +7285,7 @@ object Form11: TForm11
       Top = 22
       Width = 548
       Height = 346
-      ActivePage = TabSheet3
+      ActivePage = TabSheet1
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWhite
       Font.Height = -13
@@ -7385,7 +7390,7 @@ object Form11: TForm11
           Top = 3
           Width = 534
           Height = 314
-          ActivePage = sTabSheet2
+          ActivePage = sTabSheet1
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWhite
           Font.Height = -14
@@ -7580,8 +7585,9 @@ object Form11: TForm11
       PaintData.CustomGradient = '16744448;16744448;97;0;0;16744448;16744448;0;0;0'
     end
   end
-  object Timer1: TTimer
-    Left = 16
+  object Timer: TTimer
+    Interval = 500
+    Left = 48
     Top = 16
   end
 end

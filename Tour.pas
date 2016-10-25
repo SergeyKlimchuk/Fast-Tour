@@ -188,7 +188,7 @@ type
     sBitBtn7: TsBitBtn;
     sBitBtn8: TsBitBtn;
     sCheckBox2: TsCheckBox;
-    Timer1: TTimer;
+    Timer: TTimer;
     sImage3: TsImage;
     Edit1: TEdit;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -221,6 +221,13 @@ type
     procedure Button_SettingClick(Sender: TObject);
     procedure Edit1KeyPress(Sender: TObject; var Key: Char);
     procedure Edit1Exit(Sender: TObject);
+    procedure Panel_ButtonMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Panel_ButtonMouseLeave(Sender: TObject);
+    procedure Panel_ButtonMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Panel_ButtonMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     { Private declarations }
   public
@@ -232,7 +239,7 @@ var
 
   Hotels_List: Array of THotel_Line;
   CButtons   : Array of TCButton;
-  Page_Count: Integer;
+
   Page: TPage;
 
   Procedure BUILD_PAGE(Index: Integer);
@@ -254,6 +261,75 @@ If (sender is TsGradientPanel) then Panel_Active((Sender as TsGradientPanel).Tag
 If (sender is TsLabel) then Panel_Active((Sender as TsLabel).Tag);
 End;
 
+procedure TForm11.Panel_ButtonMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+Var
+  I, D :Integer;
+begin
+for I:=0 to (Page.Count - 1 )do
+  if (CButtons[I].Left <= X) AND (X <= CButtons[I].Left+CButtons[I].Width)
+  AND (CButtons[I].Top <= Y) AND (Y <= CButtons[I].Top + CButtons[I].Height) then
+    if CButtons[I].State<>cbLocked then
+    Begin
+    CButtons[I].State:=cbPressed;
+    Panel_Button.Canvas.Draw(CButtons[I].Left,CButtons[I].Top, CButtons[I].Paint);
+    End;
+end;
+
+procedure TForm11.Panel_ButtonMouseLeave(Sender: TObject);
+Var
+  I :integer;
+begin
+for I:=0 to (Page.Count - 1 )do
+    Begin
+    if CButtons[I].State<>cbLocked then
+      CButtons[I].State:=cbStay;
+    Panel_Button.Canvas.Draw(CButtons[I].Left,CButtons[I].Top, CButtons[I].Paint);
+    End;
+end;
+
+procedure TForm11.Panel_ButtonMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+var
+  I:Integer;
+begin
+for I:=0 to (Page.Count - 1) do
+  if (CButtons[I].Left <= X) AND (X <= CButtons[I].Left + CButtons[I].Width)
+  AND (CButtons[I].Top <= Y) AND (Y <= CButtons[I].Top + CButtons[I].Height) then
+    begin
+    if CButtons[I].State<>cbLocked then
+      if GetKeyState(VK_LBUTTON)<0 then
+        CButtons[I].State:=cbPressed
+          else
+            CButtons[I].State:=cbHover;
+    Panel_Button.Canvas.Draw(CButtons[I].Left,CButtons[I].Top, CButtons[I].Paint);
+    end
+  else
+  if CButtons[I].State<>cbLocked then
+    begin
+    CButtons[I].State:=cbStay;
+    Panel_Button.Canvas.Draw(CButtons[I].Left,CButtons[I].Top, CButtons[I].Paint);
+    end;
+end;
+
+procedure TForm11.Panel_ButtonMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+Var
+  I, D :Integer;
+begin
+for I:=0 to (Page.Count - 1) do
+  if (CButtons[I].Left <= X) AND (X <= CButtons[I].Left + CButtons[I].Width)
+  AND (CButtons[I].Top <= Y) AND (Y <= CButtons[I].Top + CButtons[I].Height) then
+    if (Page.Current <> (X div 35) + 1) then
+      Begin
+      // Построение страницы
+      Build_Page((X div 35) + 1);
+      // Открытие кнопок перемещения
+      if (Page.Current + 1) > Page.Count then Button_Next.Enabled:= False else Button_Next.Enabled:= True;
+      if (Page.Current - 1) < 1 then Button_Prior.Enabled:= False else Button_Prior.Enabled:= True;
+      End;
+end;
+
 procedure TForm11.Button_ExitClick(Sender: TObject);
 begin
 Form11.Hide;
@@ -274,11 +350,11 @@ end;
 
 procedure TForm11.Button_NextClick(Sender: TObject);
 begin
-if (Page.Current < Page_Count) then
+if (Page.Current < Page.Count) then
   Begin
   Build_page(Page.Current + 1);
   Button_Prior.Enabled:= True;
-  if (Page.Current = Page_Count) then
+  if (Page.Current = Page.Count) then
     Button_Next.Enabled:=False;
   End;
 end;
@@ -311,7 +387,7 @@ Var
 begin
   Try
   Error:= True;
-  if StrToInt(Edit1.Text) > 17  then Edit1.Text:= '17';
+  if StrToInt(Edit1.Text) > 8  then Edit1.Text:= '8';
   if StrToInt(Edit1.Text) < 1  then Edit1.Text:= '1';
   Error:= False;
   Finally
@@ -417,10 +493,10 @@ With DataModule2.Tour_Query do
   Active:= True;
   End;
 Lbl_Records_count.Caption:= 'По вашему запросу было найдено: ' + IntToStr(DataModule2.Tour_Query.RecordCount) + ' записей!';
-Page_Count:= (DataModule2.Tour_Query.RecordCount div Page.Lines);
+Page.Count:= (DataModule2.Tour_Query.RecordCount div Page.Lines);
 if (DataModule2.Tour_Query.RecordCount mod Page.Lines) > 0 then
-  Page_Count:= (Page_Count + 1);
-SetLength(CButtons, Page_Count);
+  Page.Count:= (Page.Count + 1);
+SetLength(CButtons, Page.Count);
 
 BUILD_PAGE(1);
 // Отрисовываем задний фон
@@ -439,7 +515,7 @@ for I:= 0 to 49 do
 if (DataModule2.Tour_Query.RecordCount > 0) then
   Begin
   // Переформатирование кнопок
-  for I:= 0 to Page_Count - 1 do
+  for I:= 0 to Page.Count - 1 do
     begin
     CButtons[I].BorderWidth:= 1;
     CButtons[I].Left:= I * 35;
@@ -542,25 +618,66 @@ end;
 procedure TForm11.sBitBtn7Click(Sender: TObject);
 begin
 sPanel5.Visible:= False;
+Edit1.Text:= IntToStr(Page.Lines);
 end;
 
 procedure TForm11.sBitBtn8Click(Sender: TObject);
 Var
   I: Integer;
+  R, G, B, DR, DG, DB: Double;
 begin
 for I:= 0 to (Page.Lines - 1) do
   Hotels_List[I].Destroy;
-ShowMessage('Удаление прошло успешно!');
 Page.Lines:= StrToInt(Edit1.Text);
 for I:= 0 to (Page.Lines - 1) do
   Hotels_List[I].Create(8, (8 + (I * 80) + (I * 8)), I, Main_Scroll);
 Page.Current:= 1;
-Page_Count:= (Page.Current div Page.Lines);
-if (Page.Current mod Page.Lines) > 0 then
-  Page_Count:= Page_Count + 1;
-ShowMessage('Добавление прошло успешно!');
-
+Page.Count:= (DataModule2.Tour_Query.RecordCount div Page.Lines);
+if (DataModule2.Tour_Query.RecordCount mod Page.Lines) > 0 then
+  Page.Count:= Page.Count + 1;
 BUILD_PAGE(1);
+// Отрисовываем задний фон
+R:=255.0; DR:= (247 - R) / 48;
+G:=255.0; DG:= (247 - G) / 48;
+B:=255.0; DB:= (247 - B) / 48;
+for I:= 0 to 49 do
+  Begin
+  Panel_Button.Canvas.Pen.Color:=RGB(Trunc(R), Trunc(G), Trunc(B));
+  Panel_Button.Canvas.MoveTo(0, I);
+  Panel_Button.Canvas.LineTo(Panel_Button.Width, I);
+  R:= R + DR;
+  G:= G + DG;
+  B:= B + DB;
+  End;
+if (DataModule2.Tour_Query.RecordCount > 0) then
+  Begin
+  // Переформатирование кнопок
+  for I:= 0 to Page.Count - 1 do
+    begin
+    CButtons[I].BorderWidth:= 1;
+    CButtons[I].Left:= I * 35;
+    CButtons[I].Top:= 8;
+    CButtons[I].Height:= 32;
+    CButtons[I].Width:= 32;
+    CButtons[I].BorderRadius:= 8;
+    CButtons[I].BorderColor:= RGB(220,220,220);
+    CButtons[I].Color:= RGB(237,237,237);
+    CButtons[I].Color_off:= RGB(0,128,255);
+    CButtons[I].BackColor:= ClWhite;
+    CButtons[I].BackGradient.Enabled:= True;
+    CButtons[I].BackGradient.Color1:= RGB(253,253,253);
+    CButtons[I].BackGradient.Color2:= RGB(248,248,248);
+    CButtons[I].Gradient.Color1:= RGB(254,254,254);
+    CButtons[I].Gradient.Color2:= RGB(221,221,221);
+    CButtons[I].Caption:= IntToStr(I + 1);
+    if (I = 0) then
+      CButtons[I].State:= cbLocked
+        else
+          CButtons[I].State:= cbStay;
+    CButtons[I].Create;
+    Panel_Button.Canvas.Draw(CButtons[I].Left, CButtons[I].Top, CButtons[I].Paint);
+    end;
+  End;
 end;
 
 procedure TForm11.sCheckBox1Click(Sender: TObject);
@@ -795,10 +912,10 @@ if (DataModule2.Tour_Query.RecordCount > 0) then
                 else
                   Hotels_List[I - 1].Main_Panel.Visible:= False;
 
-  Page_Count:= DataModule2.Tour_Query.RecordCount div Page.Lines;
+  Page.Count:= DataModule2.Tour_Query.RecordCount div Page.Lines;
   if (DataModule2.Tour_Query.RecordCount mod Page.Lines) > 0 then
-    Page_Count:= Page_Count + 1;
-  if (Index < Page_Count) then Form11.Button_Next.Enabled:= True else Form11.Button_Next.Enabled:= False;
+    Page.Count:= Page.Count + 1;
+  if (Index < Page.Count) then Form11.Button_Next.Enabled:= True else Form11.Button_Next.Enabled:= False;
   if (Index = 1) then Form11.Button_Prior.Enabled:= False else Form11.Button_Prior.Enabled:= True;
 
   //...

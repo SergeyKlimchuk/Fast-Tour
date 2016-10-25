@@ -30,7 +30,7 @@ type
     sBevel10: TsBevel;
     sBevel11: TsBevel;
     Panel1: TPanel;
-    Main_ScrollBox: TsScrollBox;
+    Main_Scroll: TsScrollBox;
     Label_Not_Found: TLabel;
     Search_Panel: TsPanel;
     sBevel1: TsBevel;
@@ -92,6 +92,18 @@ type
     Label_FTo: TsLabel;
     Image1: TImage;
     sBitBtn5: TsBitBtn;
+    sPanel5: TsPanel;
+    Image4: TImage;
+    sLabel8: TsLabel;
+    sBevel27: TsBevel;
+    sBevel28: TsBevel;
+    sLabel9: TsLabel;
+    Image5: TImage;
+    sGradientPanel11: TsGradientPanel;
+    sBitBtn7: TsBitBtn;
+    sBitBtn8: TsBitBtn;
+    sCheckBox3: TsCheckBox;
+    Edit1: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure sLabel1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -125,6 +137,10 @@ type
     procedure Edit_DateKeyPress(Sender: TObject; var Key: Char);
     procedure Edit_DateCloseUp(Sender: TObject);
     procedure Button_RefreshClick(Sender: TObject);
+    procedure sBitBtn8Click(Sender: TObject);
+    procedure sBitBtn7Click(Sender: TObject);
+    procedure Edit1Exit(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -134,7 +150,7 @@ type
 var
   Form6: TForm6;
 
-  Page_Count: Integer;
+
   Page: TPage;
 
   Air_List: Array of TAir_Line;
@@ -213,11 +229,11 @@ if (DataModule2.Air_Query.RecordCount > 0) then
   Residue:= DataModule2.Air_Query.RecordCount - ((Index - 1) * Page.Lines);
   // Отключаем все не задействующиеся формы
   if (Residue < Page.Lines) then
-    for I:= 0 to (Page.Lines - 1) do
+    for I:= 1 to Page.Lines do
       if (I <= Residue) then
-        Air_List[I].Main_Panel.Visible:= True
+        Air_List[I - 1].Main_Panel.Visible:= True
           else
-            Air_List[I].Main_Panel.Visible:= False
+            Air_List[I - 1].Main_Panel.Visible:= False
               else
                 for I:= 0 to (Page.Lines - 1) do
                   Air_List[I].Main_Panel.Visible:= True;
@@ -369,7 +385,7 @@ procedure TForm6.Button_PanelMouseDown(Sender: TObject; Button: TMouseButton;
 Var
   I, D :Integer;
 begin
-for I:=0 to (Page_Count - 1 )do
+for I:=0 to (Page.Count - 1 )do
   if (CButtons[I].Left <= X) AND (X <= CButtons[I].Left+CButtons[I].Width)
   AND (CButtons[I].Top <= Y) AND (Y <= CButtons[I].Top + CButtons[I].Height) then
     if CButtons[I].State<>cbLocked then
@@ -383,7 +399,7 @@ procedure TForm6.Button_PanelMouseLeave(Sender: TObject);
 Var
   I :integer;
 begin
-for I:=0 to (Page_Count - 1 )do
+for I:=0 to (Page.Count - 1 )do
     Begin
     if CButtons[I].State<>cbLocked then
       CButtons[I].State:=cbStay;
@@ -396,7 +412,7 @@ procedure TForm6.Button_PanelMouseMove(Sender: TObject; Shift: TShiftState; X,
 var
   I:Integer;
 begin
-for I:=0 to (Page_Count - 1) do
+for I:=0 to (Page.Count - 1) do
   if (CButtons[I].Left <= X) AND (X <= CButtons[I].Left + CButtons[I].Width)
   AND (CButtons[I].Top <= Y) AND (Y <= CButtons[I].Top + CButtons[I].Height) then
     begin
@@ -420,7 +436,7 @@ procedure TForm6.Button_PanelMouseUp(Sender: TObject; Button: TMouseButton;
 Var
   I, D :Integer;
 begin
-for I:=0 to (Page_Count - 1) do
+for I:=0 to (Page.Count - 1) do
   if (CButtons[I].Left <= X) AND (X <= CButtons[I].Left + CButtons[I].Width)
   AND (CButtons[I].Top <= Y) AND (Y <= CButtons[I].Top + CButtons[I].Height) then
     if (Page.Current <> (X div 35) + 1) then
@@ -428,7 +444,7 @@ for I:=0 to (Page_Count - 1) do
       // Построение страницы
       Build_Page((X div 35) + 1);
       // Открытие кнопок перемещения
-      if (Page.Current + 1) > Page_Count then Next_button.Enabled:= False else Next_button.Enabled:= True;
+      if (Page.Current + 1) > Page.Count then Next_button.Enabled:= False else Next_button.Enabled:= True;
       if (Page.Current - 1) < 1 then Prior_button.Enabled:= False else Prior_button.Enabled:= True;
       End;
 end;
@@ -489,6 +505,25 @@ if (Tr = True) then
   End;
 End;
 
+procedure TForm6.Edit1Exit(Sender: TObject);
+Var
+  Error: Boolean;
+begin
+  Try
+  Error:= True;
+  if StrToInt(Edit1.Text) > 10  then Edit1.Text:= '10';
+  if StrToInt(Edit1.Text) < 1  then Edit1.Text:= '1';
+  Error:= False;
+  Finally
+  if Error then Edit1.Text:= '8';
+  End;
+end;
+
+procedure TForm6.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['0'..'9', #8]) then key:= #0;
+end;
+
 procedure TForm6.Edit_DateCloseUp(Sender: TObject);
 begin
 CHECK_DATE;
@@ -525,13 +560,13 @@ Page.Lines:= 8;
 SetLength(Air_List, Page.Lines);
 // Создание динамических элементов
 For I:= 1 to Page.Lines do
-  Air_List[I - 1].Create(80, ((I - 1) * 100) + (10 * I), I, Main_ScrollBox);
+  Air_List[I - 1].Create(80, ((I - 1) * 100) + (10 * I), I, Main_Scroll);
 // Создание списка
-Page_Count:= (DataModule2.Air_Query.Recordcount Div Page.Lines);
+Page.Count:= (DataModule2.Air_Query.Recordcount Div Page.Lines);
 if (DataModule2.Air_Query.Recordcount Mod Page.Lines) > 0 then
-  Page_Count:= Page_Count + 1;
+  Page.Count:= Page.Count + 1;
 // Кнопки експлорера
-SetLength(CButtons, Page_Count);
+SetLength(CButtons, Page.Count);
 // Отрисовываем задний фон
 R:=255.0; DR:= (247 - R) / Button_Panel.Height;
 G:=255.0; DG:= (247 - G) / Button_Panel.Height;
@@ -546,7 +581,7 @@ for I:= 0 to Button_Panel.Height+1 do
   B:= B + DB;
   End;
 // Создаем массив кнопок
-for I:= 0 to (Page_Count - 1) do
+for I:= 0 to (Page.Count - 1) do
   begin
   CButtons[I].BorderWidth:= 1;
   CButtons[I].Left:= I * 35;
@@ -598,7 +633,7 @@ sComboBox2.ItemIndex:= 0;
 sComboBox2.ItemIndex:= 0;
 sComboBox4.ItemIndex:= 0;
 // проверяем будут ли кнопки активны
-if (Page.Current + 1) <= Page_Count then
+if (Page.Current + 1) <= Page.Count then
   Next_Button.Enabled:= True;
 // Строим список
 Build_page(1);
@@ -611,7 +646,7 @@ panel1.Left:= (ClientWidth div 2) - 480;
 panel1.Height:= ClientHeight - 53;
 Explorer_Panel.Top:= Panel1.Height - 180;
 Search_Panel.Top:= Explorer_Panel.Top + 50;
-Main_ScrollBox.Height:= Explorer_Panel.Top;
+Main_Scroll.Height:= Explorer_Panel.Top;
 sPanel1.Left:= panel1.Left;
 sPanel2.Left:= Panel1.Left + 506;
 BackGround_Image.Width:= ClientWidth;
@@ -621,6 +656,12 @@ if Panel_FullInfo.Visible then
   Begin
   Panel_FullInfo.Left:= (ClientWidth div 2) - 350;
   Panel_FullInfo.Top:= (ClientHeight div 2) - 76;
+  End;
+
+if Castom_Way.Visible then
+  Begin
+  Castom_Way.Left:= (ClientWidth div 2) - 500;
+  Castom_Way.Top:= (ClientHeight div 2) - 48;
   End;
 end;
 
@@ -637,11 +678,11 @@ end;
 
 procedure TForm6.Next_ButtonClick(Sender: TObject);
 begin
-if (Page.Current < Page_Count) then
+if (Page.Current < Page.Count) then
   Begin
   Build_page(Page.Current+1);
   Prior_Button.Enabled:= True;
-  if (Page.Current = Page_Count) then
+  if (Page.Current = Page.Count) then
     Next_Button.Enabled:=False;
   End;
 end;
@@ -665,12 +706,79 @@ end;
 
 procedure TForm6.sBitBtn3Click(Sender: TObject);
 begin
-ShowMessage('Настроек нет, но вы там держитесь!');
+sPanel5.Visible:= True;
 end;
 
 procedure TForm6.sBitBtn5Click(Sender: TObject);
 begin
 Panel_FullInfo.Visible:= False;
+end;
+
+procedure TForm6.sBitBtn7Click(Sender: TObject);
+begin
+sPanel5.Visible:= False;
+edit1.Text:= IntToStr(Page.Lines);
+end;
+
+procedure TForm6.sBitBtn8Click(Sender: TObject);
+Var
+  I: Integer;
+  R, G, B, DR, DG, DB: Double;
+begin
+for I:= 0 to (Page.Lines - 1) do
+  Air_List[I].Destroy;
+Page.Lines:= StrToInt(Edit1.Text);
+SetLength(Air_List, Page.Lines);
+for I:= 1 to Page.Lines do
+  Air_List[I - 1].Create(80, ((I - 1) * 100) + (10 * I), I, Main_Scroll);
+Page.Current:= 1;
+Page.Count:= (DataModule2.Air_Query.RecordCount div Page.Lines);
+if (DataModule2.Air_Query.RecordCount mod Page.Lines) > 0 then
+  Page.Count:= Page.Count + 1;
+BUILD_PAGE(1);
+sPanel5.Visible:= False;
+// Кнопки експлорера
+SetLength(CButtons, Page.Count);
+// Отрисовываем задний фон
+R:=255.0; DR:= (247 - R) / Button_Panel.Height;
+G:=255.0; DG:= (247 - G) / Button_Panel.Height;
+B:=255.0; DB:= (247 - B) / Button_Panel.Height;
+for I:= 0 to 49 do
+  Begin
+  Button_Panel.Canvas.Pen.Color:=RGB(Trunc(R), Trunc(G), Trunc(B));
+  Button_Panel.Canvas.MoveTo(0, I);
+  Button_Panel.Canvas.LineTo(Button_Panel.Width, I);
+  R:= R + DR;
+  G:= G + DG;
+  B:= B + DB;
+  End;
+// Создаем массив кнопок
+for I:= 0 to (Page.Count - 1) do
+  begin
+  CButtons[I].BorderWidth:= 1;
+  CButtons[I].Left:= I * 35;
+  CButtons[I].Top:= 8;
+  CButtons[I].Height:= 32;
+  CButtons[I].Width:= 32;
+  CButtons[I].BorderRadius:= 8;
+  CButtons[I].BorderColor:= RGB(220,220,220);
+  CButtons[I].Color:= RGB(237,237,237);
+  CButtons[I].Color_off:= RGB(0,128,255);
+  CButtons[I].BackColor:= ClWhite;
+  CButtons[I].Gradient.Color1:= RGB(254,254,254);
+  CButtons[I].Gradient.Color2:= RGB(221,221,221);
+  CButtons[I].Caption:= IntToStr(I + 1);
+  CButtons[I].BackGradient.Enabled:=True;
+  CButtons[I].BackGradient.Color1:=RGB(253,253,253);
+  CButtons[I].BackGradient.Color2:=RGB(248,248,248);
+  if (I = 0) then
+    CButtons[I].State:= cbLocked
+      else
+        CButtons[I].State:= cbStay;
+  CButtons[I].Create;
+  Button_panel.Canvas.Draw(CButtons[I].Left, CButtons[I].Top, CButtons[I].Paint);
+  end;
+ShowMessage('Готово!');
 end;
 
 Procedure REFRESH_PRICE; // Процедура обновления цены (Активируется при смене валюты)
@@ -865,18 +973,16 @@ With DataModule2.Air_Query do
 Lbl_Records_count.Caption:= DataModule2.CHECK_RecordCount(DataModule2.Air_Query.RecordCount);
 Lbl_Records_count.left:= 227 - (Lbl_Records_count.Width div 2);
 // Узнаем точное кол-во страниц (Integer)
-Page_Count:= (DataModule2.Air_Query.Recordcount Div Page.Lines);
+Page.Count:= (DataModule2.Air_Query.Recordcount Div Page.Lines);
 if (DataModule2.Air_Query.Recordcount Mod Page.Lines) > 0 then
-  Inc(Page_Count);
+  Inc(Page.Count);
 // Снимаем залок клавиши
 CButtons[Page.Current - 1].State:= cbStay;
-// Ставим кол-во клавишь равное кол-ву страниц
-Page_Count:= Page_Count;
 // Выставляем текущей страницей - страницу 1
 Build_page(1);
 // Проверяем будут ли кнопки активны
 //ShowMessage('Page_Current= ' + IntToStr(Page_Current) + ' <= ' + IntToStr(Pages_count));
-if (Page.Current + 1) <= Page_Count then
+if (Page.Current + 1) <= Page.Count then
   Next_Button.Enabled:= True
     else
       Next_Button.Enabled:= False;
@@ -896,7 +1002,7 @@ for I:= 0 to Button_Panel.Height+1 do
   B:= B + DB;
   End;
 // Переформатирование кнопок
-for I:= 0 to Page_Count - 1 do
+for I:= 0 to Page.Count - 1 do
   begin
   CButtons[I].BorderWidth:= 1;
   CButtons[I].Left:= I * 35;

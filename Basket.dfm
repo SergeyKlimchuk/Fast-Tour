@@ -5,8 +5,8 @@ object Form9: TForm9
   ClientHeight = 350
   ClientWidth = 900
   Color = clBtnFace
-  Constraints.MinHeight = 389
-  Constraints.MinWidth = 916
+  Constraints.MinHeight = 350
+  Constraints.MinWidth = 900
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
