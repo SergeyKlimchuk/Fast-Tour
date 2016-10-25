@@ -6,6 +6,29 @@ uses
   sPanel, sBitBtn, sLabel, sBevel, acImage, sScrollBox,Vcl.Graphics, Vcl.Controls, sysUtils;
 
 Type
+  TAir_Line = record
+    Main_Panel: TsPanel;
+    Label_Way: TsLabel;
+    Picture_Plane: TsImage;
+    Label_AirCompany: TsLabel;
+    Label_Days: TsLabel;
+    Label_Date: TsLabel;
+    Home_Bevel: TsBevel;
+    Label_Info: TsLabel;
+    Label_Type: TsLabel;
+    Label_FlightTime: TsLabel;
+    Picture_AirCompany: TsImage;
+    Panel_Explorer: TsGradientPanel;
+    Label_Price: TsLabel;
+    Label_Currency: TsLabel;
+    Label_Message: TsLabel;
+    Button_Choose: TsBitBtn;
+    Explorer_Bevel: TsBevel;
+    Public
+      Procedure Create(X,Y,Index:Integer; Parent:TObject);
+      Procedure Destroy;
+  end;
+
   THotel_Line = record
     Main_Panel: TsPanel;
     Photo: TsImage;
@@ -31,7 +54,159 @@ Type
 implementation
 
 uses
-  Tour;
+  Tour, AirTicket;
+
+Procedure TAir_Line.Create(X,Y,Index:Integer; Parent:TObject);
+Var
+  Plane_IMG: TPicture;
+Begin
+Main_Panel:=TsPanel.create( (Parent as TsScrollBox) );
+Main_Panel.Parent:= (Parent as TsScrollBox);
+Main_Panel.Width:= 800;
+Main_Panel.Height:= 100;
+Main_Panel.Left:= X;
+Main_Panel.Top:= Y;
+// Лейбел "Авиакомпания:"
+Label_AirCompany:=TsLabel.create(Main_Panel);
+Label_AirCompany.Parent:= Main_Panel;
+Label_AirCompany.Left:= 15;
+Label_AirCompany.Top:= 8;
+Label_AirCompany.Font.Style:=[fsBold];
+// Лейбел "Авиакомпания:"
+Picture_Plane:=TsImage.create(Main_Panel);
+Picture_Plane.Parent:= Main_Panel;
+Picture_Plane.Left:= 5;
+Picture_Plane.Top:= 27;
+Picture_Plane.Width:= 16;
+Picture_Plane.Height:= 16;
+Plane_IMG:= TPicture.Create;
+Plane_IMG.LoadFromFile('Textures\Plane.png');
+Picture_Plane.Picture.Assign(Plane_IMG);
+FreeAndNil(Plane_IMG);
+// Лейбел "Путь"
+Label_Way:=TsLabel.create(Main_Panel);
+Label_Way.Parent:= Main_Panel;
+Label_Way.Left:= 27;
+Label_Way.Top:= 27;
+// Лейбел "Дата полёта / время:"
+Label_Date:=TsLabel.create(Main_Panel);
+Label_Date.Parent:= Main_Panel;
+Label_Date.Left:= 27;
+Label_Date.Top:= 46;
+// Лейбел "Дни вылетов:"
+Label_Days:=TsLabel.create(Main_Panel);
+Label_Days.Parent:= Main_Panel;
+Label_Days.Left:= 27;
+Label_Days.Top:= 65;
+// Bevel заграничитель
+Home_Bevel:=TsBevel.create(Main_Panel);
+Home_Bevel.Parent:=Main_Panel;
+Home_Bevel.Left:= 200;
+Home_Bevel.Top:= -1;
+Home_Bevel.Width:= 3;
+Home_Bevel.Height:= 102;
+// Лейбел ""
+Label_Info:=TsLabel.create(Main_Panel);
+Label_Info.Parent:= Main_Panel;
+Label_Info.Left:= 206;
+Label_Info.Top:= 8;
+Label_Info.Font.Style:= [fsUnderline];
+Label_Info.Cursor:= crHandPoint;
+Label_Info.Caption:= 'Детали перелёта';
+Label_Info.OnClick:= Form6.sLabel28Click;
+Label_Info.Tag:= Index;
+// Лейбел ""
+Label_Type:=TsLabel.create(Main_Panel);
+Label_Type.Parent:= Main_Panel;
+Label_Type.Left:= 209;
+Label_Type.Top:= 27;
+Label_Type.UseSkinColor:= False;
+Label_Type.Font.Style:= [fsBold];
+Label_Type.Color:= $0000BE93;
+// Лейбел "Время полёта"
+Label_FlightTime:=TsLabel.create(Main_Panel);
+Label_FlightTime.Parent:= Main_Panel;
+Label_FlightTime.Left:= 209;
+Label_FlightTime.Top:= 46;
+// Лейбел "Авиакомпания"
+Picture_AirCompany:=TsImage.create(Main_Panel);
+Picture_AirCompany.Parent:= Main_Panel;
+Picture_AirCompany.Left:= 209;
+Picture_AirCompany.Top:= 0;
+Picture_AirCompany.Width:= 400;
+Picture_AirCompany.Height:= 100;
+Picture_AirCompany.SendToBack;
+// Лейбел ""
+Panel_Explorer:=TsGradientPanel.create(Main_Panel);
+Panel_Explorer.Parent:= Main_Panel;
+Panel_Explorer.Left:= 600;
+Panel_Explorer.Top:= 0;
+Panel_Explorer.Width:= 200;
+Panel_Explorer.Height:= 100;
+Panel_Explorer.PaintData.Color1.Color:= $00EBEBEB;
+Panel_Explorer.PaintData.Color2.UseSkinColor:= False;
+Panel_Explorer.PaintData.Color2.Color:= $00EBEBEB;
+// Лейбел ""
+Label_Price:=TsLabel.create(Main_Panel);
+Label_Price.Parent:= Panel_Explorer;
+Label_Price.Left:= 55;
+Label_Price.Top:= 24;
+Label_Price.Font.Size:= 16;
+// Лейбел ""
+Label_Currency:=TsLabel.create(Main_Panel);
+Label_Currency.Parent:= Panel_Explorer;
+Label_Currency.Left:= 123;
+Label_Currency.Top:= 32;
+Label_Currency.Caption:= ' USD';
+Label_Currency.Font.Size:= 9;
+// Лейбел ""
+Label_Message:=TsLabel.create(Main_Panel);
+Label_Message.Parent:= Panel_Explorer;
+Label_Message.Left:= 28;
+Label_Message.Top:= 44;
+Label_Message.Caption:='Цена за всех пассажиров';
+Label_Message.Font.Size:= 9;
+// Лейбел ""
+Button_Choose:=TsBitBtn.create(Main_Panel);
+Button_Choose.Parent:= Panel_Explorer;
+Button_Choose.Left:= 50;
+Button_Choose.Top:= 64;
+Button_Choose.Width:= 100;
+Button_Choose.Height:= 25;
+Button_Choose.Cursor:= crHandPoint;
+Button_Choose.Caption:= 'Выбрать';
+Button_Choose.Tag:= Index;
+Button_Choose.OnClick:= Form6.Get_Info;
+// Кнопка с капчей ""
+Explorer_Bevel:=TsBevel.Create(Main_Panel);
+Explorer_Bevel.Parent:= Panel_Explorer;
+Explorer_Bevel.Left:= 0;
+Explorer_Bevel.Top:= 0;
+Explorer_Bevel.Width:= 200;
+Explorer_Bevel.Height:= 100;
+End;
+
+Procedure TAir_Line.Destroy;
+Begin
+FreeAndNil(Label_Way);
+FreeAndNil(Label_AirCompany);
+FreeAndNil(Label_Days);
+FreeAndNil(Label_Date);
+FreeAndNil(Label_Info);
+FreeAndNil(Label_Type);
+FreeAndNil(Label_FlightTime);
+FreeAndNil(Label_Price);
+FreeAndNil(Label_Currency);
+FreeAndNil(Label_Message);
+FreeAndNil(Picture_Plane);
+FreeAndNil(Home_Bevel);
+FreeAndNil(Picture_AirCompany);
+FreeAndNil(Panel_Explorer);
+FreeAndNil(Explorer_Bevel);
+FreeAndNil(Picture_AirCompany);
+FreeAndNil(Main_Panel);
+End;
+
 
 Procedure THotel_Line.Create(X,Y,Index:Integer; Parent:TObject);
 Begin

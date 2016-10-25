@@ -9,7 +9,7 @@ uses
   Vcl.Imaging.jpeg, Vcl.OleCtrls, SHDocVw, acWebBrowser, Data.DB, Data.Win.ADODB,
   acAlphaHints, Vcl.Grids, Vcl.DBGrids, sDialogs, PNGImage, Vcl.Buttons, sBitBtn,
   sPageControl, BTNlib, acPNG, Vcl.Mask, sMaskEdit, sCustomComboEdit, sToolEdit, Dateutils,
-  sScrollBox, sEdit, sCheckBox, sComboBox;
+  sScrollBox, sEdit, sCheckBox, sComboBox, sCurrEdit, sCurrencyEdit, sSpinEdit;
 
 type
   TForm7 = class(TForm)

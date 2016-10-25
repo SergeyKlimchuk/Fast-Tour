@@ -9,7 +9,7 @@ uses
   sBevel, sComboBox, sButton, Vcl.Mask, sMaskEdit, sToolEdit, sCheckBox, sEdit,
   Vcl.ActnPopup, sCheckListBox, Vcl.Buttons, sBitBtn, acPNG, acImage,
   BTNlib, sRadioButton, DateUtils, Vcl.Imaging.jpeg, sCustomComboEdit, sListBox,
-  sScrollBox, sGroupBox;
+  sScrollBox, sGroupBox, Records;
 
 type
   TForm6 = class(TForm)
@@ -68,6 +68,13 @@ type
     sBitBtn2: TsBitBtn;
     sBitBtn3: TsBitBtn;
     sBitBtn4: TsBitBtn;
+    Explorer_Panel: TsPanel;
+    Button_Panel: TImage;
+    Next_Button: TsBitBtn;
+    Prior_button: TsBitBtn;
+    sPanel2: TsPanel;
+    Lbl_Records_count: TsLabel;
+    Button_Refresh: TsBitBtn;
     Panel_FullInfo: TsPanel;
     sLabel11: TsLabel;
     Label_FWay: TsLabel;
@@ -85,13 +92,6 @@ type
     Label_FTo: TsLabel;
     Image1: TImage;
     sBitBtn5: TsBitBtn;
-    Explorer_Panel: TsPanel;
-    Button_Panel: TImage;
-    Next_Button: TsBitBtn;
-    Prior_button: TsBitBtn;
-    sPanel2: TsPanel;
-    Lbl_Records_count: TsLabel;
-    Button_Refresh: TsBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure sLabel1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -131,45 +131,15 @@ type
     { Public declarations }
   end;
 
-Const
-  Panel_Count=6;
-  KZT= 333;
-  USD= 1;
-  EUR= 0.89;
-  RUB= 62;
-  AUD= 1.32;
-  GBP= 0.79;
-  DKK= 6.65;
-  AED= 3.67;
-
 var
   Form6: TForm6;
-  Button_Count  :integer = 1; // Количетво кнопок
-  Pages_count   :Integer;     // Количество страниц
-  Page_Current  :Integer;     // Текущая страница
 
-//.........Блок динамических объектов..........................//
-  Home_Panel        :Array [1..Panel_Count] of TsGradientPanel;//
-  Label_Way         :Array [1..Panel_Count] of TsLabel;        //
-  Picture_Plane     :Array [1..Panel_Count] of TsImage;        //
-  Label_AirCompany  :Array [1..Panel_Count] of TsLabel;        //
-  Label_Days        :Array [1..Panel_Count] of TsLabel;        //
-  Label_Date        :Array [1..Panel_Count] of TsLabel;        //
-  Home_Bevel        :Array [1..Panel_Count] of TsBevel;        //
-  Label_Info        :Array [1..Panel_Count] of TsLabel;        //
-  Label_Type        :Array [1..Panel_Count] of TsLabel;        //
-  Label_FlightTime  :Array [1..Panel_Count] of TsLabel;        //
-  Picture_AirCompany:Array [1..Panel_Count] of TsImage;        //
-  Panel_Explorer    :Array [1..Panel_Count] of TsGradientPanel;//
-  Label_Price       :Array [1..Panel_Count] of TsLabel;        //
-  Label_Currency    :Array [1..Panel_Count] of TsLabel;        //
-  Label_Message     :Array [1..Panel_Count] of TsLabel;        //
-  Button_Choose     :Array [1..Panel_Count] of TsBitBtn;       //
-  Explorer_Bevel    :Array [1..Panel_Count] of TsBevel;        //
-//.............................................................//
+  Page_Count: Integer;
+  Page: TPage;
+
+  Air_List: Array of TAir_Line;
 
 //.........Блок кнопок.........................//
-  Pages_mas:Array                  of String;  //
   CButtons :Array                  of TCButton;//
 //.............................................//
 
@@ -195,7 +165,7 @@ Edit_Date.Text:= '';
 // Переход к началу
 DataModule2.Air_Query.First;
 // Переход к нужной записи
-DataModule2.Air_Query.MoveBy(((Page_Current - 1) * Panel_Count) + ((Sender as TsBitBtn).Tag - 1));
+DataModule2.Air_Query.MoveBy(((Page.Current - 1) * Page.Lines) + ((Sender as TsBitBtn).Tag - 1));
 // Заполняем поля
 Label_Air_Company.Caption:= DataModule2.Air_Query.FieldByName('Air_company').AsString;
 Label_Air_Company.Left:= sBevel15.Left + ((sBevel15.Width div 2) - (Label_Air_Company.Width div 2));
@@ -229,8 +199,7 @@ Var
   I, D, Residue :integer;
 Begin
 // Скрываем поле
-if Form6.Castom_Way.Visible = True then
-   Form6.Castom_Way.Visible:= False;
+if Form6.Castom_Way.Visible then Form6.Castom_Way.Visible:= False;
 // Делаем проверку на присутствие записей на странице
 if (DataModule2.Air_Query.RecordCount > 0) then
   Begin
@@ -239,39 +208,39 @@ if (DataModule2.Air_Query.RecordCount > 0) then
   // Переход на первую запись нашей страницы
   DataModule2.Air_Query.First;
   if (Index > 1) then
-    DataModule2.Air_Query.MoveBy((Index - 1) * Panel_count);
+    DataModule2.Air_Query.MoveBy((Index - 1) * Page.Lines);
   // Узнаем остаточное кол-во записей
-  Residue:= DataModule2.Air_Query.RecordCount - ((Index - 1) * Panel_count);
+  Residue:= DataModule2.Air_Query.RecordCount - ((Index - 1) * Page.Lines);
   // Отключаем все не задействующиеся формы
-  if (Residue < Panel_count) then
-    for I:= 1 to Panel_count do
+  if (Residue < Page.Lines) then
+    for I:= 0 to (Page.Lines - 1) do
       if (I <= Residue) then
-        Home_Panel[I].Visible:= True
+        Air_List[I].Main_Panel.Visible:= True
           else
-            Home_Panel[I].Visible:= False
+            Air_List[I].Main_Panel.Visible:= False
               else
-                for I:= 1 to Panel_count do
-                  Home_Panel[I].Visible:= True;
+                for I:= 0 to (Page.Lines - 1) do
+                  Air_List[I].Main_Panel.Visible:= True;
   // Создание страницы
-  if (Residue >= Panel_count)  then
-    for I:= 1 to Panel_Count do
+  if (Residue >= Page.Lines)  then
+    for I:= 0 to (Page.Lines - 1) do
       Build_Line(I, True)
         else
-          for I:= 1 to Residue do
+          for I:= 0 to (Residue - 1) do
             Build_Line(I, True);
   End
 else  // В случае если послали пустую страницу на отрисовку
   begin
-  for I:= 1 to Panel_count do
-    Home_Panel[I].Visible:= False;
+  for I:= 1 to Page.Lines do
+    Air_List[I - 1].Main_Panel.Visible:= False;
   Form6.Label_Not_Found.visible:= True;
   end;
 // Изменение кнопок
-CButtons[Page_Current - 1].State:= cbStay;
-Form6.Button_panel.Canvas.Draw(CButtons[Page_Current - 1].Left, CButtons[Page_Current - 1].Top, CButtons[Page_Current - 1].Paint);
+CButtons[Page.Current - 1].State:= cbStay;
+Form6.Button_panel.Canvas.Draw(CButtons[Page.Current - 1].Left, CButtons[Page.Current - 1].Top, CButtons[Page.Current - 1].Paint);
 CButtons[Index - 1].State:= cbLocked;
 Form6.Button_panel.Canvas.Draw(CButtons[Index - 1].Left, CButtons[Index - 1].Top, CButtons[Index - 1].Paint);
-Page_Current:= Index;
+Page.Current:= Index;
 // Обновление цены
 REFRESH_PRICE;
 End;
@@ -348,13 +317,13 @@ End;
 Procedure Build_Line(Index:integer; OnNext:Boolean); // Построение строки
 Begin
 // Выводим информацию в поля
-  Label_Way         [Index].Caption:= DataModule2.Air_Query.FieldByName('City_D').AsString + ' -> ' + DataModule2.Air_Query.FieldByName('City_A').AsString;
-  Label_AirCompany  [Index].Caption:= DataModule2.Air_Query.FieldByName('Air_Company').AsString;
-  Label_Days        [Index].Caption:= _Days;
-  Label_Date        [Index].Caption:= _Date;
-  Label_Type        [Index].Caption:='Прямой рейс';
-  Label_Type        [Index].Font.Color:= $0000BE93;
-  Label_FlightTime  [Index].Caption:= _Time;
+  Air_List[Index].Label_Way.Caption:= DataModule2.Air_Query.FieldByName('City_D').AsString + ' -> ' + DataModule2.Air_Query.FieldByName('City_A').AsString;
+  Air_List[Index].Label_AirCompany.Caption:= DataModule2.Air_Query.FieldByName('Air_Company').AsString;
+  Air_List[Index].Label_Days.Caption:= _Days;
+  Air_List[Index].Label_Date.Caption:= _Date;
+  Air_List[Index].Label_Type.Caption:='Прямой рейс';
+  Air_List[Index].Label_Type.Font.Color:= $0000BE93;
+  Air_List[Index].Label_FlightTime.Caption:= _Time;
 //  Picture_AirCompany[Index]
 // Переключаемся на следующую запись
 if (DataModule2.Air_Query.Eof = False) and (OnNext = true) then 
@@ -400,7 +369,7 @@ procedure TForm6.Button_PanelMouseDown(Sender: TObject; Button: TMouseButton;
 Var
   I, D :Integer;
 begin
-for I:=0 to Button_Count-1 do
+for I:=0 to (Page_Count - 1 )do
   if (CButtons[I].Left <= X) AND (X <= CButtons[I].Left+CButtons[I].Width)
   AND (CButtons[I].Top <= Y) AND (Y <= CButtons[I].Top + CButtons[I].Height) then
     if CButtons[I].State<>cbLocked then
@@ -414,7 +383,7 @@ procedure TForm6.Button_PanelMouseLeave(Sender: TObject);
 Var
   I :integer;
 begin
-for I:=0 to Button_Count-1 do
+for I:=0 to (Page_Count - 1 )do
     Begin
     if CButtons[I].State<>cbLocked then
       CButtons[I].State:=cbStay;
@@ -427,7 +396,7 @@ procedure TForm6.Button_PanelMouseMove(Sender: TObject; Shift: TShiftState; X,
 var
   I:Integer;
 begin
-for I:=0 to Button_Count-1 do
+for I:=0 to (Page_Count - 1) do
   if (CButtons[I].Left <= X) AND (X <= CButtons[I].Left + CButtons[I].Width)
   AND (CButtons[I].Top <= Y) AND (Y <= CButtons[I].Top + CButtons[I].Height) then
     begin
@@ -451,16 +420,16 @@ procedure TForm6.Button_PanelMouseUp(Sender: TObject; Button: TMouseButton;
 Var
   I, D :Integer;
 begin
-for I:=0 to Button_Count-1 do
+for I:=0 to (Page_Count - 1) do
   if (CButtons[I].Left <= X) AND (X <= CButtons[I].Left + CButtons[I].Width)
   AND (CButtons[I].Top <= Y) AND (Y <= CButtons[I].Top + CButtons[I].Height) then
-    if (Page_Current <> (X div 35) + 1) then
+    if (Page.Current <> (X div 35) + 1) then
       Begin
       // Построение страницы
       Build_Page((X div 35) + 1);
       // Открытие кнопок перемещения
-      if (Page_Current + 1) > Length(Pages_mas) then Next_button.Enabled:= False else Next_button.Enabled:= True;
-      if (Page_Current - 1) < 1 then Prior_button.Enabled:= False else Prior_button.Enabled:= True;
+      if (Page.Current + 1) > Page_Count then Next_button.Enabled:= False else Next_button.Enabled:= True;
+      if (Page.Current - 1) < 1 then Prior_button.Enabled:= False else Prior_button.Enabled:= True;
       End;
 end;
 
@@ -471,7 +440,7 @@ With DataModule2.Air_Query do
   Active:= False;
   Active:= True;
   End;
-BUILD_PAGE(Page_Current);
+BUILD_PAGE(Page.Current);
 end;
 
 Procedure CHECK_DATE;
@@ -548,149 +517,21 @@ procedure TForm6.FormCreate(Sender: TObject);
 Var
 I:Integer;
 CHK1,CHK2,CHK3:Boolean;
-Img:TPicture;
 R,G,B:Double;
 DR,DG,DB:Double;
 begin
-// Загрузка изображения
-Img:= TPicture.Create;
-Img.LoadFromFile('Textures\Plane.png');
+Page.Current:= 1;
+Page.Lines:= 8;
+SetLength(Air_List, Page.Lines);
 // Создание динамических элементов
-For I:=1 to Panel_Count do
-  Begin
-    Home_Panel[I]:=TsGradientPanel.create(Owner);
-    Home_Panel[I].Parent:= Main_ScrollBox;
-    Home_Panel[I].Width:= 800;
-    Home_Panel[I].Height:= 100;
-    Home_Panel[I].Left:= 80;
-    Home_Panel[I].Top:= ((I - 1) * 100) + (10 * I);
-    // Лейбел "Авиакомпания:"
-    Label_AirCompany[I]:=TsLabel.create(Owner);
-    Label_AirCompany[I].Parent:= Home_Panel[I];
-    Label_AirCompany[I].Left:= 15;
-    Label_AirCompany[I].Top:= 8;
-    Label_AirCompany[I].Font.Style:=[fsBold];
-    // Лейбел "Авиакомпания:"
-    Picture_Plane[I]:=TsImage.create(Owner);
-    Picture_Plane[I].Parent:= Home_Panel[I];
-    Picture_Plane[I].Left:= 5;
-    Picture_Plane[I].Top:= 27;
-    Picture_Plane[I].Width:= 16;
-    Picture_Plane[I].Height:= 16;
-    Picture_Plane[I].Picture.Assign(Img);
-    // Лейбел "Путь"
-    Label_Way[I]:=TsLabel.create(Owner);
-    Label_Way[I].Parent:= Home_Panel[I];
-    Label_Way[I].Left:= 27;
-    Label_Way[I].Top:= 27;
-    // Лейбел "Дата полёта / время:"
-    Label_Date[I]:=TsLabel.create(Owner);
-    Label_Date[I].Parent:= Home_Panel[I];
-    Label_Date[I].Left:= 27;
-    Label_Date[I].Top:= 46;
-    // Лейбел "Дни вылетов:"
-    Label_Days[I]:=TsLabel.create(Owner);
-    Label_Days[I].Parent:= Home_Panel[I];
-    Label_Days[I].Left:= 27;
-    Label_Days[I].Top:= 65;
-    // Bevel заграничитель
-    Home_Bevel[I]:=TsBevel.create(Owner);
-    Home_Bevel[I].Parent:=Home_Panel[I];
-    Home_Bevel[I].Left:= 200;
-    Home_Bevel[I].Top:= -1;
-    Home_Bevel[I].Width:= 3;
-    Home_Bevel[I].Height:= 102;
-    // Лейбел ""
-    Label_Info[I]:=TsLabel.create(Owner);
-    Label_Info[I].Parent:= Home_Panel[I];
-    Label_Info[I].Left:= 206;
-    Label_Info[I].Top:= 8;
-    Label_Info[I].Font.Style:= [fsUnderline];
-    Label_Info[I].Cursor:= crHandPoint;
-    Label_Info[I].Caption:= 'Детали перелёта';
-    Label_Info[I].OnClick:= sLabel28Click;
-    Label_Info[I].Tag:= I;
-    // Лейбел ""
-    Label_Type[I]:=TsLabel.create(Owner);
-    Label_Type[I].Parent:= Home_Panel[I];
-    Label_Type[I].Left:= 209;
-    Label_Type[I].Top:= 27;
-    Label_Type[I].UseSkinColor:= False;
-    Label_Type[I].Font.Style:= [fsBold];
-    Label_Type[I].Color:= $0000BE93;
-    // Лейбел "Время полёта"
-    Label_FlightTime[I]:=TsLabel.create(Owner);
-    Label_FlightTime[I].Parent:= Home_Panel[I];
-    Label_FlightTime[I].Left:= 209;
-    Label_FlightTime[I].Top:= 46;
-    // Лейбел "Авиакомпания"
-    Picture_AirCompany[I]:=TsImage.create(Owner);
-    Picture_AirCompany[I].Parent:= Home_Panel[I];
-    Picture_AirCompany[I].Left:= 209;
-    Picture_AirCompany[I].Top:= 0;
-    Picture_AirCompany[I].Width:= 400;
-    Picture_AirCompany[I].Height:= 100;
-    Picture_AirCompany[I].SendToBack;
-    // Лейбел ""
-    Panel_Explorer[I]:=TsGradientPanel.create(Owner);
-    Panel_Explorer[I].Parent:= Home_Panel[I];
-    Panel_Explorer[I].Left:= 600;
-    Panel_Explorer[I].Top:= 0;
-    Panel_Explorer[I].Width:= 200;
-    Panel_Explorer[I].Height:= 100;
-    Panel_Explorer[I].PaintData.Color1.Color:= $00EBEBEB;
-    Panel_Explorer[I].PaintData.Color2.UseSkinColor:= False;
-    Panel_Explorer[I].PaintData.Color2.Color:= $00EBEBEB;
-    // Лейбел ""
-    Label_Price[I]:=TsLabel.create(Owner);
-    Label_Price[I].Parent:= Panel_Explorer[I];
-    Label_Price[I].Left:= 55;
-    Label_Price[I].Top:= 24;
-    Label_Price[I].Font.Size:= 16;
-    // Лейбел ""
-    Label_Currency[I]:=TsLabel.create(Owner);
-    Label_Currency[I].Parent:= Panel_Explorer[I];
-    Label_Currency[I].Left:= 123;
-    Label_Currency[I].Top:= 32;
-    Label_Currency[I].Caption:= 'KZT';
-    Label_Currency[I].Font.Size:= 9;
-    // Лейбел ""
-    Label_Message[I]:=TsLabel.create(Owner);
-    Label_Message[I].Parent:= Panel_Explorer[I];
-    Label_Message[I].Left:= 28;
-    Label_Message[I].Top:= 44;
-    Label_Message[I].Caption:='Цена за всех пассажиров';
-    Label_Message[I].Font.Size:= 9;
-    // Лейбел ""
-    Button_Choose[I]:=TsBitBtn.create(Owner);
-    Button_Choose[I].Parent:= Panel_Explorer[I];
-    Button_Choose[I].Left:= 50;
-    Button_Choose[I].Top:= 64;
-    Button_Choose[I].Width:= 100;
-    Button_Choose[I].Height:= 25;
-    Button_Choose[I].Cursor:= crHandPoint;
-    Button_Choose[I].Caption:= 'Выбрать';
-    Button_Choose[I].Tag:= I;
-    Button_Choose[I].OnClick:= Get_Info;
-    // Кнопка с капчей ""
-    Explorer_Bevel[I]:=TsBevel.Create(Owner);
-    Explorer_Bevel[I].Parent:= Panel_Explorer[I];
-    Explorer_Bevel[I].Left:= 0;
-    Explorer_Bevel[I].Top:= 0;
-    Explorer_Bevel[I].Width:= 200;
-    Explorer_Bevel[I].Height:= 100;
-    Explorer_Bevel[I].Style:= bsLowered;
-  End;
+For I:= 1 to Page.Lines do
+  Air_List[I - 1].Create(80, ((I - 1) * 100) + (10 * I), I, Main_ScrollBox);
 // Создание списка
-SetLength(Pages_mas, (DataModule2.Air_Query.Recordcount Div Panel_count));
-if (DataModule2.Air_Query.Recordcount Mod Panel_count) > 0 then
-  SetLength(Pages_mas, Length(Pages_mas) + 1);
+Page_Count:= (DataModule2.Air_Query.Recordcount Div Page.Lines);
+if (DataModule2.Air_Query.Recordcount Mod Page.Lines) > 0 then
+  Page_Count:= Page_Count + 1;
 // Кнопки експлорера
-// Находим общее кол-во кнопок
-Button_Count:= (DataModule2.Air_Query.Recordcount Div Panel_count);
-if (DataModule2.Air_Query.Recordcount Mod Panel_count) > 0 then
-  Button_Count:= Button_Count + 1;
-SetLength(CButtons, Button_Count);
+SetLength(CButtons, Page_Count);
 // Отрисовываем задний фон
 R:=255.0; DR:= (247 - R) / Button_Panel.Height;
 G:=255.0; DG:= (247 - G) / Button_Panel.Height;
@@ -705,7 +546,7 @@ for I:= 0 to Button_Panel.Height+1 do
   B:= B + DB;
   End;
 // Создаем массив кнопок
-for I:= 0 to (Button_count - 1) do
+for I:= 0 to (Page_Count - 1) do
   begin
   CButtons[I].BorderWidth:= 1;
   CButtons[I].Left:= I * 35;
@@ -730,9 +571,7 @@ for I:= 0 to (Button_count - 1) do
   CButtons[I].Create;
   Button_panel.Canvas.Draw(CButtons[I].Left, CButtons[I].Top, CButtons[I].Paint);
   end;
-
   // Заполнение комбобокса предметами где предметы - (Названия городов)
-  DataModule2.Air_Query.First; // переключаемс на самое начало
   while DataModule2.Air_Query.Eof = False do
   Begin
   CHK1:= False; // Наден элемент = ложь
@@ -758,17 +597,11 @@ sComboBox3.ItemIndex:= 0;
 sComboBox2.ItemIndex:= 0;
 sComboBox2.ItemIndex:= 0;
 sComboBox4.ItemIndex:= 0;
-// Вычисляем кол-во страниц
-Pages_count:= (DataModule2.Air_Query.RecordCount div Panel_Count);
-if (DataModule2.Air_Query.RecordCount mod Panel_Count) > 0 then
-  Pages_count:= Pages_count + 1;
-// Выставляем текущей страницей - страницу 1
-Page_Current:= 1;
 // проверяем будут ли кнопки активны
-if (Page_Current + 1) <= Pages_count then
+if (Page.Current + 1) <= Page_Count then
   Next_Button.Enabled:= True;
 // Строим список
-Build_page(Page_Current);
+Build_page(1);
 BackGround_Image.Picture.LoadFromFile('Textures\BackGround\sky.png');
 end;
 
@@ -783,6 +616,12 @@ sPanel1.Left:= panel1.Left;
 sPanel2.Left:= Panel1.Left + 506;
 BackGround_Image.Width:= ClientWidth;
 BackGround_Image.Height:= ClientHeight;
+
+if Panel_FullInfo.Visible then
+  Begin
+  Panel_FullInfo.Left:= (ClientWidth div 2) - 350;
+  Panel_FullInfo.Top:= (ClientHeight div 2) - 76;
+  End;
 end;
 
 procedure TForm6.FormShow(Sender: TObject);
@@ -798,22 +637,22 @@ end;
 
 procedure TForm6.Next_ButtonClick(Sender: TObject);
 begin
-if (Page_Current < Pages_Count) then
+if (Page.Current < Page_Count) then
   Begin
-  Build_page(Page_Current+1);
+  Build_page(Page.Current+1);
   Prior_Button.Enabled:= True;
-  if (Page_Current = Pages_Count) then
+  if (Page.Current = Page_Count) then
     Next_Button.Enabled:=False;
   End;
 end;
 
 procedure TForm6.Prior_buttonClick(Sender: TObject);
 begin
-if (Page_Current > 1) then
+if (Page.Current > 1) then
   Begin
-  Build_page(Page_Current - 1);
+  Build_page(Page.Current - 1);
   Next_Button.Enabled:= True;
-  if (Page_Current = 1) then
+  if (Page.Current = 1) then
     Prior_Button.Enabled:= False;
   End;
 end;
@@ -842,7 +681,7 @@ Var
 Begin
 DataModule2.Air_Query.First;
 // Переход на первую запись нашей страницы
-DataModule2.Air_Query.MoveBy(((Page_Current - 1) * Panel_Count));
+DataModule2.Air_Query.MoveBy(((Page.Current - 1) * Page.Lines));
 EndPrice:= 0;
 currency:= Copy(Form6.sComboBox1.Text, 1, 3);
   case Form6.sRadioGroup1.ItemIndex of
@@ -850,9 +689,9 @@ currency:= Copy(Form6.sComboBox1.Text, 1, 3);
     1:tpe:= 'BC';
     2:tpe:= 'EC';
   end;
-for I:= 1 to Panel_Count do
+for I:= 0 to (Page.Lines - 1) do
   Begin
-  Label_Currency[I].Caption:= currency;
+  Air_List[I].Label_Currency.Caption:= currency;
   case Form6.sComboBox1.ItemIndex of
     0:Price:= DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger * KZT;
     1:Price:= DataModule2.Air_Query.FieldByName('Price_' + tpe).AsInteger;
@@ -867,9 +706,9 @@ for I:= 1 to Panel_Count do
   Price2:= IntToStr(Price);
   if Length(Price2) > 3 then
     Insert(' ',Price2,Length(Price2)-2);
-  Label_Price[I].Caption:= Price2;
-  Label_Price[I].Left:= (Panel_Explorer[I].Width div 2) - ((Label_Currency[I].Width + Label_Price[I].Width + 6) div 2);
-  Label_Currency[I].Left:= Label_Price[I].Left + Label_Price[I].Width + 6;
+  Air_List[I].Label_Price.Caption:= Price2;
+  Air_List[I].Label_Price.Left:= (Air_List[I].Panel_Explorer.Width div 2) - ((Air_List[I].Label_Currency.Width + Air_List[I].Label_Price.Width + 6) div 2);
+  Air_List[I].Label_Currency.Left:= Air_List[I].Label_Price.Left + Air_List[I].Label_Price.Width + 6;
   DataModule2.Air_Query.Next;
   End;
 Form6.sLabel6.Caption:= Copy(Form6.sComboBox1.Text, 1, 3);
@@ -1026,18 +865,18 @@ With DataModule2.Air_Query do
 Lbl_Records_count.Caption:= DataModule2.CHECK_RecordCount(DataModule2.Air_Query.RecordCount);
 Lbl_Records_count.left:= 227 - (Lbl_Records_count.Width div 2);
 // Узнаем точное кол-во страниц (Integer)
-Pages_Count:= (DataModule2.Air_Query.Recordcount Div Panel_Count);
-if (DataModule2.Air_Query.Recordcount Mod Panel_Count) > 0 then
-  Inc(Pages_Count);
+Page_Count:= (DataModule2.Air_Query.Recordcount Div Page.Lines);
+if (DataModule2.Air_Query.Recordcount Mod Page.Lines) > 0 then
+  Inc(Page_Count);
 // Снимаем залок клавиши
-CButtons[Page_Current - 1].State:= cbStay;
+CButtons[Page.Current - 1].State:= cbStay;
 // Ставим кол-во клавишь равное кол-ву страниц
-Button_count:= Pages_Count;
+Page_Count:= Page_Count;
 // Выставляем текущей страницей - страницу 1
 Build_page(1);
 // Проверяем будут ли кнопки активны
 //ShowMessage('Page_Current= ' + IntToStr(Page_Current) + ' <= ' + IntToStr(Pages_count));
-if (Page_Current + 1) <= Pages_count then
+if (Page.Current + 1) <= Page_Count then
   Next_Button.Enabled:= True
     else
       Next_Button.Enabled:= False;
@@ -1057,7 +896,7 @@ for I:= 0 to Button_Panel.Height+1 do
   B:= B + DB;
   End;
 // Переформатирование кнопок
-for I:= 0 to Button_count - 1 do
+for I:= 0 to Page_Count - 1 do
   begin
   CButtons[I].BorderWidth:= 1;
   CButtons[I].Left:= I * 35;
@@ -1124,12 +963,16 @@ Var
   I, D:Integer;
 begin
 DataModule2.Air_Query.First;
-DataModule2.Air_Query.MoveBy(((Page_Current - 1) * Panel_Count) + ((Sender as TsLabel).Tag - 1));
+DataModule2.Air_Query.MoveBy(((Page.Current - 1) * Page.Lines) + ((Sender as TsLabel).Tag - 1));
 case sRadioGroup1.ItemIndex of
   0:Label_FClass.Caption:= 'Первый класс';
   1:Label_FClass.Caption:= 'Бизнес класс';
   2:Label_FClass.Caption:= 'Эконом класс';
 end;
+
+// Смещение формы (Центр)
+Panel_FullInfo.Left:= (ClientWidth div 2) - 350;
+Panel_FullInfo.Top:= (ClientHeight div 2) - 76;
 
 if (DataModule2.Air_Query.FieldByName('Regular').AsBoolean = True) then
   if (Edit_Date.Tag = 1) then
@@ -1139,9 +982,6 @@ if (DataModule2.Air_Query.FieldByName('Regular').AsBoolean = True) then
     Label_FAirCompany.Caption:= DataModule2.Air_Query.FieldByName('Air_company').AsString;
     Label_FFrom.Caption:= Date_Info('From');
     Label_FTo.Caption:= Date_Info('To');
-    // Смещение формы (Центр)
-    Panel_FullInfo.Left:= (ClientWidth div 2) - (Panel_FullInfo.Width div 2);
-    Panel_FullInfo.Top:= (ClientHeight div 2) - (Panel_FullInfo.Height div 2);
     Panel_FullInfo.Visible:= True;
     End
   else
@@ -1153,9 +993,6 @@ else
     Label_FAirCompany.Caption:= DataModule2.Air_Query.FieldByName('Air_company').AsString;
     Label_FFrom.Caption:= Date_Info('From');
     Label_FTo.Caption:= Date_Info('To');
-    // Смещение формы (Центр)
-    Panel_FullInfo.Left:= (ClientWidth div 2) - (Panel_FullInfo.Width div 2);
-    Panel_FullInfo.Top:= (ClientHeight div 2) - (Panel_FullInfo.Height div 2);
     Panel_FullInfo.Visible:= True;
     End;
 end;

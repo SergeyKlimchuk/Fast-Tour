@@ -9,7 +9,7 @@ uses
   System.ImageList, Vcl.ImgList, sComboBox, sEdit, sCheckBox, Vcl.StdCtrls,
   sBevel, sScrollBox, Records, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls,
   sTrackBar, Vcl.Mask, sMaskEdit, sCustomComboEdit, sToolEdit, Winapi.Windows, BTNlib, DateUtils,
-  sPageControl, Vcl.Imaging.jpeg, sButton;
+  sPageControl, Vcl.Imaging.jpeg, sButton, sSpinEdit;
 
 type
   TForm11 = class(TForm)
@@ -177,6 +177,20 @@ type
     sCheckBox7: TsCheckBox;
     sCheckBox8: TsCheckBox;
     sCheckBox9: TsCheckBox;
+    sPanel5: TsPanel;
+    Image4: TImage;
+    sLabel11: TsLabel;
+    sBevel27: TsBevel;
+    sBevel28: TsBevel;
+    sLabel12: TsLabel;
+    Image5: TImage;
+    sGradientPanel11: TsGradientPanel;
+    sBitBtn7: TsBitBtn;
+    sBitBtn8: TsBitBtn;
+    sCheckBox2: TsCheckBox;
+    Timer1: TTimer;
+    sImage3: TsImage;
+    Edit1: TEdit;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure sEdit2KeyPress(Sender: TObject; var Key: Char);
     procedure FormResize(Sender: TObject);
@@ -202,6 +216,11 @@ type
     procedure Button_LeaveClick(Sender: TObject);
     procedure sDateEdit2Exit(Sender: TObject);
     procedure sDateEdit1Exit(Sender: TObject);
+    procedure sBitBtn8Click(Sender: TObject);
+    procedure sBitBtn7Click(Sender: TObject);
+    procedure Button_SettingClick(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit1Exit(Sender: TObject);
   private
     { Private declarations }
   public
@@ -279,6 +298,30 @@ With DataModule2.Tour_Query do
   Active:= True;
   BUILD_PAGE(Page.Current);
   End;
+end;
+
+procedure TForm11.Button_SettingClick(Sender: TObject);
+begin
+sPanel5.Visible:= true;
+end;
+
+procedure TForm11.Edit1Exit(Sender: TObject);
+Var
+  Error: Boolean;
+begin
+  Try
+  Error:= True;
+  if StrToInt(Edit1.Text) > 17  then Edit1.Text:= '17';
+  if StrToInt(Edit1.Text) < 1  then Edit1.Text:= '1';
+  Error:= False;
+  Finally
+  if Error then Edit1.Text:= '8';
+  End;
+end;
+
+procedure TForm11.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['0'..'9', #8]) then key:= #0;
 end;
 
 procedure TForm11.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -494,6 +537,30 @@ end;
 procedure TForm11.sBitBtn4Click(Sender: TObject);
 begin
 sPanel2.Visible:= False;
+end;
+
+procedure TForm11.sBitBtn7Click(Sender: TObject);
+begin
+sPanel5.Visible:= False;
+end;
+
+procedure TForm11.sBitBtn8Click(Sender: TObject);
+Var
+  I: Integer;
+begin
+for I:= 0 to (Page.Lines - 1) do
+  Hotels_List[I].Destroy;
+ShowMessage('Удаление прошло успешно!');
+Page.Lines:= StrToInt(Edit1.Text);
+for I:= 0 to (Page.Lines - 1) do
+  Hotels_List[I].Create(8, (8 + (I * 80) + (I * 8)), I, Main_Scroll);
+Page.Current:= 1;
+Page_Count:= (Page.Current div Page.Lines);
+if (Page.Current mod Page.Lines) > 0 then
+  Page_Count:= Page_Count + 1;
+ShowMessage('Добавление прошло успешно!');
+
+BUILD_PAGE(1);
 end;
 
 procedure TForm11.sCheckBox1Click(Sender: TObject);

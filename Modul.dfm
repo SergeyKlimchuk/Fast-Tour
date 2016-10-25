@@ -43,25 +43,15 @@ object DataModule2: TDataModule2
     Parameters = <>
     SQL.Strings = (
       'SELECT * FROM LogPass')
-    Left = 544
-    Top = 24
+    Left = 312
+    Top = 56
   end
   object Reg_Table: TADOTable
     Connection = Connect_to_DB
     CursorType = ctStatic
     TableName = 'LogPass'
-    Left = 544
-    Top = 72
-  end
-  object Reg_DS_Q: TDataSource
-    DataSet = Reg_Query
-    Left = 512
-    Top = 24
-  end
-  object Reg_DS_T: TDataSource
-    DataSet = Reg_Query
-    Left = 512
-    Top = 72
+    Left = 304
+    Top = 232
   end
   object Connect_to_DB: TADOConnection
     ConnectionString = 
@@ -70,13 +60,8 @@ object DataModule2: TDataModule2
     LoginPrompt = False
     Mode = cmShareDenyNone
     Provider = 'Microsoft.Jet.OLEDB.4.0'
-    Left = 293
-    Top = 168
-  end
-  object Air_DS_Q: TDataSource
-    DataSet = Air_Query
-    Left = 61
-    Top = 16
+    Left = 205
+    Top = 144
   end
   object Air_Query: TADOQuery
     Connection = Connect_to_DB
@@ -84,8 +69,8 @@ object DataModule2: TDataModule2
     Parameters = <>
     SQL.Strings = (
       'Select * from Air_Ticket')
-    Left = 29
-    Top = 16
+    Left = 133
+    Top = 56
   end
   object IdMessage1: TIdMessage
     AttachmentEncoding = 'UUE'
@@ -138,13 +123,8 @@ object DataModule2: TDataModule2
     Parameters = <>
     SQL.Strings = (
       'Select * from Hotels')
-    Left = 24
-    Top = 72
-  end
-  object Hotel_DS_Query: TDataSource
-    DataSet = Hotel_Query
-    Left = 56
-    Top = 72
+    Left = 168
+    Top = 96
   end
   object Basket_Query: TADOQuery
     Connection = Connect_to_DB
@@ -152,8 +132,8 @@ object DataModule2: TDataModule2
     Parameters = <>
     SQL.Strings = (
       'Select * from Basket')
-    Left = 48
-    Top = 296
+    Left = 144
+    Top = 184
   end
   object Buffer: TADOQuery
     Connection = Connect_to_DB
@@ -161,8 +141,8 @@ object DataModule2: TDataModule2
     Parameters = <>
     SQL.Strings = (
       'Select * from Basket')
-    Left = 48
-    Top = 336
+    Left = 88
+    Top = 224
   end
   object Purchases_Query: TADOQuery
     Connection = Connect_to_DB
@@ -170,8 +150,8 @@ object DataModule2: TDataModule2
     Parameters = <>
     SQL.Strings = (
       'Select * from Purchases')
-    Left = 184
-    Top = 16
+    Left = 256
+    Top = 96
   end
   object Tour_Query: TADOQuery
     Connection = Connect_to_DB
@@ -179,12 +159,7 @@ object DataModule2: TDataModule2
     Parameters = <>
     SQL.Strings = (
       'Select * from Tours as T;')
-    Left = 168
-    Top = 344
-  end
-  object DataSource1: TDataSource
-    DataSet = Tour_Query
-    Left = 168
-    Top = 302
+    Left = 256
+    Top = 184
   end
 end

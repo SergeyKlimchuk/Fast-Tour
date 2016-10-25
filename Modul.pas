@@ -15,10 +15,7 @@ type
     sSkinManager1: TsSkinManager;
     Reg_Query: TADOQuery;
     Reg_Table: TADOTable;
-    Reg_DS_Q: TDataSource;
-    Reg_DS_T: TDataSource;
     Connect_to_DB: TADOConnection;
-    Air_DS_Q: TDataSource;
     Air_Query: TADOQuery;
     IdMessage1: TIdMessage;
     IdSMTP1: TIdSMTP;
@@ -27,12 +24,10 @@ type
     sAlphaHints1: TsAlphaHints;
     sOpenDialog1: TsOpenDialog;
     Hotel_Query: TADOQuery;
-    Hotel_DS_Query: TDataSource;
     Basket_Query: TADOQuery;
     Buffer: TADOQuery;
     Purchases_Query: TADOQuery;
     Tour_Query: TADOQuery;
-    DataSource1: TDataSource;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }

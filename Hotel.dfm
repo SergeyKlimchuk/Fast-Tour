@@ -2636,7 +2636,7 @@ object Form7: TForm7
       Top = 22
       Width = 548
       Height = 346
-      ActivePage = TabSheet3
+      ActivePage = TabSheet1
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWhite
       Font.Height = -13
@@ -2741,7 +2741,7 @@ object Form7: TForm7
           Top = 3
           Width = 534
           Height = 314
-          ActivePage = sTabSheet7
+          ActivePage = sTabSheet1
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWhite
           Font.Height = -14
