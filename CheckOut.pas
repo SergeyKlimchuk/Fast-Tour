@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, sPanel, Vcl.StdCtrls, sEdit, sLabel,
   Vcl.ExtCtrls, sBevel, sComboBox, sScrollBox, Vcl.Buttons, sBitBtn, acImage, Dateutils,
-  Data.DB, Vcl.Grids, Vcl.DBGrids, acPNG, Vcl.Mask, sMaskEdit;
+  Data.DB, Vcl.Grids, Vcl.DBGrids, acPNG, Vcl.Mask, sMaskEdit, ShellApi;
 
 type
 
@@ -46,7 +46,6 @@ type
     sLabel4: TsLabel;
     Exit: TsBitBtn;
     Info: TsBitBtn;
-    Print: TsBitBtn;
     sComboBox1: TsComboBox;
     sLabel11: TsLabel;
     sLabel18: TsLabel;
@@ -107,6 +106,7 @@ type
     procedure sEdit6KeyPress(Sender: TObject; var Key: Char);
     procedure sEdit7KeyPress(Sender: TObject; var Key: Char);
     procedure sEdit8KeyPress(Sender: TObject; var Key: Char);
+    procedure InfoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -319,6 +319,12 @@ sComboBox1.ItemIndex:= Form9.sComboBox1.ItemIndex;
 sComboBox1.OnChange(Sender);
 end;
 
+
+procedure TForm10.InfoClick(Sender: TObject);
+begin
+ShellExecute(Handle, 'open',
+  'Help\Help.chm', nil, nil, SW_SHOWNORMAL);
+end;
 
 procedure TForm10.sBitBtn1Click(Sender: TObject);
 begin

@@ -314,14 +314,6 @@ object Form11: TForm11
         Font.Name = 'Tahoma'
         Font.Style = []
       end
-      object sImage3: TsImage
-        Left = 149
-        Top = 0
-        Width = 100
-        Height = 50
-        Picture.Data = {07544269746D617000000000}
-        SkinData.SkinSection = 'CHECKBOX'
-      end
       object Button_Exit: TsBitBtn
         Left = 0
         Top = 0
@@ -915,6 +907,7 @@ object Form11: TForm11
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00}
         TabOrder = 1
         TabStop = False
+        OnClick = Button_InfoClick
         ShowFocus = False
       end
       object Button_Setting: TsBitBtn
@@ -6948,7 +6941,7 @@ object Form11: TForm11
         Top = 83
         Width = 145
         Height = 21
-        Hint = #1050#1072#1082' '#1084#1080#1085#1080#1084#1091#1084' 1 '#1089#1080#1084#1074#1086#1083' '#1085#1072' '#1089#1090#1088#1072#1085#1080#1094#1091' '#1080' '#1082#1072#1082' '#1084#1072#1082#1089#1080#1084#1091#1084' 8!'
+        Hint = #1050#1072#1082' '#1084#1080#1085#1080#1084#1091#1084' 1 '#1089#1080#1084#1074#1086#1083' '#1085#1072' '#1089#1090#1088#1072#1085#1080#1094#1091' '#1080' '#1082#1072#1082' '#1084#1072#1082#1089#1080#1084#1091#1084' 20!'
         ParentShowHint = False
         ShowHint = True
         TabOrder = 4
@@ -6959,7 +6952,7 @@ object Form11: TForm11
   end
   object sPanel2: TsGradientPanel
     Left = 140
-    Top = 160
+    Top = 214
     Width = 1000
     Height = 400
     Alignment = taLeftJustify
@@ -7285,7 +7278,7 @@ object Form11: TForm11
       Top = 22
       Width = 548
       Height = 346
-      ActivePage = TabSheet1
+      ActivePage = TabSheet3
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWhite
       Font.Height = -13
@@ -7390,7 +7383,7 @@ object Form11: TForm11
           Top = 3
           Width = 534
           Height = 314
-          ActivePage = sTabSheet1
+          ActivePage = sTabSheet8
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWhite
           Font.Height = -14
@@ -7584,10 +7577,5 @@ object Form11: TForm11
       PaintData.Color1.Color = clYellow
       PaintData.CustomGradient = '16744448;16744448;97;0;0;16744448;16744448;0;0;0'
     end
-  end
-  object Timer: TTimer
-    Interval = 500
-    Left = 48
-    Top = 16
   end
 end

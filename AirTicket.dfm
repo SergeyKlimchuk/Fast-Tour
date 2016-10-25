@@ -2128,6 +2128,7 @@ object Form6: TForm6
       ShowHint = True
       TabOrder = 2
       TabStop = False
+      OnClick = sBitBtn4Click
       ShowFocus = False
     end
   end
@@ -2481,8 +2482,8 @@ object Form6: TForm6
     end
   end
   object Panel_FullInfo: TsPanel
-    Left = 290
-    Top = 284
+    Left = 282
+    Top = 414
     Width = 700
     Height = 152
     TabOrder = 4
@@ -3440,8 +3441,8 @@ object Form6: TForm6
     end
   end
   object sPanel5: TsPanel
-    Left = 161
-    Top = 244
+    Left = 153
+    Top = 21
     Width = 958
     Height = 232
     TabOrder = 5
@@ -5785,7 +5786,7 @@ object Form6: TForm6
       Top = 83
       Width = 145
       Height = 21
-      Hint = #1050#1072#1082' '#1084#1080#1085#1080#1084#1091#1084' 1 '#1089#1080#1084#1074#1086#1083' '#1085#1072' '#1089#1090#1088#1072#1085#1080#1094#1091' '#1080' '#1082#1072#1082' '#1084#1072#1082#1089#1080#1084#1091#1084' 8!'
+      Hint = #1050#1072#1082' '#1084#1080#1085#1080#1084#1091#1084' 1 '#1089#1080#1084#1074#1086#1083' '#1085#1072' '#1089#1090#1088#1072#1085#1080#1094#1091' '#1080' '#1082#1072#1082' '#1084#1072#1082#1089#1080#1084#1091#1084' 20!'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 4

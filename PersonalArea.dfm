@@ -2997,6 +2997,7 @@ object Form5: TForm5
     Caption = #1057#1087#1088#1072#1074#1082#1072
     ParentBackground = False
     TabOrder = 4
+    OnClick = sPanel6Click
   end
   object sButton2: TsButton
     Left = 8
@@ -3033,6 +3034,17 @@ object Form5: TForm5
     ParentColor = False
     TabOrder = 9
     SkinData.CustomColor = True
+  end
+  object sPanel8: TsPanel
+    Left = 8
+    Top = 369
+    Width = 180
+    Height = 31
+    Caption = #1055#1077#1088#1077#1081#1090#1080' '#1082' '#1088#1077#1076#1072#1082#1090#1086#1088#1091' '#1041#1044
+    ParentBackground = False
+    TabOrder = 11
+    Visible = False
+    OnClick = sPanel8Click
   end
   object EditPanel: TsPanel
     Left = 100

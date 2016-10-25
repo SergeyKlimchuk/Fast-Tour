@@ -9,7 +9,7 @@ uses
   sBevel, sComboBox, sButton, Vcl.Mask, sMaskEdit, sToolEdit, sCheckBox, sEdit,
   Vcl.ActnPopup, sCheckListBox, Vcl.Buttons, sBitBtn, acPNG, acImage,
   BTNlib, sRadioButton, DateUtils, Vcl.Imaging.jpeg, sCustomComboEdit, sListBox,
-  sScrollBox, sGroupBox, Records;
+  sScrollBox, sGroupBox, Records, ShellApi;
 
 type
   TForm6 = class(TForm)
@@ -141,6 +141,7 @@ type
     procedure sBitBtn7Click(Sender: TObject);
     procedure Edit1Exit(Sender: TObject);
     procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure sBitBtn4Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -707,6 +708,12 @@ end;
 procedure TForm6.sBitBtn3Click(Sender: TObject);
 begin
 sPanel5.Visible:= True;
+end;
+
+procedure TForm6.sBitBtn4Click(Sender: TObject);
+begin
+ShellExecute(Handle, 'open',
+  'Help\Help.chm', nil, nil, SW_SHOWNORMAL);
 end;
 
 procedure TForm6.sBitBtn5Click(Sender: TObject);

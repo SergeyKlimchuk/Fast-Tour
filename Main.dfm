@@ -6408,10 +6408,10 @@ object Form4: TForm4
     object sLabelFX2: TsLabelFX
       Left = 389
       Top = 32
-      Width = 41
+      Width = 34
       Height = 24
       SkinSection = 'MENUBTN'
-      Caption = 'V18.3'
+      Caption = 'V2.3'
       ParentFont = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText

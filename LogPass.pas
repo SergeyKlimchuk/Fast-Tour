@@ -237,6 +237,9 @@ if (Datamodule2.Reg_Query.RecordCount = 1) then
     Form4.show;
     Form3.Hide;
     Form9.Nick_Name.Caption:= 'Вы вошли как - ' + sEdit1.Text + '!';
+    if DataModule2.Reg_Query.Fields.FieldByName('U_Status').AsString = 'Администратор' then
+    Form5.sPanel8.Visible:= True else Form5.sPanel8.Visible:= False;
+
     Form5.sImage1.Picture.Assign(DataModule2.Reg_Query.Fields.FieldByName('U_Picture'));
     Form5.Label_Name_SecName.Caption:= DataModule2.Reg_Query.Fields.Fields[3].AsString + ' ' + DataModule2.Reg_Query.Fields.Fields[4].AsString;
     Form5.Label_Email.caption:= 'Email: ' + DataModule2.Reg_Query.Fields.Fields[5].AsString;

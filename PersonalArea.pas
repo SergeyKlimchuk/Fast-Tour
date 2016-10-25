@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, acImage, sPanel,
   Vcl.StdCtrls, sLabel, sButton, JPEG, Vcl.DBCtrls, sEdit, sBevel, Vcl.Mask,
   sMaskEdit, sCustomComboEdit, sToolEdit, sComboBox, Vcl.Buttons, sBitBtn,
-  sScrollBox, acPNG, DateUtils;
+  sScrollBox, acPNG, DateUtils, ShellApi;
 
 type
 
@@ -124,6 +124,7 @@ type
     sBevel5: TsBevel;
     sPanel2: TsPanel;
     sImage2: TsImage;
+    sPanel8: TsPanel;
     procedure sButton2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button4Click(Sender: TObject);
@@ -145,6 +146,8 @@ type
     procedure GET_INFO(Sender: TObject);
     procedure sBitBtn2Click(Sender: TObject);
     procedure sBitBtn1Click(Sender: TObject);
+    procedure sPanel6Click(Sender: TObject);
+    procedure sPanel8Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -696,6 +699,18 @@ end;
 procedure TForm5.sEdit6KeyPress(Sender: TObject; var Key: Char);
 begin
 Edit_Secret_A:=true;
+end;
+
+procedure TForm5.sPanel6Click(Sender: TObject);
+begin
+ShellExecute(Handle, 'open',
+  'Help\Help.chm', nil, nil, SW_SHOWNORMAL);
+end;
+
+procedure TForm5.sPanel8Click(Sender: TObject);
+begin
+ShellExecute(Handle, 'open',
+  'EditBases\Edit.exe', nil, nil, SW_SHOWNORMAL);
 end;
 
 end.

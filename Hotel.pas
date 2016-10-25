@@ -9,7 +9,7 @@ uses
   Data.DB, Data.Win.ADODB,
   acAlphaHints, Vcl.Grids, Vcl.DBGrids, sDialogs, PNGImage, Vcl.Buttons, sBitBtn,
   sPageControl, BTNlib, acPNG, sToolEdit, Dateutils,
-  sScrollBox, sEdit, sCheckBox, sComboBox, Vcl.Mask, sMaskEdit, sCustomComboEdit;
+  sScrollBox, sEdit, sCheckBox, sComboBox, Vcl.Mask, sMaskEdit, sCustomComboEdit, ShellApi;
 
 type
   TForm7 = class(TForm)
@@ -132,6 +132,7 @@ type
     procedure sEdit4KeyPress(Sender: TObject; var Key: Char);
     procedure sEdit5KeyPress(Sender: TObject; var Key: Char);
     procedure Button_RefreshClick(Sender: TObject);
+    procedure sBitBtn2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -480,6 +481,12 @@ begin
 Form7.Hide;
 // Код для показа меню
 Form4.show;
+end;
+
+procedure TForm7.sBitBtn2Click(Sender: TObject);
+begin
+ShellExecute(Handle, 'open',
+  'Help\Help.chm', nil, nil, SW_SHOWNORMAL);
 end;
 
 Procedure CHK_Date;

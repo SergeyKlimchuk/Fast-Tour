@@ -916,6 +916,7 @@ object Form7: TForm7
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00}
       TabOrder = 1
       TabStop = False
+      OnClick = sBitBtn2Click
       ShowFocus = False
     end
   end

@@ -9,7 +9,7 @@ uses
   System.ImageList, Vcl.ImgList, sComboBox, sEdit, sCheckBox, Vcl.StdCtrls,
   sBevel, sScrollBox, Records, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls,
   sTrackBar, Vcl.Mask, sMaskEdit, sCustomComboEdit, sToolEdit, Winapi.Windows, BTNlib, DateUtils,
-  sPageControl, Vcl.Imaging.jpeg, sButton, sSpinEdit;
+  sPageControl, Vcl.Imaging.jpeg, sButton, sSpinEdit, ShellApi;
 
 type
   TForm11 = class(TForm)
@@ -188,8 +188,6 @@ type
     sBitBtn7: TsBitBtn;
     sBitBtn8: TsBitBtn;
     sCheckBox2: TsCheckBox;
-    Timer: TTimer;
-    sImage3: TsImage;
     Edit1: TEdit;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure sEdit2KeyPress(Sender: TObject; var Key: Char);
@@ -228,6 +226,7 @@ type
       Y: Integer);
     procedure Panel_ButtonMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure Button_InfoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -339,6 +338,14 @@ end;
 procedure TForm11.Button_FullInfoClick(Sender: TObject);
 begin
 GET_INFO((Sender as TsBitBtn).Tag);
+sPanel7.Visible:= False;
+sBevel7.Visible:= False;
+end;
+
+procedure TForm11.Button_InfoClick(Sender: TObject);
+begin
+ShellExecute(Handle, 'open',
+  'Help\Help.chm', nil, nil, SW_SHOWNORMAL);
 end;
 
 procedure TForm11.Button_LeaveClick(Sender: TObject);
@@ -387,7 +394,7 @@ Var
 begin
   Try
   Error:= True;
-  if StrToInt(Edit1.Text) > 8  then Edit1.Text:= '8';
+  if StrToInt(Edit1.Text) > 20  then Edit1.Text:= '20';
   if StrToInt(Edit1.Text) < 1  then Edit1.Text:= '1';
   Error:= False;
   Finally
@@ -457,6 +464,8 @@ Var
   R, G, B, DR, DG, DB: Double;
   I: Integer;
 begin
+sPanel7.Visible:= False;
+sBevel7.Visible:= False;
 MSG:= 'SELECT H.*, A.*, T.* FROM Hotels AS H, Air_Ticket AS A, Tours AS T WHERE (((H.ID )=[T].[Hotel_ID]) AND ((A.ID)=[T].[Air_ID])';
 if sEdit1.Text <> '' then MSG:= MSG + ' AND ([H].[Name] LIKE ''' + sEdit1.Text + '%'')';           // Название отеля
 if (sComboBox2.ItemIndex > 0) then MSG:= MSG + ' AND ([H].[Country]=''' + sComboBox2.Text + ''')'; // Страна
@@ -629,6 +638,7 @@ begin
 for I:= 0 to (Page.Lines - 1) do
   Hotels_List[I].Destroy;
 Page.Lines:= StrToInt(Edit1.Text);
+SetLength(Hotels_List, Page.Lines);
 for I:= 0 to (Page.Lines - 1) do
   Hotels_List[I].Create(8, (8 + (I * 80) + (I * 8)), I, Main_Scroll);
 Page.Current:= 1;
@@ -859,8 +869,16 @@ Var
   sDate1, sDate2:TDateTime;
 Begin
 // Фиксируем даты
-sDate1:= VarToDateTime(DataModule2.Tour_Query.FieldByName('Date_Start').AsString + ' ' + IntToStr(HourOf(VarToDateTime(DataModule2.Tour_Query.FieldByName('Time_D').AsString))) + ':' + IntToStr(MinuteOf(VarToDateTime(DataModule2.Tour_Query.FieldByName('Time_D').AsString))));
-sDate2:= VarToDateTime(DataModule2.Tour_Query.FieldByName('Date_Finish').AsString + ' ' + IntToStr(HourOf(VarToDateTime(DataModule2.Tour_Query.FieldByName('Time_A').AsString))) + ':' + IntToStr(MinuteOf(VarToDateTime(DataModule2.Tour_Query.FieldByName('Time_A').AsString))));
+if DataModule2.Tour_Query.FieldByName('Regular').AsBoolean then
+  Begin
+  sDate1:= VarToDateTime(DataModule2.Tour_Query.FieldByName('Date_Start').AsString + ' ' + IntToStr(HourOf(VarToDateTime(DataModule2.Tour_Query.FieldByName('Time_D').AsString))) + ':' + IntToStr(MinuteOf(VarToDateTime(DataModule2.Tour_Query.FieldByName('Time_D').AsString))));
+  sDate2:= sDate1;
+  End
+else
+  Begin
+  sDate1:= VarToDateTime(DataModule2.Tour_Query.FieldByName('Date_D').AsString + ' ' + IntToStr(HourOf(VarToDateTime(DataModule2.Tour_Query.FieldByName('Time_D').AsString))) + ':' + IntToStr(MinuteOf(VarToDateTime(DataModule2.Tour_Query.FieldByName('Time_D').AsString))));
+  sDate2:= VarToDateTime(DataModule2.Tour_Query.FieldByName('Date_A').AsString + ' ' + IntToStr(HourOf(VarToDateTime(DataModule2.Tour_Query.FieldByName('Time_A').AsString))) + ':' + IntToStr(MinuteOf(VarToDateTime(DataModule2.Tour_Query.FieldByName('Time_A').AsString))));
+  End;
 // Формируем начало итоговой строки
 Form11.Label_FFrom.Caption:= IntToStr(DayOf(sDate1)) + ' ' + sMouths[MonthOf(sDate1)] + ', ' + sDay[DayOfWeek(sDate1)] + ' ' +IntToStr(HourOf(sDate1)) + ':' + IntToStr(MinuteOf(sDate1)) + ', ' + DataModule2.Tour_Query.FieldByName('City_D').AsString;
 // Берём оставшуюся часть в буффер
@@ -1044,11 +1062,11 @@ With DataModule2.Tour_Query do
     End;
   // Кол-во дней
   DaysCount:= DaysBetween(FieldByName('Date_Start').AsDateTime, FieldByName('Date_Finish').AsDateTime);
-  if DaysCount = (1 or 21 or 31) then
-    Form11.slabel15.Caption:= IntToStr(DaysCount) + ' день' else
-      if DaysCount = (2 or 3 or 4 or 22 or 23 or 24) then
-        Form11.slabel15.Caption:= IntToStr(DaysCount) + ' дня' else
-          Form11.slabel15.Caption:= IntToStr(DaysCount) + ' дней';
+  case Integer((IntToStr(DaysCount))[(IntToStr(DaysCount)).Length]) of
+  1:Form11.slabel15.Caption:= IntToStr(DaysCount) + ' день';
+  2,3,4:Form11.slabel15.Caption:= IntToStr(DaysCount) + ' дня';
+  5,6,7,8,9,0:Form11.slabel15.Caption:= IntToStr(DaysCount) + ' дней';
+  end;
   // Тип заселения
   Form11.slabel17.Caption:= Form11.sComboBox5.Items[Fields.FieldByName('Peoples').AsInteger];
   // Тип тура
